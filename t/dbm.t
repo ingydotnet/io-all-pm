@@ -1,12 +1,27 @@
 use lib 't', 'lib';
 use strict;
 use warnings;
-use Test::More tests => 2;
+
+my $db_file;
+BEGIN {
+    use Config;
+    foreach (qw/SDBM_File GDBM_File ODBM_File NDBM_File DB_File/) {
+        if ($Config{extensions} =~ /\b$_\b/) {
+            $db_file = $_;
+            last;
+        }
+    }
+}
+
+use Test::More defined($db_file)
+    ? (tests => 2)
+    : (skip_all => 'No DMB modules available');
+
 use IO::All;
 use IO_All_Test;
 
 {
-my $db = io(o_dir() . '/mydbm')->dbm('SDBM_File');
+my $db = io(o_dir() . '/mydbm')->dbm($db_file);
 $db->{fortytwo} = 42;
 $db->{foo} = 'bar';
 
