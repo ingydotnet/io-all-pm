@@ -1,0 +1,40 @@
+0.30 release
+- IO::All::STDIO -> IO::All::Stdio (downcase)
+- No dependency on Tie::File
+- Fix test failures
+- Test the interface with 3rd party modules
+- New methods:
+  - file->empty dir->empty
+  - touch
+  - file->all
+  - add stubs in IO::All that throw errors for these (type undetermined)
+
+
+
+- Use '=' for STDERR
+- Support piping open: '|foo', 'foo|'
+- Maybe even: '|foo|'
+
+- $io->separator
+- $io->ending
+- $io->end
+- $io->sep
+
+- overloading
+  # read all files recursively
+  $files << io('dir');
+  io('dir') >> $files;
+
+- email support (Mail::Send)
+- irc support
+- blog support (Atom)
+- http support (LWP)
+- ftp support
+- dav support
+- ldap support
+- pop support
+- smtp support
+
+- Serial Support
+  - Win32::SerialPort
+  - Device::SerialPort

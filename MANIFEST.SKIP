@@ -1,0 +1,11 @@
+^unit/
+^Makefile$
+^ToDo$
+^MANIFEST\.SKIP$
+\.swp$
+^pm_to_blib$
+^blib/
+^t/output/
+^test/
+^method_list$
+\.svn/
