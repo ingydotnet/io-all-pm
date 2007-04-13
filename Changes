@@ -1,4 +1,9 @@
 ---
+version: 0.38
+date:    Mon Apr  9 10:52:44 JST 2007
+changes:
+- Add generic encoding, instead of just utf8.
+---
 version: 0.37
 date:    Fri Apr  6 18:04:27 JST 2007
 changes:

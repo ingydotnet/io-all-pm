@@ -39,6 +39,7 @@ t/construct.t
 t/dbm.t
 t/devnull.t
 t/empty.t
+t/encoding.t
 t/error1.t
 t/file_spec.t
 t/file_subclass.t
@@ -78,6 +79,8 @@ t/synopsis1.t
 t/synopsis2.t
 t/synopsis3.t
 t/synopsis5.t
+t/text.big5
+t/text.utf8
 t/tie.t
 t/tie_file.t
 t/xxx.t

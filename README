@@ -33,6 +33,11 @@ SYNOPSIS
         use IO::All -utf8;                          # Turn on utf8 for all io
         $contents = io('file.txt')->all;            #   by default in this package.
 
+        # General Encoding Support
+        $contents = io('file.txt')->encoding('big5')->all;
+        use IO::All -encoding => 'big5';            # Turn on big5 for all io
+        $contents = io('file.txt')->all;            #   by default in this package.
+
         # Print the path name of a file:
         print $io->name;                            # The direct method
         print "$io";                                # Object stringifies to name
@@ -166,7 +171,7 @@ USAGE
 
     You can also pass global flags like this:
 
-        use IO::All -strict -utf8 -foobar;
+        use IO::All -strict -encoding => 'big5', -foobar;
 
     Which automatically makes those method calls on every new IO object. In
     other words this:
@@ -175,7 +180,7 @@ USAGE
 
     becomes this:
 
-        my $io = io('lalala.txt')->strict->utf8->foobar;
+        my $io = io('lalala.txt')->strict->encoding('big5')->foobar;
 
 METHOD ROLE CALL
     Here is an alphabetical list of all the public methods that you can call
@@ -188,17 +193,17 @@ METHOD ROLE CALL
     "canonpath", "case_tolerant", "catdir", "catfile", "catpath", "cc",
     "chdir", "chomp", "clear", "close", "confess", "content", "ctime",
     "curdir", "dbm", "deep", "device", "device_id", "devnull", "dir",
-    "domain", "empty", "eof", "errors", "file", "filename", "fileno",
-    "filepath", "filter", "fork", "from", "ftp", "get", "getc", "getline",
-    "getlines", "gid", "handle", "head", "http", "https", "inode",
-    "io_handle", "is_absolute", "is_dir", "is_dbm", "is_executable",
-    "is_file", "is_link", "is_mldbm", "is_open", "is_pipe", "is_readable",
-    "is_socket", "is_stdio", "is_string", "is_temp", "is_writable", "join",
-    "length", "link", "lock", "mailer", "mailto", "mkdir", "mkpath",
-    "mldbm", "mode", "modes", "mtime", "name", "new", "next", "nlink",
-    "open", "password", "path", "pathname", "perms", "pipe", "port",
-    "print", "printf", "println", "put", "rdonly", "rdwr", "read",
-    "readdir", "readlink", "recv", "rel2abs", "relative", "rename",
+    "domain", "empty", "encoding", "eof", "errors", "file", "filename",
+    "fileno", "filepath", "filter", "fork", "from", "ftp", "get", "getc",
+    "getline", "getlines", "gid", "handle", "head", "http", "https",
+    "inode", "io_handle", "is_absolute", "is_dir", "is_dbm",
+    "is_executable", "is_file", "is_link", "is_mldbm", "is_open", "is_pipe",
+    "is_readable", "is_socket", "is_stdio", "is_string", "is_temp",
+    "is_writable", "join", "length", "link", "lock", "mailer", "mailto",
+    "mkdir", "mkpath", "mldbm", "mode", "modes", "mtime", "name", "new",
+    "next", "nlink", "open", "password", "path", "pathname", "perms",
+    "pipe", "port", "print", "printf", "println", "put", "rdonly", "rdwr",
+    "read", "readdir", "readlink", "recv", "rel2abs", "relative", "rename",
     "request", "response", "rmdir", "rmtree", "rootdir", "scalar", "seek",
     "send", "separator", "shutdown", "size", "slurp", "socket", "sort",
     "splitdir", "splitpath", "stat", "stdio", "stderr", "stdin", "stdout",
@@ -778,6 +783,9 @@ THE IO::All METHODS
 
     * domain
         Set the domain name or ip address that a socket should use.
+
+    * encoding
+        Set the encoding to be used for the PerlIO layer.
 
     * errors
         Use this to set a subroutine reference that gets called when an

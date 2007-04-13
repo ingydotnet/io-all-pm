@@ -6,7 +6,7 @@ require Carp;
 # So one can use Carp::carp "$message" - without the parenthesis.
 sub Carp::carp;
 use IO::All::Base -base;
-our $VERSION = '0.37';
+our $VERSION = '0.38';
 use File::Spec();
 use Symbol();
 use Fcntl;
@@ -359,6 +359,7 @@ field 'package';
 field _binary => undef;
 field _binmode => undef;
 field _strict => undef;
+field _encoding => undef;
 field _utf8 => undef;
 field _handle => undef;
 
@@ -687,10 +688,26 @@ sub slurp {
 
 sub utf8 {
     my $self = shift;
-    return $self if $] < 5.008;
+    if ($] < 5.008) {
+        die "IO::All -utf8 not supported on Perl older than 5.8";
+    }
     CORE::binmode($self->io_handle, ':utf8')
       if $self->is_open;
     $self->_utf8(1);
+    $self->encoding('utf8');
+    return $self;
+}
+
+sub encoding {
+    my $self = shift;
+    my $encoding = shift
+      or die "No encoding value passed to IO::All::encoding";
+    if ($] < 5.008) {
+        die "IO::All -encoding not supported on Perl older than 5.8";
+    }
+    CORE::binmode($self->io_handle, ":$encoding")
+      if $self->is_open;
+    $self->_encoding($encoding);
     return $self;
 }
 
@@ -761,12 +778,15 @@ sub copy {
 
 sub set_binmode {
     my $self = shift;
-    CORE::binmode($self->io_handle) 
-      if $self->_binary;
-    CORE::binmode($self->io_handle, ":utf8")
-      if $self->_utf8;
-    CORE::binmode($self->io_handle, $self->_binmode)
-      if $self->_binmode;
+    if (my $encoding = $self->_encoding) {
+        CORE::binmode($self->io_handle, ":encoding($encoding)");
+    }
+    elsif ($self->_binary) {
+        CORE::binmode($self->io_handle);
+    }
+    elsif ($self->_binmode) {
+        CORE::binmode($self->io_handle, $self->_binmode);
+    }
     return $self;
 }
 

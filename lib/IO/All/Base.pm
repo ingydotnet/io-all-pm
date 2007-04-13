@@ -28,12 +28,22 @@ sub import {
 
 sub generate_constructor {
     my $class = shift;
-    my @flags = grep { s/^-// } @_;
+    my (@flags, %flags, $key);
+    for (@_) {
+        if (s/^-//) {
+            push @flags, $_;
+            $flags{$_} = 1;
+            $key = $_;
+        }
+        else {
+            $flags{$key} = $_ if $key;
+        }
+    }
     my $constructor;
     $constructor = sub {
         my $self = $class->new(@_);
-        for my $flag (@flags) {
-            $self->$flag;
+        for (@flags) {
+            $self->$_($flags{$_});
         }
         $self->constructor($constructor);
         return $self;
