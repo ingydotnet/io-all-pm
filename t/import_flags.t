@@ -1,8 +1,15 @@
 use lib 't', 'lib';
 use strict;
 use warnings;
-use Test::More tests => 16;
+use Test::More;
 use IO_All_Test;
+
+BEGIN {
+    plan(($] < 5.008003)
+          ? (skip_all => 'Broken on older perls')
+          : (tests => 16)
+    );
+}
 
 package One;
 use IO::All -strict;

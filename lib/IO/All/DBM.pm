@@ -89,6 +89,8 @@ sub add_utf8_dbm_filter {
     $db->filter_fetch_value(sub { utf8::decode($_) });
 }
 
+=encoding utf8
+
 =head1 NAME 
 
 IO::All::DBM - DBM Support for IO::All
@@ -105,9 +107,9 @@ Ingy döt Net <ingy@cpan.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2006. Ingy döt Net. All rights reserved.
+Copyright (c) 2004. Brian Ingerson.
 
-Copyright (c) 2004. Brian Ingerson. All rights reserved.
+Copyright (c) 2006, 2008. Ingy döt Net.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

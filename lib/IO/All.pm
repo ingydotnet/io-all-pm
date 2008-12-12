@@ -6,7 +6,7 @@ require Carp;
 # So one can use Carp::carp "$message" - without the parenthesis.
 sub Carp::carp;
 use IO::All::Base -base;
-our $VERSION = '0.38';
+our $VERSION = '0.39';
 use File::Spec();
 use Symbol();
 use Fcntl;
