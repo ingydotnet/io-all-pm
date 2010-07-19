@@ -889,6 +889,11 @@ Set the mode for which the file should be opened. Examples:
     $io->mode('>>')->open;
     $io->mode(O_RDONLY);
 
+    my $log_appender = io->file('/var/log/my-application.log')
+                         ->mode('>>')->open();
+
+    $log_appender->print("Stardate 5987.6: Mission accomplished.");
+
 =item * name
 
 Set or get the name of the file or directory represented by the IO::All
