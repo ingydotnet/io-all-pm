@@ -1627,6 +1627,13 @@ Finally, thanks to Autrijus Tang, for always having one more good idea.
 
 (It seems IO::All of it to a lot of people!)
 
+=head1 REPOSITORY AND COMMUNITY
+
+The IO::All module can be found on CPAN and on GitHub:
+L<http://github.com/ingydotnet/io-all-pm>.
+
+Please join the IO::All discussion on #io-all on irc.perl.org.
+
 =head1 AUTHOR
 
 Ingy döt Net <ingy@cpan.org>
@@ -1635,7 +1642,7 @@ Ingy döt Net <ingy@cpan.org>
 
 Copyright (c) 2004. Brian Ingerson.
 
-Copyright (c) 2006, 2008. Ingy döt Net.
+Copyright (c) 2006, 2008, 2010. Ingy döt Net.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

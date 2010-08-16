@@ -2,6 +2,7 @@
 ^Makefile$
 ^ToDo$
 ^MANIFEST\.SKIP$
+^MANIFEST.bak$
 \.swp$
 ^pm_to_blib$
 ^blib/
@@ -9,3 +10,4 @@
 ^test/
 ^method_list$
 \.svn/
+\.git/
