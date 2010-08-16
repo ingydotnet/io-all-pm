@@ -139,7 +139,7 @@ sub overload_any_to_any {
     $self->close;
 }
 
-=encoding utf8;
+=encoding utf8
 
 =head1 NAME 
 
@@ -159,7 +159,7 @@ Ingy döt Net <ingy@cpan.org>
 
 Copyright (c) 2004. Brian Ingerson.
 
-Copyright (c) 2006, 2008. Ingy döt Net.
+Copyright (c) 2006, 2008, 2010. Ingy döt Net.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

@@ -1,4 +1,9 @@
 ---
+version: 0.40
+date:    Sun Aug 15 15:22:12 PDT 2010
+changes:
+- Fixed a bug in t/chdir.t
+---
 version: 0.39
 date:    Thu Dec 11 23:22:56 PST 2008
 changes:
