@@ -13,3 +13,4 @@
 ^method_list$
 \.svn/
 \.git/
+\.gitignore
