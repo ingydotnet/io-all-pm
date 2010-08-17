@@ -1,6 +1,7 @@
 ^unit/
 ^Makefile$
 ^ToDo$
+^README.md$
 ^MANIFEST\.SKIP$
 ^MANIFEST.bak$
 \.swp$
