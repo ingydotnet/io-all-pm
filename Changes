@@ -1,4 +1,10 @@
 ---
+version: 0.41
+date:    Mon Aug 16 22:33:45 PDT 2010
+changes:
+- Recent Test::More was triggering errors in file_spec.t.
+- Thanks to Torsten Raudssus for a fix. Getty++
+---
 version: 0.40
 date:    Sun Aug 15 15:22:12 PDT 2010
 changes:
