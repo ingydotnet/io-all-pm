@@ -332,7 +332,7 @@ lock. If all goes well the child will print 3 lines.
 This simple example will read lines from a file forever. When the last
 line is read, it will reopen the file and read the first one again.
 
-    my $io = io'file1.txt';
+    my $io = io 'file1.txt';
     $io->autoclose(1);
     while (my $line = $io->getline || $io->getline) {
         print $line;
@@ -358,7 +358,7 @@ or more simply:
 The C<backwards> method returns the IO::All object so that you can
 chain the calls.
 
-NOTE: This operation requires that you have the File::ReadBackwards 
+NOTE: This operation requires that you have the L<File::ReadBackwards>
 module installed.
     
 =head2 Client/Server Sockets
