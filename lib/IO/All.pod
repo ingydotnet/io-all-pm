@@ -161,7 +161,7 @@ by the usage context. That means you can replace this:
 
 with this:
 
-    my $stuff < io"./mystuff";
+    my $stuff < io "./mystuff";
 
 And that is a B<good thing>!
 
@@ -262,7 +262,7 @@ appended to.
 
 An IO::All file used as an array reference becomes tied using Tie::File:
 
-    $file = io"file";
+    $file = io "file";
     # Print last line of file
     print $file->[-1];
     # Insert new line in middle of file
