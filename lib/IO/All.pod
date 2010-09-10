@@ -233,9 +233,9 @@ a huge matrix of possibilities for magic. That's because the overloading
 is sensitive to the types, position and context of the arguments, and an
 IO::All object can be one of many types.
 
-The most important overload to grok is stringification. IO::All objects
-stringify to their file or directory name. Here we print the contents of
-the current directory:
+The most important overload to become familiar with is stringification.
+IO::All objects stringify to their file or directory name. Here we print the
+contents of the current directory:
 
     perl -MIO::All -le 'print for io(".")->all'
 
