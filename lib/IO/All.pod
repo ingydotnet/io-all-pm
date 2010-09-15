@@ -536,7 +536,7 @@ for I/O:
 
 =item * file
 
-    io->file(file-name);
+    io->file("path/to/my/file.txt");
 
 Using the C<file> method sets the type of the object to I<file> and sets
 the pathname of the file if provided.
@@ -551,25 +551,25 @@ work the same:
 
 =item * dir
 
-    io->file(dir-name);
+    io->file($dir_name);
 
 Make the object be of type I<directory>.
 
 =item * socket
 
-    io->file(domain:port);
+    io->socket("${domain}:${port}");
 
 Make the object be of type I<socket>.
 
 =item * link
 
-    io->file(link-name);
+    io->link($link_name);
 
 Make the object be of type I<link>.
 
 =item * pipe
 
-    io->file(link-name);
+    io->pipe($pipe_command);
 
 Make the object be of type I<pipe>. The following two statements are
 equivalent:
@@ -605,7 +605,7 @@ Storable or FreezeThaw.
 
 =item * string
 
-Make the object be a IO::String object. These are equivalent:
+Make the object be an IO::String object. These are equivalent:
 
     my $io = io('$');
     my $io = io->string;
@@ -637,7 +637,7 @@ Make the object represent STDERR.
 
 =item * handle
 
-    io->handle(io-handle);
+    io->handle($io_handle);
 
 Forces the object to be created from an pre-existing IO handle. You can
 chain calls together to indicate the type of handle:
@@ -647,19 +647,19 @@ chain calls together to indicate the type of handle:
 
 =item * http
 
-Make the object represent an http uri. Requires IO-All-LWP.
+Make the object represent an HTTP URI. Requires IO-All-LWP.
 
 =item * https
 
-Make the object represent an https uri. Requires IO-All-LWP.
+Make the object represent an HTTPS URI. Requires IO-All-LWP.
 
 =item * ftp
 
-Make the object represent a ftp uri. Requires IO-All-LWP.
+Make the object represent an FTP URI. Requires IO-All-LWP.
 
 =item * mailto
 
-Make the object represent a mailto uri. Requires IO-All-Mailto.
+Make the object represent a C<mailto:> URI. Requires IO-All-Mailto.
 
 =back
 
