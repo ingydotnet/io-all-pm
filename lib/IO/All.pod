@@ -87,7 +87,7 @@ IO::All - IO::All of it to Graham and Damian!
     "Thank you!" > $connection;                 # Thank the caller
     $connection->close;                         # Hang up
     io(':6666')->accept->slurp > io->devnull;   # Take a complaint and file it
-    
+
     # DBM database operations:
     $dbm = io 'my/database';                    # Create a database object
     print $dbm->{grocery_list};                 # Hash context makes it a DBM
@@ -102,7 +102,7 @@ IO::All - IO::All of it to Graham and Damian!
     @$io = reverse @$io;                        # Reverse lines in a file
 
     # Stat functions:
-    printf "%s %s %s\n",                        # Print name, uid and size of 
+    printf "%s %s %s\n",                        # Print name, uid and size of
       $_->name, $_->uid, $_->size               # contents of current directory
         for io('.')->all;
     print "$_\n" for sort                       # Use mtime method to sort all
@@ -111,10 +111,10 @@ IO::All - IO::All of it to Graham and Damian!
 
     # File::Spec support:
     $contents < io->catfile(qw(dir file.txt));  # Portable IO operation
-    
+
     # Miscellaneous:
     @lines = io('file.txt')->chomp->slurp;      # Chomp as you slurp
-    @chunks = 
+    @chunks =
       io('file.txt')->separator('xxx')->slurp;  # Use alternnate record sep
     $binary = io('file.bin')->binary->all;      # Read a binary file
     io('a-symlink')->readlink->slurp;           # Readlink returns an object
@@ -141,7 +141,7 @@ IO::String, Tie::File, File::Spec, File::Path and File::ReadBackwards;
 as well as all the DBM and MLDBM modules. You can use most of the
 methods found in these classes and in IO::Handle (which they inherit
 from). IO::All adds dozens of other helpful idiomatic methods
-including file stat and manipulation functions. 
+including file stat and manipulation functions.
 
 IO::All is pluggable, and modules like L<IO::All::LWP> and L<IO::All::Mailto>
 add even more functionality. Optionally, every IO::All object can be
@@ -360,7 +360,7 @@ chain the calls.
 
 NOTE: This operation requires that you have the L<File::ReadBackwards>
 module installed.
-    
+
 =head2 Client/Server Sockets
 
 IO::All makes it really easy to write a forking socket server and a
@@ -402,7 +402,7 @@ dynamic pages:
 
 There is are a lot of subtle things going on here. First we accept a socket
 and fork the server. Then we overload the new socket as a code ref. This code
-ref takes one argument, another code ref, which is used as a callback. 
+ref takes one argument, another code ref, which is used as a callback.
 
 The callback is called once for every line read on the socket. The line
 is put into C<$_> and the socket itself is passed in to the callback.
@@ -414,7 +414,7 @@ we create a piped command as our IO::All object. This somewhat approximates
 CGI support.
 
 Whatever the resulting object is, we direct the contents back at our socket
-which is in C<$_[0]>. Pretty simple, eh? 
+which is in C<$_[0]>. Pretty simple, eh?
 
 =head2 DBM Files
 
@@ -452,7 +452,7 @@ then pass control to the real C<open>.
 First the code using the module:
 
     use IO::Dumper;
-    
+
     io('./mydump')->dump($hash);
 
 And next the IO::Dumper module itself:
@@ -460,12 +460,12 @@ And next the IO::Dumper module itself:
     package IO::Dumper;
     use IO::All -base;
     use Data::Dumper;
-    
+
     sub dump {
         my $self = shift;
         Dumper(@_) > $self;
     }
-    
+
     1;
 
 =head2 Inline Subclassing
@@ -477,11 +477,11 @@ method manually.
 
     IO::Dumper->import;
     io('./mydump')->dump($hash);
-    
+
     package IO::Dumper;
     use IO::All -base;
     use Data::Dumper;
-    
+
     sub dump {
         my $self = shift;
         Dumper(@_) > $self;
@@ -509,7 +509,7 @@ attributes are copied from the instance object.
     io(file-descriptor);
     IO::All->new(file-descriptor);
     $io->new(file-descriptor);
-            
+
 All three forms take a single argument, a file descriptor. A file
 descriptor can be any of the following:
 
@@ -600,7 +600,7 @@ serialization module. The first DBM module that is available is used to
 process the MLDBM file. The serialization module can be Data::Dumper,
 Storable or FreezeThaw.
 
-    io('mymldbm')->mldbm('GDBM_File', 'Storable')->{author} = 
+    io('mymldbm')->mldbm('GDBM_File', 'Storable')->{author} =
       {nickname => 'ingy'};
 
 =item * string
@@ -973,7 +973,7 @@ Read all contents into a single string.
 =item * all (For directories)
 
 Returns a list of IO::All objects for all files and subdirectories in a
-directory. 
+directory.
 
 '.' and '..' are excluded.
 
@@ -1569,7 +1569,7 @@ To keep input objects from closing at EOF, do this:
 
     $io->autoclose(0);
 
-=item * 
+=item *
 
 You can always call C<open> and C<close> explicitly, if you need that
 level of control. To test if an object is currently open, use the

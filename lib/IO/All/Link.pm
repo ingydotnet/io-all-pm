@@ -55,7 +55,7 @@ sub target {
 
 =encoding utf8
 
-=head1 NAME 
+=head1 NAME
 
 IO::All::Link - Symbolic Link Support for IO::All
 

@@ -56,7 +56,7 @@ sub assert_tied_file {
     my $self = shift;
     return $self->tied_file || do {
         eval {require Tie::File};
-        $self->throw("Tie::File required for file array operations:\n$@") 
+        $self->throw("Tie::File required for file array operations:\n$@")
           if $@;
         my $array_ref = do { my @array; \@array };
         my $name = $self->pathname;
@@ -81,7 +81,7 @@ sub open {
     push @args, $self->perms if defined $self->perms;
     if (defined $self->pathname) {
         $self->io_handle(IO::File->new);
-        $self->io_handle->open($self->pathname, @args) 
+        $self->io_handle->open($self->pathname, @args)
           or $self->throw($self->open_msg);
     }
     elsif (defined $self->_handle and
@@ -242,7 +242,7 @@ sub overload_file_as_scalar {
 
 =encoding utf8
 
-=head1 NAME 
+=head1 NAME
 
 IO::All::File - File Support for IO::All
 

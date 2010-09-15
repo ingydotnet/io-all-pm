@@ -29,7 +29,7 @@ sub open {
     my $command = $self->name;
     $command =~ s/(^\||\|$)//;
     my $mode = shift || $self->mode || '<';
-    my $pipe_mode = 
+    my $pipe_mode =
       $mode eq '>' ? '|-' :
       $mode eq '<' ? '-|' :
       $self->throw("Invalid usage mode '$mode' for pipe");
@@ -55,7 +55,7 @@ sub open_msg {
 
 =encoding utf8
 
-=head1 NAME 
+=head1 NAME
 
 IO::All::Pipe - Pipe Support for IO::All
 

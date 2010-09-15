@@ -22,7 +22,7 @@ sub open {
 
 =encoding utf8
 
-=head1 NAME 
+=head1 NAME
 
 IO::All::String - String IO Support for IO::All
 

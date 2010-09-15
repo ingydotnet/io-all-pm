@@ -120,7 +120,7 @@ sub empty {
     opendir($dh, $self->pathname) or die;
     while (my $dir = readdir($dh)) {
        return 0 unless $dir =~ /^\.{1,2}$/;
-    } 
+    }
     return 1;
 }
 
@@ -153,13 +153,13 @@ sub readdir {
     my $self = shift;
     $self->assert_open;
     if (wantarray) {
-        my @return = grep { 
-            not /^\.{1,2}$/ 
+        my @return = grep {
+            not /^\.{1,2}$/
         } $self->io_handle->read;
         $self->close;
         return @return;
     }
-    my $name = '.'; 
+    my $name = '.';
     while ($name =~ /^\.{1,2}$/) {
         $name = $self->io_handle->read;
         unless (defined $name) {
@@ -201,17 +201,17 @@ sub overload_as_array {
 }
 
 sub overload_as_hash {
-    +{ 
+    +{
         map {
             (my $name = $_->pathname) =~ s/.*[\/\\]//;
             ($name, $_);
-        } $_[1]->all 
+        } $_[1]->all
     };
 }
 
 =encoding utf8
 
-=head1 NAME 
+=head1 NAME
 
 IO::All::Dir - Directory Support for IO::All
 

@@ -19,11 +19,11 @@ sub fix {
     return qq{'$_'};
 }
 
-undef $/; 
+undef $/;
 # # Copy STDIN to STDOUT
 # io('-')->print(io('-')->slurp);
 my $test1 = fix 'io("-")->print(io("-")->slurp)';
-open TEST, '-|', qq{$^X -Ilib -MIO::All -e $test1 < t/mystuff} 
+open TEST, '-|', qq{$^X -Ilib -MIO::All -e $test1 < t/mystuff}
   or die "open failed: $!";
 test_file_contents(<TEST>, 't/mystuff');
 close TEST;
@@ -31,10 +31,10 @@ close TEST;
 # # Copy STDIN to STDOUT a block at a time
 # my $stdin = io('-');
 # my $stdout = io('-');
-# $stdout->buffer($stdin->buffer); 
+# $stdout->buffer($stdin->buffer);
 # $stdout->write while $stdin->read;
 my $test2 = fix 'my $stdin = io("-");my $stdout = io("-");$stdout->buffer($stdin->buffer);$stdout->write while $stdin->read';
-open TEST, '-|', qq{$^X -Ilib -MIO::All -e $test2 < t/mystuff} 
+open TEST, '-|', qq{$^X -Ilib -MIO::All -e $test2 < t/mystuff}
   or die "open failed: $!";
 test_file_contents(<TEST>, 't/mystuff');
 close TEST;
@@ -46,7 +46,7 @@ close TEST;
 #     $string_out->print($line);
 # }
 my $test3 = fix 'my $stdin = io("-");my $string_out = io(q{$});while (my $line = $stdin->getline("")) {$string_out->print($line)} print ${$string_out->string_ref}';
-open TEST, '-|', qq{$^X -Ilib -MIO::All -e $test3 < t/mystuff} 
+open TEST, '-|', qq{$^X -Ilib -MIO::All -e $test3 < t/mystuff}
   or die "open failed: $!";
 test_file_contents(<TEST>, 't/mystuff');
 close TEST;

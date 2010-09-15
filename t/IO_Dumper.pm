@@ -15,6 +15,6 @@ sub dump {
     local $Data::Dumper::Sortkeys = 1;
     $self->print(Data::Dumper::Dumper(@_));
     return $self;
-} 
+}
 
 1;

@@ -53,7 +53,7 @@ sub open_stderr {
 
 =encoding utf8
 
-=head1 NAME 
+=head1 NAME
 
 IO::All::STDIO - STDIO Support for IO::All
 

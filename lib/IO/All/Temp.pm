@@ -17,7 +17,7 @@ sub temp {
 
 =encoding utf8
 
-=head1 NAME 
+=head1 NAME
 
 IO::All::Temp - Temporary File Support for IO::All
 

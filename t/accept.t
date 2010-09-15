@@ -6,7 +6,7 @@ use IO::All;
 use IO_All_Test;
 use IO::Socket::INET;
 
-# This test tests for the ability of a non-forking socket to handle more 
+# This test tests for the ability of a non-forking socket to handle more
 # than one connection.
 
 my $pid = fork();
@@ -21,7 +21,7 @@ if (! $pid)
         open my $out, ">t/output/server-port.t";
         print {$out} $port;
         close($out);
-        
+
         my $server = io("localhost:$port");
 
         eval {
@@ -29,7 +29,7 @@ if (! $pid)
             {
                 my $connection = $server->accept();
                 $accepted = 1;
-                $connection->print(sprintf("Ingy-%.2d", $count)); 
+                $connection->print(sprintf("Ingy-%.2d", $count));
                 $connection->close();
             }
         };

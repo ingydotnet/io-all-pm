@@ -17,7 +17,7 @@ sub dbm {
 
 sub assert_open {
     my $self = shift;
-    return $self->tied_file 
+    return $self->tied_file
       if $self->tied_file;
     $self->open;
 }
@@ -56,7 +56,7 @@ sub open {
         $self->_dbm_class->import;
         my $type = eval '$DB_HASH'; die $@ if $@;
         # XXX Not sure about this warning
-        warn "Using DB_File::Lock in IO::All without the rdonly or rdwr method\n" 
+        warn "Using DB_File::Lock in IO::All without the rdonly or rdwr method\n"
           if not ($self->_rdwr or $self->_rdonly);
         my $flag = $self->_rdwr ? 'write' : 'read';
         $mode = $self->_rdwr ? O_RDWR : O_RDONLY;
@@ -72,7 +72,7 @@ sub tie_dbm {
     my $self = shift;
     my $hash;
     my $filename = $self->name;
-    my $db = tie %$hash, $self->_dbm_class, $filename, $self->mode, $self->perms, 
+    my $db = tie %$hash, $self->_dbm_class, $filename, $self->mode, $self->perms,
         @{$self->_dbm_extra}
       or $self->throw("Can't open '$filename' as DBM file:\n$!");
     $self->add_utf8_dbm_filter($db)
@@ -91,7 +91,7 @@ sub add_utf8_dbm_filter {
 
 =encoding utf8
 
-=head1 NAME 
+=head1 NAME
 
 IO::All::DBM - DBM Support for IO::All
 

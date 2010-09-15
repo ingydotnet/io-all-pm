@@ -38,7 +38,7 @@ sub accept {
     $self->_listen(1);
     $self->assert_open;
     my $server = $self->io_handle;
-    my $socket; 
+    my $socket;
     while (1) {
         $socket = $server->accept;
         last unless $self->_fork;
@@ -141,7 +141,7 @@ sub overload_any_to_any {
 
 =encoding utf8
 
-=head1 NAME 
+=head1 NAME
 
 IO::All::Socket - Socket Support for IO::All
 

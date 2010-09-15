@@ -7,7 +7,7 @@ field _serializer => 'Data::Dumper';
 
 sub mldbm {
     my $self = shift;
-    bless $self, __PACKAGE__;    
+    bless $self, __PACKAGE__;
     my ($serializer) = grep { /^(Storable|Data::Dumper|FreezeThaw)$/ } @_;
     $self->_serializer($serializer) if defined $serializer;
     my @dbm_list = grep { not /^(Storable|Data::Dumper|FreezeThaw)$/ } @_;
@@ -23,7 +23,7 @@ sub tie_dbm {
     eval "use MLDBM qw($dbm_class $serializer)";
     $self->throw("Can't open '$filename' as MLDBM:\n$@") if $@;
     my $hash;
-    my $db = tie %$hash, 'MLDBM', $filename, $self->mode, $self->perms, 
+    my $db = tie %$hash, 'MLDBM', $filename, $self->mode, $self->perms,
         @{$self->_dbm_extra}
       or $self->throw("Can't open '$filename' as MLDBM file:\n$!");
     $self->add_utf8_dbm_filter($db)
@@ -33,7 +33,7 @@ sub tie_dbm {
 
 =encoding utf8
 
-=head1 NAME 
+=head1 NAME
 
 IO::All::MLDBM - MLDBM Support for IO::All
 

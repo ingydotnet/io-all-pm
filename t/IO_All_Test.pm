@@ -1,8 +1,8 @@
 package IO_All_Test;
 use File::Path;
 @EXPORT = qw(
-    test_file_contents 
-    test_file_contents2 
+    test_file_contents
+    test_file_contents2
     test_matching_files
     read_file_lines
     flip_slash f
@@ -29,7 +29,7 @@ sub test_matching_files {
 sub read_file {
     my ($file) = @_;
     local(*FILE, $/);
-    open FILE, $file 
+    open FILE, $file
       or die "Can't open $file for input:\n$!";
     <FILE>;
 }

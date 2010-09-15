@@ -14,7 +14,7 @@ sub dump {
     my $self = shift;
     $self->print(Data::Dumper::Dumper(@_));
     return $self;
-} 
+}
 
 package main;
 use Test::More tests => 5;

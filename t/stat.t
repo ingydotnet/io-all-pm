@@ -5,7 +5,7 @@ use Test::More tests => 14;
 use IO::All;
 use IO_All_Test;
 
-my ($dev, $ino, $modes, $nlink, $uid, $gid, $rdev, 
+my ($dev, $ino, $modes, $nlink, $uid, $gid, $rdev,
     $size, $atime, $mtime, $ctime, $blksize, $blocks) = stat('t/stat.t');
 
 my $io = io('t/stat.t');
@@ -23,5 +23,5 @@ is($io->ctime, $ctime);
 is($io->blksize, $blksize);
 is($io->blocks, $blocks);
 
-my @stat = $io->stat; 
+my @stat = $io->stat;
 ok(defined $stat[0]);

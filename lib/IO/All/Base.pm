@@ -19,7 +19,7 @@ sub import {
     else {
         my @flags = @_;
         for my $export (@{$class . '::EXPORT'}) {
-            *{$package . "::$export"} = $export eq 'io' 
+            *{$package . "::$export"} = $export eq 'io'
             ? $class->generate_constructor(@flags)
             : \&{$class . "::$export"};
         }
@@ -99,9 +99,9 @@ sub field {
       sub {
           my $self = shift;
           unless (exists *$self->{$field}) {
-              *$self->{$field} = 
+              *$self->{$field} =
                 ref($default) eq 'ARRAY' ? [] :
-                ref($default) eq 'HASH' ? {} : 
+                ref($default) eq 'HASH' ? {} :
                 $default;
           }
           return *$self->{$field} unless @_;
@@ -143,7 +143,7 @@ sub proxy_open {
         $self->error_check;
         wantarray ? @return : $return[0];
     };
-    *{"$package\::$proxy"} = 
+    *{"$package\::$proxy"} =
     (@args and $args[0] eq '>') ?
     sub {
         my $self = shift;

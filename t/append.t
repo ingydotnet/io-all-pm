@@ -46,7 +46,7 @@ plan((lc($^O) eq 'mswin32' and defined $ENV{PERL5_CPANPLUS_IS_RUNNING})
     my $contents = _slurp("t/output/myappend.txt");
 
     # TEST
-    is ($contents, "Hello World!\nMessage No. 2!\n", 
+    is ($contents, "Hello World!\nMessage No. 2!\n",
         "Second append was ok.");
 }
 

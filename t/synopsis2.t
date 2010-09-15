@@ -6,7 +6,7 @@ use IO::All;
 use IO_All_Test;
 
 # Print name and first line of all files in a directory
-my $dir = io('t/mydir'); 
+my $dir = io('t/mydir');
 ok($dir->is_dir);
 my @results;
 while (my $io = $dir->next) {
