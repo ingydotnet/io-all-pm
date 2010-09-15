@@ -793,18 +793,21 @@ sub set_binmode {
 #===============================================================================
 # Stat Methods
 #===============================================================================
-sub device    {my $self = shift; my $x = (stat($self->io_handle || $self->pathname))[0] }
-sub inode     {my $self = shift; my $x = (stat($self->io_handle || $self->pathname))[1] }
-sub modes     {my $self = shift; my $x = (stat($self->io_handle || $self->pathname))[2] }
-sub nlink     {my $self = shift; my $x = (stat($self->io_handle || $self->pathname))[3] }
-sub uid       {my $self = shift; my $x = (stat($self->io_handle || $self->pathname))[4] }
-sub gid       {my $self = shift; my $x = (stat($self->io_handle || $self->pathname))[5] }
-sub device_id {my $self = shift; my $x = (stat($self->io_handle || $self->pathname))[6] }
-sub size      {my $self = shift; my $x = (stat($self->io_handle || $self->pathname))[7] }
-sub atime     {my $self = shift; my $x = (stat($self->io_handle || $self->pathname))[8] }
-sub mtime     {my $self = shift; my $x = (stat($self->io_handle || $self->pathname))[9] }
-sub ctime     {my $self = shift; my $x = (stat($self->io_handle || $self->pathname))[10] }
-sub blksize   {my $self = shift; my $x = (stat($self->io_handle || $self->pathname))[11] }
-sub blocks    {my $self = shift; my $x = (stat($self->io_handle || $self->pathname))[12] }
+BEGIN {
+    no strict 'refs';
+    my @stat_fields = qw(
+        device inode modes nlink uid gid device_id size atime mtime
+        ctime blksize blocks
+    );
+    foreach my $stat_field_idx (0 .. $#stat_fields)
+    {
+        my $idx = $stat_field_idx;
+        my $name = $stat_fields[$idx];
 
-1;
+        *$name = sub {
+            my $self = shift;
+            return (stat($self->io_handle || $self->pathname))[$idx];
+        };
+    }
+}
+
