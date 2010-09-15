@@ -421,7 +421,7 @@ which is in C<$_[0]>. Pretty simple, eh?
 IO::All file objects used as a hash reference, treat the file as a DBM tied to
 a hash. Here I write my DB record to STDERR:
 
-    io("names.db")->{ingy} > io'=';
+    io("names.db")->{ingy} > io('=');
 
 Since their are several DBM formats available in Perl, IO::All picks the first
 one of these that is installed on your system:
