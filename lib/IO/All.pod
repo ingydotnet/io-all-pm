@@ -695,6 +695,13 @@ together. For example:
 
 Indicates that the C<pathname> for the object should be made absolute.
 
+    # Print the full path of the current working directory
+    # (like pwd).
+
+    use IO::All; 
+
+    print io->curdir->absolute;
+
 =item * assert
 
 This method ensures that the path for a file or directory actually exists
