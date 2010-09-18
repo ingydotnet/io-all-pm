@@ -83,8 +83,8 @@ SYNOPSIS
         "Thank you!" > $connection;                 # Thank the caller
         $connection->close;                         # Hang up
         io(':6666')->accept->slurp > io->devnull;   # Take a complaint and file it
-        
-    # DBM database operations:
+
+        # DBM database operations:
         $dbm = io 'my/database';                    # Create a database object
         print $dbm->{grocery_list};                 # Hash context makes it a DBM
         $dbm->{todo} = $new_list;                   # Write to database
@@ -98,7 +98,7 @@ SYNOPSIS
         @$io = reverse @$io;                        # Reverse lines in a file
 
         # Stat functions:
-        printf "%s %s %s\n",                        # Print name, uid and size of 
+        printf "%s %s %s\n",                        # Print name, uid and size of
           $_->name, $_->uid, $_->size               # contents of current directory
             for io('.')->all;
         print "$_\n" for sort                       # Use mtime method to sort all
@@ -107,10 +107,10 @@ SYNOPSIS
 
         # File::Spec support:
         $contents < io->catfile(qw(dir file.txt));  # Portable IO operation
-        
-    # Miscellaneous:
+
+        # Miscellaneous:
         @lines = io('file.txt')->chomp->slurp;      # Chomp as you slurp
-        @chunks = 
+        @chunks =
           io('file.txt')->separator('xxx')->slurp;  # Use alternnate record sep
         $binary = io('file.bin')->binary->all;      # Read a binary file
         io('a-symlink')->readlink->slurp;           # Readlink returns an object
@@ -157,7 +157,7 @@ DESCRIPTION
 
     with this:
 
-        my $stuff < io"./mystuff";
+        my $stuff < io "./mystuff";
 
     And that is a good thing!
 
@@ -224,9 +224,9 @@ OPERATOR OVERLOADING
     is sensitive to the types, position and context of the arguments, and an
     IO::All object can be one of many types.
 
-    The most important overload to grok is stringification. IO::All objects
-    stringify to their file or directory name. Here we print the contents of
-    the current directory:
+    The most important overload to become familiar with is stringification.
+    IO::All objects stringify to their file or directory name. Here we print
+    the contents of the current directory:
 
         perl -MIO::All -le 'print for io(".")->all'
 
@@ -253,7 +253,7 @@ OPERATOR OVERLOADING
 
     An IO::All file used as an array reference becomes tied using Tie::File:
 
-        $file = io"file";
+        $file = io "file";
         # Print last line of file
         print $file->[-1];
         # Insert new line in middle of file
@@ -321,7 +321,7 @@ COOKBOOK
     This simple example will read lines from a file forever. When the last
     line is read, it will reopen the file and read the first one again.
 
-        my $io = io'file1.txt';
+        my $io = io 'file1.txt';
         $io->autoclose(1);
         while (my $line = $io->getline || $io->getline) {
             print $line;
@@ -407,7 +407,7 @@ COOKBOOK
     IO::All file objects used as a hash reference, treat the file as a DBM
     tied to a hash. Here I write my DB record to STDERR:
 
-        io("names.db")->{ingy} > io'=';
+        io("names.db")->{ingy} > io('=');
 
     Since their are several DBM formats available in Perl, IO::All picks the
     first one of these that is installed on your system:
@@ -437,21 +437,21 @@ COOKBOOK
     First the code using the module:
 
         use IO::Dumper;
-        
-    io('./mydump')->dump($hash);
+
+        io('./mydump')->dump($hash);
 
     And next the IO::Dumper module itself:
 
         package IO::Dumper;
         use IO::All -base;
         use Data::Dumper;
-        
-    sub dump {
+
+        sub dump {
             my $self = shift;
             Dumper(@_) > $self;
         }
-        
-    1;
+
+        1;
 
   Inline Subclassing
     This recipe does the same thing as the previous one, but without needing
@@ -461,12 +461,12 @@ COOKBOOK
 
         IO::Dumper->import;
         io('./mydump')->dump($hash);
-        
-    package IO::Dumper;
+
+        package IO::Dumper;
         use IO::All -base;
         use Data::Dumper;
-        
-    sub dump {
+
+        sub dump {
             my $self = shift;
             Dumper(@_) > $self;
         }
@@ -517,7 +517,7 @@ THE IO::All METHODS
 
     *   file
 
-            io->file(file-name);
+            io->file("path/to/my/file.txt");
 
         Using the "file" method sets the type of the object to *file* and
         sets the pathname of the file if provided.
@@ -532,25 +532,25 @@ THE IO::All METHODS
 
     *   dir
 
-            io->file(dir-name);
+            io->file($dir_name);
 
         Make the object be of type *directory*.
 
     *   socket
 
-            io->file(domain:port);
+            io->socket("${domain}:${port}");
 
         Make the object be of type *socket*.
 
     *   link
 
-            io->file(link-name);
+            io->link($link_name);
 
         Make the object be of type *link*.
 
     *   pipe
 
-            io->file(link-name);
+            io->pipe($pipe_command);
 
         Make the object be of type *pipe*. The following two statements are
         equivalent:
@@ -581,12 +581,12 @@ THE IO::All METHODS
         available is used to process the MLDBM file. The serialization
         module can be Data::Dumper, Storable or FreezeThaw.
 
-            io('mymldbm')->mldbm('GDBM_File', 'Storable')->{author} = 
+            io('mymldbm')->mldbm('GDBM_File', 'Storable')->{author} =
               {nickname => 'ingy'};
 
     *   string
 
-        Make the object be a IO::String object. These are equivalent:
+        Make the object be an IO::String object. These are equivalent:
 
             my $io = io('$');
             my $io = io->string;
@@ -618,7 +618,7 @@ THE IO::All METHODS
 
     *   handle
 
-            io->handle(io-handle);
+            io->handle($io_handle);
 
         Forces the object to be created from an pre-existing IO handle. You
         can chain calls together to indicate the type of handle:
@@ -628,19 +628,19 @@ THE IO::All METHODS
 
     *   http
 
-        Make the object represent an http uri. Requires IO-All-LWP.
+        Make the object represent an HTTP URI. Requires IO-All-LWP.
 
     *   https
 
-        Make the object represent an https uri. Requires IO-All-LWP.
+        Make the object represent an HTTPS URI. Requires IO-All-LWP.
 
     *   ftp
 
-        Make the object represent a ftp uri. Requires IO-All-LWP.
+        Make the object represent an FTP URI. Requires IO-All-LWP.
 
     *   mailto
 
-        Make the object represent a mailto uri. Requires IO-All-Mailto.
+        Make the object represent a "mailto:" URI. Requires IO-All-Mailto.
 
     If you need to use the same options to create a lot of objects, and
     don't want to duplicate the code, just create a dummy object with the
@@ -671,6 +671,13 @@ THE IO::All METHODS
 
         Indicates that the "pathname" for the object should be made
         absolute.
+
+            # Print the full path of the current working directory
+            # (like pwd).
+
+            use IO::All; 
+
+            print io->curdir->absolute;
 
     *   assert
 
@@ -1588,12 +1595,12 @@ REPOSITORY AND COMMUNITY
     Please join the IO::All discussion on #io-all on irc.perl.org.
 
 AUTHOR
-    Ingy döt Net <ingy@cpan.org>
+    Ingy dÃ¶t Net <ingy@cpan.org>
 
 COPYRIGHT
     Copyright (c) 2004. Brian Ingerson.
 
-    Copyright (c) 2006, 2008, 2010. Ingy döt Net.
+    Copyright (c) 2006, 2008, 2010. Ingy dÃ¶t Net.
 
     This program is free software; you can redistribute it and/or modify it
     under the same terms as Perl itself.

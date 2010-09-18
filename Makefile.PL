@@ -2,6 +2,10 @@ use inc::Module::Install;
 
 name        'IO-All';
 all_from    'lib/IO/All.pm';
+readme_from 'lib/IO/All.pod';
+manifest_skip;
+ack_xxx;
+version_check;
 
 requires    'IO::String' => '0';
 
