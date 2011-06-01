@@ -1,3 +1,9 @@
+== 0.42
+- Return 0 or 1 on fail or success
+- Die on failure with -strict option.
+
+
+
 0.30 release
 - IO::All::STDIO -> IO::All::Stdio (downcase)
 - No dependency on Tie::File
