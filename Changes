@@ -1,5 +1,11 @@
 ---
 version: 0.41
+date:    
+changes:
+- Doc work and tests by Shlomi Fish
+- Use Module::Package
+---
+version: 0.41
 date:    Mon Aug 16 22:33:45 PDT 2010
 changes:
 - Recent Test::More was triggering errors in file_spec.t.

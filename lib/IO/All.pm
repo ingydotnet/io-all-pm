@@ -2,14 +2,18 @@ package IO::All;
 use 5.006001;
 use strict;
 use warnings;
+
 require Carp;
 # So one can use Carp::carp "$message" - without the parenthesis.
 sub Carp::carp;
+
 use IO::All::Base -base;
-our $VERSION = '0.41';
+
 use File::Spec();
 use Symbol();
 use Fcntl;
+
+our $VERSION = '0.41';
 our @EXPORT = qw(io);
 
 #===============================================================================
