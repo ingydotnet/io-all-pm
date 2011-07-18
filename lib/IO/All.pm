@@ -13,7 +13,7 @@ use File::Spec();
 use Symbol();
 use Fcntl;
 
-our $VERSION = '0.41';
+our $VERSION = '0.42';
 our @EXPORT = qw(io);
 
 #===============================================================================
@@ -486,6 +486,14 @@ sub rel2abs {
 #===============================================================================
 # Public IO Action Methods
 #===============================================================================
+sub absolute {
+    my $self = shift;
+    $self->pathname(File::Spec->rel2abs($self->pathname))
+      unless $self->is_absolute;
+    $self->is_absolute(1);
+    return $self;
+}
+
 sub all {
     my $self = shift;
     $self->assert_open('<');

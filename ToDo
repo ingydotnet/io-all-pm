@@ -1,8 +1,10 @@
 == 0.42
+- Can't sort io->all_files
+- Test on OS X
 - Return 0 or 1 on fail or success
-- Die on failure with -strict option.
-
-
+  - Die on failure with -strict option.
+- Fix mst's bug
+  - perl -MIO::All -e '${io("/tmp")}'
 
 0.30 release
 - IO::All::STDIO -> IO::All::Stdio (downcase)

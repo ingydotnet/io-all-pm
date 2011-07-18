@@ -1,6 +1,6 @@
-use inc::Module::Package 'Ingy:modern 0.07';
+use inc::Module::Package 'Ingy:modern 0.12';
 
-requires    'IO::String' => '0';
+requires    'IO::String' => '1.08';
 recommends  'File::ReadBackwards';
 
 # XXX Not working yet...

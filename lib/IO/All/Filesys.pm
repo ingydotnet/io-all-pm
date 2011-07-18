@@ -4,14 +4,6 @@ use warnings;
 use IO::All::Base -base;
 use Fcntl qw(:flock);
 
-sub absolute {
-    my $self = shift;
-    $self->pathname(File::Spec->rel2abs($self->pathname))
-      unless $self->is_absolute;
-    $self->is_absolute(1);
-    return $self;
-}
-
 sub exists { my $self = shift; -e $self->name }
 
 sub filename {
