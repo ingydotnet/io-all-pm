@@ -1,7 +1,0 @@
-META.yml
-Makefile
-MANIFEST
-blib
-inc
-pm_to_blib
-t/output

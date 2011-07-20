@@ -1,7 +1,7 @@
-use lib 't', 'lib';
+use lib 't'; #, 'lib';
 use strict;
 use warnings;
-use Test::More tests => 23;
+use Test::More tests => 24;
 use IO_All_Test;
 use IO::All;
 
@@ -73,3 +73,5 @@ ${io('t/mystuff')} . "xxx\n" . ${io('t/mystuff')} > io('t/output/overload1');
 $data < io('t/mystuff');
 my $cat3 = $data . "xxx\n" . $data;
 test_file_contents2('t/output/overload1', $cat3);
+
+is "" . ${io("t")}, "t", "scalar overload of directory (for mst)";

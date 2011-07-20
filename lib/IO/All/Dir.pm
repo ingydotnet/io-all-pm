@@ -191,9 +191,14 @@ sub DESTROY {
 #===============================================================================
 sub overload_table {
     (
+        '${} dir' => 'overload_as_scalar',
         '@{} dir' => 'overload_as_array',
         '%{} dir' => 'overload_as_hash',
     )
+}
+
+sub overload_as_scalar {
+    \ $_[1];
 }
 
 sub overload_as_array {
