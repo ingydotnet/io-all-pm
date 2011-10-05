@@ -159,13 +159,17 @@ sub READLINE {
     goto &getline;
 }
 
-sub DESTROY {
-    my $self = shift;
-    no warnings;
-    unless ( $^V and $^V lt v5.8.0 ) {
-        untie *$self if tied *$self;
+{
+    my $is_pre_5_8 = !!($^V and $^V lt v5.8.0);
+
+    sub DESTROY {
+        my $self = shift;
+        no warnings;
+        unless ( $is_pre_5_8 ) {
+            untie *$self if tied *$self;
+        }
+        $self->close if $self->is_open;
     }
-    $self->close if $self->is_open;
 }
 
 sub BINMODE {
