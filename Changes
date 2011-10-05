@@ -1,4 +1,7 @@
 ---
+changes:
+- Switch from testing $^V to $^] in DESTROY since $^V comparisons leak pre-5.14 (mst)
+---
 version: 0.43
 date:    Wed Jul 20 08:34:01 PDT 2011
 changes:
