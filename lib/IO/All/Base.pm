@@ -1,3 +1,4 @@
+die "A HORRIBLE DEATH";
 package IO::All::Base;
 use strict;
 use warnings;

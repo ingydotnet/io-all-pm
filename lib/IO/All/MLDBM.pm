@@ -1,9 +1,8 @@
 package IO::All::MLDBM;
-use strict;
-use warnings;
-use IO::All::DBM -base;
+use IO::All::Mo;
+extends 'IO::All::DBM';
 
-field _serializer => 'Data::Dumper';
+has _serializer => (default => sub {'Data::Dumper'});
 
 sub mldbm {
     my $self = shift;

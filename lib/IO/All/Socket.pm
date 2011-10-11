@@ -1,15 +1,13 @@
 package IO::All::Socket;
-use strict;
-use warnings;
-use IO::All -base;
+use IO::All::Mo;
 use IO::Socket;
 
-const type => 'socket';
-field _listen => undef;
-option 'fork';
-const domain_default => 'localhost';
-chain domain => undef;
-chain port => undef;
+use constant type => 'socket';
+use constant domain_default => 'localhost';
+has _listen => ();
+has fork => (option => 1);
+has domain => (chain => 1);
+has port => (chain => 1);
 proxy_open 'recv';
 proxy_open 'send';
 

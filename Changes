@@ -1,4 +1,9 @@
 ---
+version: 0.45
+date:    
+changes:
+- Refactor OO from IO::All::Base to Mo.
+---
 version: 0.44
 date:    Wed Oct  5 18:11:27 EDT 2011
 changes:

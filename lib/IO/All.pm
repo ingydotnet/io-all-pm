@@ -1,20 +1,51 @@
-package IO::All;
 use 5.006001;
-use strict;
-use warnings;
+package IO::All;
+use IO::All::Mo;
 
 require Carp;
 # So one can use Carp::carp "$message" - without the parenthesis.
 sub Carp::carp;
 
-use IO::All::Base -base;
-
 use File::Spec();
 use Symbol();
 use Fcntl;
 
-our $VERSION = '0.44';
-our @EXPORT = qw(io);
+our $VERSION = '0.45';
+
+#===============================================================================
+# The magic 'io' constructor generation and export
+#===============================================================================
+sub import {
+    my $class = shift;
+    my $package = caller;
+    no strict 'refs';
+    *{$package . "::io"} = $class->generate_constructor(@_);
+}
+
+sub generate_constructor {
+    my $class = shift;
+    my (@flags, %flags, $key);
+    for (@_) {
+        if (s/^-//) {
+            push @flags, $_;
+            $flags{$_} = 1;
+            $key = $_;
+        }
+        else {
+            $flags{$key} = $_ if $key;
+        }
+    }
+    my $constructor;
+    $constructor = sub {
+
+        my $self = $class->new(XXX @_);
+        for (@flags) {
+            $self->$_($flags{$_});
+        }
+        $self->constructor($constructor);
+        return $self;
+    }
+}
 
 #===============================================================================
 # Object creation and setup methods
@@ -94,33 +125,33 @@ sub autoload_class {
     $self->throw("Can't find a class for method '$method'");
 }
 
-sub new {
-    my $self = shift;
-    my $package = ref($self) || $self;
-    my $new = bless Symbol::gensym(), $package;
-    $new->package($package);
-    $new->_copy_from($self) if ref($self);
-    my $name = shift;
-    return $name if UNIVERSAL::isa($name, 'IO::All');
-    return $new->_init unless defined $name;
-    return $new->handle($name)
-      if UNIVERSAL::isa($name, 'GLOB') or ref(\ $name) eq 'GLOB';
-    # WWW - link is first because a link to a dir returns true for
-    # both -l and -d.
-    return $new->link($name) if -l $name;
-    return $new->file($name) if -f $name;
-    return $new->dir($name) if -d $name;
-    return $new->$1($name) if $name =~ /^([a-z]{3,8}):/;
-    return $new->socket($name) if $name =~ /^[\w\-\.]*:\d{1,5}$/;
-    return $new->pipe($name)
-      if $name =~ s/^\s*\|\s*// or $name =~ s/\s*\|\s*$//;
-    return $new->string if $name eq '$';
-    return $new->stdio if $name eq '-';
-    return $new->stderr if $name eq '=';
-    return $new->temp if $name eq '?';
-    $new->name($name);
-    $new->_init;
-}
+# sub new {
+#     my $self = shift;
+#     my $package = ref($self) || $self;
+#     my $new = bless Symbol::gensym(), $package;
+#     $new->package($package);
+#     $new->_copy_from($self) if ref($self);
+#     my $name = shift;
+#     return $name if UNIVERSAL::isa($name, 'IO::All');
+#     return $new->_init unless defined $name;
+#     return $new->handle($name)
+#       if UNIVERSAL::isa($name, 'GLOB') or ref(\ $name) eq 'GLOB';
+#     # WWW - link is first because a link to a dir returns true for
+#     # both -l and -d.
+#     return $new->link($name) if -l $name;
+#     return $new->file($name) if -f $name;
+#     return $new->dir($name) if -d $name;
+#     return $new->$1($name) if $name =~ /^([a-z]{3,8}):/;
+#     return $new->socket($name) if $name =~ /^[\w\-\.]*:\d{1,5}$/;
+#     return $new->pipe($name)
+#       if $name =~ s/^\s*\|\s*// or $name =~ s/\s*\|\s*$//;
+#     return $new->string if $name eq '$';
+#     return $new->stdio if $name eq '-';
+#     return $new->stderr if $name eq '=';
+#     return $new->temp if $name eq '?';
+#     $new->name($name);
+#     $new->_init;
+# }
 
 sub _copy_from {
     my $self = shift;
@@ -359,41 +390,44 @@ sub overload_scalar_to_any {
 #===============================================================================
 # Private Accessors
 #===============================================================================
-field 'package';
-field _binary => undef;
-field _binmode => undef;
-field _strict => undef;
-field _encoding => undef;
-field _utf8 => undef;
-field _handle => undef;
+has package => ();
+has _binary => ();
+has _binmode => ();
+has _strict => ();
+has _encoding => ();
+has _utf8 => ();
+has _handle => ();
 
 #===============================================================================
 # Public Accessors
 #===============================================================================
-field constructor => undef;
-chain block_size => 1024;
-chain errors => undef;
-field io_handle => undef;
-field is_open => 0;
-chain mode => undef;
-chain name => undef;
-chain perms => undef;
-chain separator => $/;
-field type => '';
-sub pathname {my $self = shift; $self->name(@_) }
+has constructor => ();
+has block_size => (chain => 1, default => sub{1024});
+has errors => (chain => 1);
+has io_handle => ();
+has is_open => (default => sub{0});
+has mode => (chain => 1);
+has name => (chain => 1);
+has perms => (chain => 1);
+has separator => (chain => 1, default => sub{$/});
+has type => (default => sub{''});
+sub pathname {
+    my $self = shift;
+    $self->name(@_);
+}
 
 #===============================================================================
 # Chainable option methods (write only)
 #===============================================================================
-option 'assert';
-option 'autoclose' => 1;
-option 'backwards';
-option 'chomp';
-option 'confess';
-option 'lock';
-option 'rdonly';
-option 'rdwr';
-option 'strict';
+has assert => (option => 1);
+has autoclose => (option => 1, default => sub{1});
+has backwards => (option => 1);
+has chomp => (option => 1);
+has confess => (option => 1);
+has lock => (option => 1);
+has rdonly => (option => 1);
+has rdwr => (option => 1);
+has strict => (option => 1);
 
 #===============================================================================
 # IO::Handle proxy methods
@@ -500,7 +534,7 @@ sub all {
     local $/;
     my $all = $self->io_handle->getline;
     $self->error_check;
-    $self->_autoclose && $self->close;
+    $self->read_autoclose && $self->close;
     return $all;
 }
 
@@ -580,36 +614,36 @@ sub exists {my $self = shift; -e $self->pathname }
 sub getline {
     my $self = shift;
     return $self->getline_backwards
-      if $self->_backwards;
+      if $self->read_backwards;
     $self->assert_open('<');
     my $line;
     {
         local $/ = @_ ? shift(@_) : $self->separator;
         $line = $self->io_handle->getline;
-        chomp($line) if $self->_chomp and defined $line;
+        chomp($line) if $self->read_chomp and defined $line;
     }
     $self->error_check;
     return $line if defined $line;
-    $self->close if $self->_autoclose;
+    $self->close if $self->read_autoclose;
     return undef;
 }
 
 sub getlines {
     my $self = shift;
     return $self->getlines_backwards
-      if $self->_backwards;
+      if $self->read_backwards;
     $self->assert_open('<');
     my @lines;
     {
         local $/ = @_ ? shift(@_) : $self->separator;
         @lines = $self->io_handle->getlines;
-        if ($self->_chomp) {
+        if ($self->read_chomp) {
             chomp for @lines;
         }
     }
     $self->error_check;
     return (@lines) or
-           $self->_autoclose && $self->close && () or
+           $self->read_autoclose && $self->close && () or
            ();
 }
 
@@ -670,7 +704,7 @@ sub read {
         $self->length,
     );
     $self->error_check;
-    return $length || $self->_autoclose && $self->close && 0;
+    return $length || $self->read_autoclose && $self->close && 0;
 }
 
 {
@@ -689,7 +723,7 @@ sub slurp {
     my $slurp = $self->all;
     return $slurp unless wantarray;
     my $separator = $self->separator;
-    if ($self->_chomp) {
+    if ($self->read_chomp) {
         local $/ = $separator;
         map {chomp; $_} split /(?<=\Q$separator\E)/, $slurp;
     }
@@ -744,7 +778,7 @@ sub throw {
     return &{$self->errors}(@_)
       if $self->errors;
     return Carp::confess(@_)
-      if $self->_confess;
+      if $self->read_confess;
     return Carp::croak(@_);
 }
 

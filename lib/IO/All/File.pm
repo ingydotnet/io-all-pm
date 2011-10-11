@@ -1,13 +1,14 @@
 package IO::All::File;
-use strict;
-use warnings;
-use IO::All::Filesys -base;
-use IO::All -base;
+use IO::All::Mo;
+extends 'IO::All::Filesys'; #, 'IO::All';  # Need Mo::inheritance
+# use IO::All -base;
+# use IO::All(); push @IO::All::Dir::ISA, 'IO::All';
+
 use IO::File;
 
 #===============================================================================
-const type => 'file';
-field tied_file => undef;
+use constant type => 'file';
+has tied_file => ();
 
 #===============================================================================
 sub file {

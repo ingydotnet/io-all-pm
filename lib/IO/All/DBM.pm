@@ -1,12 +1,11 @@
 package IO::All::DBM;
-use strict;
-use warnings;
-use IO::All::File -base;
+use IO::All::Mo;
+extends 'IO::All::File';
 use Fcntl;
 
-field _dbm_list => [];
-field '_dbm_class';
-field _dbm_extra => [];
+has _dbm_list => (default => sub{[]});
+has _dbm_class => ();
+has _dbm_extra => (default => sub{[]});
 
 sub dbm {
     my $self = shift;

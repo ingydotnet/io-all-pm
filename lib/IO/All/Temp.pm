@@ -1,7 +1,6 @@
 package IO::All::Temp;
-use strict;
-use warnings;
-use IO::All::File -base;
+use IO::All::Mo;
+extends 'IO::All::File';
 
 sub temp {
     my $self = shift;

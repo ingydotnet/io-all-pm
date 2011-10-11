@@ -1,16 +1,17 @@
 package IO::All::Dir;
-use strict;
-use warnings;
-use IO::All::Filesys -base;
-use IO::All -base;
+use IO::All::Mo;
+extends 'IO::All::Filesys'; #, 'IO::All';  # Need Mo::inheritance
+# use IO::All -base;
+# use IO::All(); push @IO::All::Dir::ISA, 'IO::All';
+
 use IO::Dir;
 
 #===============================================================================
-const type => 'dir';
-option 'sort' => 1;
-chain filter => undef;
-option 'deep';
-field 'chdir_from';
+use constant type => 'dir';
+has sort => (option => 1);
+has filter => (chain => 1);
+has deep => (option => 1);
+has chdir_from => ();
 
 #===============================================================================
 sub dir {

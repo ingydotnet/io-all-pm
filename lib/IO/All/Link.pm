@@ -1,9 +1,8 @@
 package IO::All::Link;
-use strict;
-use warnings;
-use IO::All::File -base;
+use IO::All::Mo;
+extends 'IO::All::File';
 
-const type => 'link';
+use constant type => 'link';
 
 sub link {
     my $self = shift;

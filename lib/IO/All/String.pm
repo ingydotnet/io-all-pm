@@ -1,10 +1,9 @@
 package IO::All::String;
-use strict;
-use warnings;
-use IO::All -base;
+use IO::All::Mo;
+
 use IO::String;
 
-const type => 'string';
+use constant type => 'string';
 proxy 'string_ref';
 
 sub string {

@@ -1,10 +1,9 @@
 package IO::All::Pipe;
-use strict;
-use warnings;
-use IO::All -base;
+use IO::All::Mo;
+
 use IO::File;
 
-const type => 'pipe';
+use constant type => 'pipe';
 
 sub pipe {
     my $self = shift;

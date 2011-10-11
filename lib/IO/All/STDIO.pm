@@ -1,10 +1,9 @@
 package IO::All::STDIO;
-use strict;
-use warnings;
-use IO::All -base;
+use IO::All::Mo;
+
 use IO::File;
 
-const type => 'stdio';
+use constant type => 'stdio';
 
 sub stdio {
     my $self = shift;

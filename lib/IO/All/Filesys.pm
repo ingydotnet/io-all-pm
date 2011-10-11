@@ -1,7 +1,6 @@
 package IO::All::Filesys;
-use strict;
-use warnings;
-use IO::All::Base -base;
+use IO::All::Mo;
+
 use Fcntl qw(:flock);
 
 sub exists { my $self = shift; -e $self->name }
