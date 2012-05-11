@@ -73,16 +73,18 @@ sub autoload_class {
     my $self = shift;
     my $method = shift;
     my $class_id = $self->autoload->{$method} || $method;
-    return "IO::All::\u$class_id" if $INC{"IO/All/\u$class_id\E.pm"};
+    my $ucfirst_class_name = 'IO::All::' . ucfirst($class_id);
+    my $ucfirst_class_fn = "IO/All/" . ucfirst($class_id) . ".pm";
+    return $ucfirst_class_name if $INC{$ucfirst_class_fn};
     return "IO::All::\U$class_id" if $INC{"IO/All/\U$class_id\E.pm"};
     require IO::All::Temp;
-    if (eval "require IO::All::\u$class_id; 1") {
-        my $class = "IO::All::\u$class_id";
+    if (eval "require $ucfirst_class_name; 1") {
+        my $class = $ucfirst_class_name;
         my $return = $class->can('new')
         ? $class
         : do { # (OS X hack)
-            my $value = $INC{"IO/All/\u$class_id\E.pm"};
-            delete $INC{"IO/All/\u$class_id\E.pm"};
+            my $value = $INC{$ucfirst_class_fn};
+            delete $INC{$ucfirst_class_fn};
             $INC{"IO/All/\U$class_id\E.pm"} = $value;
             "IO::All::\U$class_id";
         };
