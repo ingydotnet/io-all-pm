@@ -707,6 +707,36 @@ Indicates that the C<pathname> for the object should be made absolute.
 This method ensures that the path for a file or directory actually exists
 before the file is open. If the path does not exist, it is created.
 
+For example, here is a program called "create-cat-to" that outputs to a file
+that it creates.
+
+    #!/usr/bin/perl
+
+    # create-cat-to.pl
+    # cat to a file that can be created.
+
+    use strict;
+    use warnings;
+
+    use IO::All;
+
+    my $filename = shift(@ARGV);
+
+    # Create a file called $filename, including all leading components.
+    io('-') > io->file($filename)->assert;
+
+Here's an example use of it:
+
+    $ ls -l
+    total 0
+    $ echo "Hello World" | create-cat-to one/two/three/four.txt
+    $ ls -l
+    total 4
+    drwxr-xr-x 3 shlomif shlomif 4096 2010-10-14 18:03 one/
+    $ cat one/two/three/four.txt 
+    Hello World
+    $
+
 =item * autoclose
 
 By default, IO::All will close an object opened for input when EOF is
