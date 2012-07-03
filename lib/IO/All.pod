@@ -161,7 +161,7 @@ by the usage context. That means you can replace this:
 
 with this:
 
-    my $stuff < io "./mystuff";
+    my $stuff < io './mystuff';
 
 And that is a B<good thing>!
 
