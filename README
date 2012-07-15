@@ -157,7 +157,7 @@ DESCRIPTION
 
     with this:
 
-        my $stuff < io "./mystuff";
+        my $stuff < io './mystuff';
 
     And that is a good thing!
 
