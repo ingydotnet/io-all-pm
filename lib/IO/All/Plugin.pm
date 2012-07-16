@@ -6,6 +6,6 @@
 # copyright: 2012
 
 package IO::All::Plugin;
-use IO::All::Mo;
+use IO::All::OO;
 
 1;
