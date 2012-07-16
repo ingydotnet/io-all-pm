@@ -61,7 +61,7 @@ move the current API forward to the new API.
     * IO::All needs to be completely and consistently extensible
       * The extensions that ship with IO-All should be the same as third party
         extensions
-      * Extensions register capabilities with IO::All (tied to a scope)
+      * Plugins register capabilities with IO::All (tied to a scope)
     * IO::All operations can be strict or loose. Strict always throws errors on
       any possible error condition. Strict or loose should be determined by the
       presence of `use strict` in the scope (possibly).
@@ -69,7 +69,7 @@ move the current API forward to the new API.
       is loved by some and hated by others. It should probably be off by default
       for 2.0.
 
-=head1 IO::All Extensions
+=head1 IO::All Plugins
 
 Currently the extension API is fairly muddy. I would like the new API to
 require something like this:
@@ -91,11 +91,12 @@ automatically loaded, unless you say:
 
     use IO::All -none;
 
-Extensions can register 2 things:
+Plugins can register 2 things:
 
     1. Register a method (or methods) that will force a rebless in that class.
     2. Register a regexp (or function) that will cause a rebless when the input
        to io(...) matches.
+    3. Register overloads that the plugin responds to.
 
 These things are register according to the scope of the IO::All, so that the
 `io` function will do the right things.
