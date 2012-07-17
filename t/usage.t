@@ -2,8 +2,13 @@ use TestML -run;
 
 
 __END__
+%TestML 1.0
 
-*perl.eval.manifest == *with;
+Plan = 1;
+
+1 == 1;
+
+# *perl.eval.manifest == *with;
 
 === No plugin modules asked for
 --- perl

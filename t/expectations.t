@@ -20,6 +20,8 @@ Plan = 4;
 
 setup(*setup).eval_perl(*perl, *expect).Catch == *expect;
 
+setup('rm -f foo');
+
 === foo doesn't exist
 --- setup: rm -f foo
 --- perl: io('foo')->appends

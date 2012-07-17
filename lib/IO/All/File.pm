@@ -1,5 +1,5 @@
 ##
-# name:      IO::All
+# name:      IO::All::File
 # author:    Ingy döt Net
 # abstract:  File Plugin For IO::All
 # license:   perl
@@ -7,31 +7,35 @@
 
 package IO::All::File;
 use IO::All::OO;
-extends 'IO::All::Plugin';
+extends 'IO::All::Filesys';
 
-sub io_upgrade {
-    my ($self) = @_;
-    $self->file if
-        defined $self->name and
-        -e $self->name;
+option 'utf8';
+
+# Upgrade from IO::All to IO::All::Dir
+use constant upgrade_methods => [qw(file print)];
+
+sub can_upgrade {
+    my ($self, $object) = @_;
+    my $location = $object->location;
+    return if
+        not defined $location or
+        not length $location;
+    -f $location;
 }
 
-use constant io_methods => [qw(file print)];
-
-use constant io_overloads => {
-    'file > file' => 'overload_file_to_file',
-    'file < file' => 'overload_file_from_file',
-    '${} file' => 'overload_file_as_scalar',
-    '@{} file' => 'overload_file_as_array',
-    '%{} file' => 'overload_file_as_dbm',
-};
+#
+# Worker Methods:
+#
 
 sub file {
     my $self = shift;
-    bless $self, __PACKAGE__;
     $self->name(shift) if @_;
     return $self;
-    return $self->_init;
+}
+
+sub print {
+    my $self = shift;
+    CORE::print(@_);
 }
 
 1;
