@@ -1,12 +1,27 @@
-use TestML -run;
+use TestML -run, -bridge => 'main';
+
+sub setup {
+    shift;
+    my $cmd = (shift)->value;
+    `$cmd`;
+}
+sub eval_perl {
+    shift;
+    my $perl = (shift)->value;
+    # eval $perl;
+    my $expect = (shift)->value;
+    die $expect;
+}
 
 __DATA__
 %TestML 1.0
 
-Plan = 1; 1 == 1; # Just pass for now.
+Plan = 4;
+
+setup(*setup).eval_perl(*perl, *expect).Catch == *expect;
 
 === foo doesn't exist
---- setup: rm foo
+--- setup: rm -f foo
 --- perl: io('foo')->appends
 --- expect: throws exception
 
