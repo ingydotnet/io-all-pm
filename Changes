@@ -1,5 +1,10 @@
 ---
 version: 0.44
+date:    Wed Jul 18 22:15:04 EDT 2012
+changes:
+- Added an example for ->assert and fixed the \E warnings on 5.16, courtesy shlomi fish
+---
+version: 0.44
 date:    Wed Oct  5 18:11:27 EDT 2011
 changes:
 - Switch from testing $^V to $^] in DESTROY since $^V comparisons leak pre-5.14 (mst)
