@@ -8,9 +8,13 @@ SYNOPSIS
 
 DESCRIPTION
     This is a rewrite of the infamous IO::All. The new design is detailed
-    here:
+    below.
 
-Introduction
+STATUS
+    This is a very early release. It's just barely operational. Enough to
+    upload to CPAN under the new experimental "Alt-" namespace.
+
+IO::All Design
     This is a design document for an upcoming version of IO::All.
 
     IO::All is a Perl module that attempts to make all Input/Output

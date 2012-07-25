@@ -9,7 +9,7 @@ package IO::All;
 use IO::All::OO;
 use strict;
 
-our $VERSION = 0.44;
+our $VERSION = 0.01;
 
 has location => ();
 has plugin_classes => (
