@@ -63,6 +63,8 @@ sub field {
       };
 }
 
+package IO::All::OO::Object;
+
 sub throw {
     my $self = shift;
     require Carp;

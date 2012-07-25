@@ -57,10 +57,9 @@ sub make_constructor {
                 or $self->throw("Can't require $plugin_class: $@");
             $self->register_methods($plugin_class);
             $self->register_overloads($plugin_class);
-            if (ref($self) eq $class) {
-                if ($plugin_class->can_upgrade($self)) {
-                    $self->rebless($plugin_class);
-                }
+            if ($plugin_class->can_upgrade($self)) {
+                $self->rebless($plugin_class);
+                last;
             }
         }
         return $self;
@@ -80,7 +79,7 @@ sub parse_args {
             unless $key =~ $arg_key_pattern;
         my $arg = [$1];
         push @$arg, shift(@_)
-            while @_ and $_[0] !~ $arg_key_pattern; 
+            while @_ and $_[0] !~ $arg_key_pattern;
         push @$args, $arg;
     }
     return $args;
@@ -108,7 +107,9 @@ sub AUTOLOAD {
     my $self = shift;
     (my $method = $IO::All::AUTOLOAD) =~ s/.*:://;
     my $plugin_class = $self->methods->{$method}
-        or $self->throw("Can't locate object method '$method'");
+        or $self->throw(
+            "Can't locate object method '$method' for '$self' object"
+        );
     $self->rebless($plugin_class);
     $self->$method(@_);
 }

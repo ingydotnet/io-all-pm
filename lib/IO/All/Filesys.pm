@@ -7,7 +7,7 @@
 
 package IO::All::Filesys;
 use IO::All::OO;
-extends 'IO::All::Node';
+extends 'IO::All::IO';
 
 has name => ();
 option overload => ();

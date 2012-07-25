@@ -1,11 +1,11 @@
 ##
-# name:      IO::All::Node
+# name:      IO::All::IO
 # author:    Ingy döt Net
 # abstract:  Base Class for Various IO::All Objects
 # license:   perl
 # copyright: 2012
 
-package IO::All::Node;
+package IO::All::IO;
 use IO::All::OO;
 
 has upgrade_methods => ( default => sub { [] } );

@@ -11,6 +11,8 @@ extends 'IO::All::Filesys';
 
 option 'utf8';
 
+has handle => ();
+
 # Upgrade from IO::All to IO::All::Dir
 use constant upgrade_methods => [qw(file print)];
 
@@ -31,6 +33,20 @@ sub file {
     my $self = shift;
     $self->name(shift) if @_;
     return $self;
+}
+
+sub open {
+    my $self = shift;
+    my $fh;
+    open $fh, '<', $self->name;
+    $self->handle($fh);
+    return $self;
+}
+
+sub all {
+    my $self = shift;
+    my $fh = $self->open->handle;
+    return do { local $/; <$fh> }
 }
 
 sub print {
