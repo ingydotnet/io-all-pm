@@ -20,9 +20,15 @@ our $VERSION = '0.01';
 
 =head1 DESCRIPTION
 
-This is a rewrite of the infamous L<IO::All>. The new design is detailed here:
+This is a rewrite of the infamous L<IO::All>. The new design is detailed
+below.
 
-=head1 Introduction
+=head1 STATUS
+
+This is a very early release. It's just barely operational. Enough to upload
+to CPAN under the new experimental C<Alt-> namespace.
+
+=head1 IO::All Design
 
 This is a design document for an upcoming version of IO::All.
 
