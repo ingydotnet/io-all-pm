@@ -13,7 +13,7 @@ use File::Spec();
 use Symbol();
 use Fcntl;
 
-our $VERSION = '0.45';
+our $VERSION = '0.46';
 our @EXPORT = qw(io);
 
 #===============================================================================

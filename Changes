@@ -1,5 +1,10 @@
 ---
-version: 0.44
+version: 0.46
+date:    Wed Jul 25 17:35:44 PDT 2012
+changes:
+- Re-releasing to reclaim indexing from Alt-IO-All-new
+---
+version: 0.45
 date:    Wed Jul 18 22:15:04 EDT 2012
 changes:
 - Added an example for ->assert and fixed the \E warnings on 5.16, courtesy shlomi fish
