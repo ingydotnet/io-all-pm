@@ -13,6 +13,11 @@ sub filename {
     return $filename;
 }
 
+sub mimetype {
+   require File::MimeInfo;
+   return File::MimeInfo::mimetype($_[0]->filename)
+}
+
 sub is_absolute {
     my $self = shift;
     return *$self->{is_absolute} = shift if @_;
