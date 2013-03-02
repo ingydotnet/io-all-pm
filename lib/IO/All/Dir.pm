@@ -202,6 +202,17 @@ sub glob {
    } glob $self->_spec_class->catdir( $self->pathname, @rest );
 }
 
+sub as_foreign {
+   my ($self, $type) = @_;
+
+   my $foreign = $self->constructor->();
+   $foreign->_spec_class($type);
+   my ($v, $d, $f) = $self->_spec_class->splitpath($self->name);
+
+   my @d = $self->_spec_class->splitdir($d);
+   $foreign->dir(@d, $f);
+}
+
 sub DESTROY {
     my $self = shift;
     CORE::chdir($self->chdir_from)

@@ -201,6 +201,17 @@ sub unlink {
     unlink $self->pathname;
 }
 
+sub as_foreign {
+   my ($self, $type) = @_;
+
+   my $foreign = $self->constructor->();
+   $foreign->_spec_class($type);
+   my ($v, $d, $f) = $self->_spec_class->splitpath($self->name);
+
+   my @d = $self->_spec_class->splitdir($d);
+   $foreign->file(@d, $f);
+}
+
 #===============================================================================
 sub overload_table {
     my $self = shift;
