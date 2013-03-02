@@ -382,6 +382,20 @@ chain name => undef;
 chain perms => undef;
 chain separator => $/;
 field type => '';
+field _partial_spec_class => undef;
+
+sub _spec_class {
+   my $self = shift;
+
+   my $ret = 'File::Spec';
+   if (my $partial = $self->_partial_spec_class(@_)) {
+      $ret .= '::' . $partial;
+      eval "require $ret";
+   }
+
+   return $ret
+}
+
 sub pathname {my $self = shift; $self->name(@_) }
 
 #===============================================================================

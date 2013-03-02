@@ -16,7 +16,12 @@ field 'chdir_from';
 sub dir {
     my $self = shift;
     bless $self, __PACKAGE__;
-    $self->name(shift) if @_;
+    $self->name(
+        $self->_spec_class->catdir(
+            ($self->pathname ? ($self->pathname) : () ),
+            @_,
+        )
+    ) if @_;
     return $self->_init;
 }
 
@@ -137,6 +142,12 @@ sub mkpath {
     require File::Path;
     File::Path::mkpath($self->pathname, @_);
     return $self;
+}
+
+sub file {
+    my ($self, @rest) = @_;
+
+    return $self->constructor->()->file($self->pathname, @rest)
 }
 
 sub next {

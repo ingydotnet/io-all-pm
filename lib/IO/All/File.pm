@@ -13,7 +13,8 @@ field tied_file => undef;
 sub file {
     my $self = shift;
     bless $self, __PACKAGE__;
-    $self->name(shift) if @_;
+    # should we die here if $self->name is already set and there are args?
+    $self->name( $self->_spec_class->catfile( @_ ) ) if @_;
     return $self->_init;
 }
 
