@@ -176,7 +176,7 @@ objects.
 
 You can also pass global flags like this:
 
-    use IO::All -strict -encoding => 'big5', -foobar;
+    use IO::All -encoding => 'big5', -foobar;
 
 Which automatically makes those method calls on every new IO object. In other
 words this:
@@ -185,7 +185,7 @@ words this:
 
 becomes this:
 
-    my $io = io('lalala.txt')->strict->encoding('big5')->foobar;
+    my $io = io('lalala.txt')->encoding('big5')->foobar;
 
 # METHOD ROLE CALL
 
@@ -215,7 +215,7 @@ on an IO::All object.
 `response`, `rmdir`, `rmtree`, `rootdir`, `scalar`, `seek`,
 `send`, `separator`, `shutdown`, `size`, `slurp`, `socket`,
 `sort`, `splitdir`, `splitpath`, `stat`, `stdio`, `stderr`,
-`stdin`, `stdout`, `strict`, `string`, `string_ref`, `subject`,
+`stdin`, `stdout`, `string`, `string_ref`, `subject`,
 `sysread`, `syswrite`, `tail`, `tell`, `temp`, `tie`, `tmpdir`,
 `to`, `touch`, `truncate`, `type`, `user`, `uid`, `unlink`,
 `unlock`, `updir`, `uri`, `utf8`, `utime` and `write`.
@@ -778,13 +778,6 @@ Indicates that the `pathname` for the object should be made relative.
 
 Indicates whether objects returned from one of the `all` methods will
 be in sorted order by name. True by default.
-
-- * strict
-
-Check the return codes of every single system call. To turn this on for all
-calls in your module, use:
-
-    use IO::All -strict;
 
 - * tie
 

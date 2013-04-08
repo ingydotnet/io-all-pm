@@ -364,7 +364,6 @@ sub overload_scalar_to_any {
 field 'package';
 field _binary => undef;
 field _binmode => undef;
-field _strict => undef;
 field _encoding => undef;
 field _utf8 => undef;
 field _handle => undef;
@@ -395,7 +394,6 @@ option 'confess';
 option 'lock';
 option 'rdonly';
 option 'rdwr';
-option 'strict';
 
 #===============================================================================
 # IO::Handle proxy methods
