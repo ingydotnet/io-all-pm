@@ -29,9 +29,9 @@ move the current API forward to the new API.
   * These methods are more or less hard-coded currently
 * Options to `use IO::All` that begin with a `-`, cause a method to be called
   on each new IO::All object.
-  * use IO::All -strict, -encoding => 'big5';   # causes:
+  * use IO::All -encoding => 'big5';   # causes:
   * io('foo')->print('hi');                     # to mean:
-  * io('foo')->strict->encoding('big5')->print('hi');
+  * io('foo')->encoding('big5')->print('hi');
 * IO::All operations generally return other IO::All objects
   * Often they return themselves ($self) for chaining
 * IO::All needs to be completely and consistently extensible

@@ -1,3 +1,4 @@
+- security warning for newbies about the need to enforce type with user inputs
 ---
 version: 0.46
 date:    Wed Jul 25 17:35:44 PDT 2012
