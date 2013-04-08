@@ -1,4 +1,5 @@
 changes:
+- Remove mentions of unimplemented strict (Thanks Mithlandu, GH#15)
 - Allow testing on non SDBM DBM's (thanks Jerry D. Hedden)
 ---
 version: 0.53

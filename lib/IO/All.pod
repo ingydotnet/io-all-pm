@@ -182,7 +182,7 @@ objects.
 
 You can also pass global flags like this:
 
-    use IO::All -strict -encoding => 'big5', -foobar;
+    use IO::All -encoding => 'big5', -foobar;
 
 Which automatically makes those method calls on every new IO object. In other
 words this:
@@ -191,7 +191,7 @@ words this:
 
 becomes this:
 
-    my $io = io('lalala.txt')->strict->encoding('big5')->foobar;
+    my $io = io('lalala.txt')->encoding('big5')->foobar;
 
 =head1 METHOD ROLE CALL
 
@@ -221,7 +221,7 @@ C<readlink>, C<recv>, C<rel2abs>, C<relative>, C<rename>, C<request>,
 C<response>, C<rmdir>, C<rmtree>, C<rootdir>, C<scalar>, C<seek>,
 C<send>, C<separator>, C<shutdown>, C<size>, C<slurp>, C<socket>,
 C<sort>, C<splitdir>, C<splitpath>, C<stat>, C<stdio>, C<stderr>,
-C<stdin>, C<stdout>, C<strict>, C<string>, C<string_ref>, C<subject>,
+C<stdin>, C<stdout>, C<string>, C<string_ref>, C<subject>,
 C<sysread>, C<syswrite>, C<tail>, C<tell>, C<temp>, C<tie>, C<tmpdir>,
 C<to>, C<touch>, C<truncate>, C<type>, C<user>, C<uid>, C<unlink>,
 C<unlock>, C<updir>, C<uri>, C<utf8>, C<utime> and C<write>.
@@ -820,13 +820,6 @@ Indicates that the C<pathname> for the object should be made relative.
 
 Indicates whether objects returned from one of the C<all> methods will
 be in sorted order by name. True by default.
-
-=item * strict
-
-Check the return codes of every single system call. To turn this on for all
-calls in your module, use:
-
-    use IO::All -strict;
 
 =item * tie
 
