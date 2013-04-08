@@ -21,6 +21,20 @@ IO::All - IO::All of it to Graham and Damian!
     $contents = join '', <$io>;                 # And use it in builtins
     # and the list goes on ...
 
+Before we go on though, a small B<security warning>: io() is built for maximum
+convenience, meaning this would work out of the box:
+
+    my $input = <>;                 # user inputs: rm -rf /* |
+    my $contents = io($input)->all; # now your hdd is gone
+
+So, if you're dealing with user input, make sure to enforce the type of io
+object you're expecting, like this:
+
+    my $contents = io($input)->file->all; # die if $input is something else
+
+You will find much more information about this further on in the
+documentation. For now, let's get back to the show:
+
     # Other file operations:
     @lines = io('file.txt')->slurp;             # List context slurp
     $content > io('file.txt');                  # Print to a file
