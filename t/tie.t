@@ -8,3 +8,5 @@ use IO_All_Test;
 my $io = io('t/tie.t')->tie;
 my $file = join '', <$io>;
 test_file_contents($file, 't/tie.t');
+
+del_output_dir();

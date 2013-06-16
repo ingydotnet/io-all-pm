@@ -7,3 +7,5 @@ use IO_All_Test;
 
 test_file_contents(io->file('t/all2.t')->all, 't/all2.t');
 test_file_contents(io->file('t/all2.t')->scalar, 't/all2.t');
+
+del_output_dir();

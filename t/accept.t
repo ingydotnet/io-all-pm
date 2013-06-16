@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use Test::More tests => 20;
 use IO::All;
-use IO_All_ParTest;
+use IO_All_Test;
 use IO::Socket::INET;
 
 # This test tests for the ability of a non-forking socket to handle more

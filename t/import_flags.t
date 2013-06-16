@@ -71,3 +71,5 @@ ok not($io2c->_strict),
 ok $io2c->_utf8,
    'utf8 flag set on object 2c (propagated from 2)';
 
+
+del_output_dir();

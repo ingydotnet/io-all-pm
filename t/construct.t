@@ -44,3 +44,5 @@ my $io8 = io(':8000')->get_socket_domain_port;
 ok($io8->is_socket);
 is($io8->domain, 'localhost');
 is($io8->port, '8000');
+
+del_output_dir();

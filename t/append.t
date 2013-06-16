@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use Test::More;
 use IO::All;
-use IO_All_ParTest;
+use IO_All_Test;
 
 plan((lc($^O) eq 'mswin32' and defined $ENV{PERL5_CPANPLUS_IS_RUNNING})
     ? (skip_all => "CPANPLUS/MSWin32 breaks this")

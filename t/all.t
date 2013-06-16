@@ -50,3 +50,5 @@ is(prep(io('t/mydir')->All_Dirs), f$expected_dirs3);
 is(prep(io('t/mydir')->deep->all_dirs), f$expected_dirs3);
 is(prep(io('t/mydir')->filter(sub {/dira/})->All_Dirs), f$expected_filt1);
 is(prep(io('t/mydir')->filter(sub {/x/})->All_Dirs), f$expected_filt2);
+
+del_output_dir();

@@ -47,3 +47,5 @@ $contents << io('t/input.t');
 is($contents, $old_contents . $old_contents);
 
 is(io('t/input.t') >> $contents, ($old_contents x 3));
+
+del_output_dir();

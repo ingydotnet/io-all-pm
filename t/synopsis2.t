@@ -24,6 +24,8 @@ is("$_\n", flip_slash scalar <DATA>)
   for sort {$a->name cmp $b->name}
     grep {! /CVS|\.svn/} io('t/mydir')->all_files(0);
 
+del_output_dir();
+
 __END__
 t/mydir/file1 - file1 is fun
 t/mydir/file2 - file2 is woohoo

@@ -18,7 +18,7 @@ sub dump {
 
 package main;
 use Test::More tests => 5;
-use IO_All_ParTest;
+use IO_All_Test;
 
 IO::Dumper->import;
 

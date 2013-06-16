@@ -11,3 +11,5 @@ $io->buffer($buffer);
 1 while $io->read;
 ok(length($buffer));
 test_file_contents($buffer, 'lib/IO/All.pm');
+
+del_output_dir();

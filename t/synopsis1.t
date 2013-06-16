@@ -15,3 +15,5 @@ ok(-f 't/allstuff');
 ok(-s 't/allstuff');
 test_file_contents($my_stuff . $more_stuff, 't/allstuff');
 ok(unlink('t/allstuff'));
+
+del_output_dir();

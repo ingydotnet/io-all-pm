@@ -14,3 +14,5 @@ while (<$io>) {
     is($_, shift @lines);
 }
 ok(close $io);
+
+del_output_dir();

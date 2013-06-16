@@ -20,3 +20,5 @@ ok(not length($buffer));
 ok($output->close);
 test_matching_files($outfile, 'lib/IO/All.pm');
 ok($output->unlink);
+
+del_output_dir();

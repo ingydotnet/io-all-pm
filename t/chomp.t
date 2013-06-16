@@ -14,3 +14,5 @@ $io->close;
 for ($io->chomp->separator('io')->getlines) {
     ok(not /io/);
 }
+
+del_output_dir();

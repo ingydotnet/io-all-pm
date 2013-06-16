@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use Test::More;
 use IO::All;
-use IO_All_ParTest;
+use IO_All_Test;
 use Cwd qw(abs_path);
 
 my $cwd = abs_path('.');

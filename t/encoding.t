@@ -41,3 +41,5 @@ is Normal::io('t/text.utf8')->utf8->all,
    Normal::io('t/text.big5')->encoding('big5')->all,
    'Big5 text matches utf8 text after read';
 
+
+del_output_dir();

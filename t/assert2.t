@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use Test::More tests => 4;
 use IO::All;
-use IO_All_ParTest;
+use IO_All_Test;
 
 ok(io(o_dir() . '/xxx/yyy/zzz.db')->dbm->assert->{foo} = "bar");
 ok(-f o_dir() . '/xxx/yyy/zzz.db' or -f o_dir() . '/xxx/yyy/zzz.db.dir');

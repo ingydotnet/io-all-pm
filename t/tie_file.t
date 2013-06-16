@@ -2,7 +2,7 @@ use lib 't', 'lib';
 use strict;
 use warnings;
 use Test::More;
-use IO_All_ParTest;
+use IO_All_Test;
 use IO::All;
 
 plan((eval {require Tie::File; 1})

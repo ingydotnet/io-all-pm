@@ -14,3 +14,5 @@ is($file->name, $filename, 'name() is the same as the string');
 my $file2 = io($file);
 ok($file2->isa('IO::All::File'), 'IO::All::File object passed to io() is returned as a file');
 is($file2->name, $filename, 'name() is the same as the original string');
+
+del_output_dir();

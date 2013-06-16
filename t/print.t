@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use Test::More tests => 2;
 use IO::All;
-use IO_All_ParTest;
+use IO_All_Test;
 
 my $io1 = io(o_dir() . '/print.t');
 is($io1->print("one\n")->print("two\n")->close->scalar, "one\ntwo\n");

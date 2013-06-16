@@ -9,3 +9,5 @@ my $io = io('t/scalar.t');
 my @list = $io->scalar;
 ok(@list == 1);
 test_file_contents($list[0], 't/scalar.t');
+
+del_output_dir();

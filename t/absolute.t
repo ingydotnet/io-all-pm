@@ -14,3 +14,5 @@ $io->relative;
 is($io->pathname, File::Spec->abs2rel($0));
 
 ok(io('t')->absolute->next->is_absolute);
+
+del_output_dir();

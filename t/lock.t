@@ -2,7 +2,7 @@ use lib 't', 'lib';
 use strict;
 use warnings;
 use IO::All;
-use IO_All_ParTest;
+use IO_All_Test;
 
 # XXX This needs to be fixed!!!
 $^O !~ /^(cygwin|hpux)$/

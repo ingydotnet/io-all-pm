@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use Test::More tests => 5;
 use IO::All;
-use IO_All_ParTest;
+use IO_All_Test;
 
 my $d = io(o_dir() . '/empty');
 ok($d->mkdir);

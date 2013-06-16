@@ -50,3 +50,5 @@ open TEST, '-|', qq{$^X -Ilib -MIO::All -e $test3 < t/mystuff}
   or die "open failed: $!";
 test_file_contents(<TEST>, 't/mystuff');
 close TEST;
+
+del_output_dir();

@@ -12,3 +12,5 @@ $s->append("write 2\n");
 my $s2 = "IO::String ref: (".$s->string_ref.")";
 
 is($s1, $s2, "Don't create new string object with each write");
+
+del_output_dir();

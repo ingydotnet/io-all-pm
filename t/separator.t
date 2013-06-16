@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use Test::More tests => 4;
 use IO::All;
-use IO_All_ParTest;
+use IO_All_Test;
 
 join('', <DATA>) > io(o_dir() . '/separator1');
 my $io = io(o_dir() . '/separator1');

@@ -13,3 +13,5 @@ $temp->seek(0, 0);
 my $text = $temp->slurp;
 
 test_file_contents($text, 't/println.t');
+
+del_output_dir();

@@ -43,3 +43,5 @@ is("".io->catdir('goo', 'hoo'), f 'goo/hoo');
 is("".io->file('doo/foo')->catfile('goo', 'hoo'), f 'doo/foo/goo/hoo');
 is("".io->file->catfile('goo', 'hoo'), f 'goo/hoo');
 is("".io->catfile('goo', 'hoo'), f 'goo/hoo');
+
+del_output_dir();

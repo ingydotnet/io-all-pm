@@ -11,3 +11,5 @@ use Cwd;
     is((io(io->curdir->absolute->pathname)->splitdir)[-1], 't');
 }
 like((io(io->curdir->absolute->pathname)->splitdir)[-1], qr'(?i:^IO-All)');
+
+del_output_dir();

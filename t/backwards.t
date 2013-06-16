@@ -22,3 +22,5 @@ test_file_contents(join('', reverse @reversed), 't/mystuff');
 @reversed = io('t/mystuff')->backwards->getlines;
 
 test_file_contents(join('', reverse @reversed), 't/mystuff');
+
+del_output_dir();

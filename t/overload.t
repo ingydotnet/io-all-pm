@@ -2,7 +2,7 @@ use lib 't'; #, 'lib';
 use strict;
 use warnings;
 use Test::More tests => 24;
-use IO_All_ParTest;
+use IO_All_Test;
 use IO::All;
 
 unlink(o_dir() . '/overload1');

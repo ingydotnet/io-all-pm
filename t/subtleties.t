@@ -4,7 +4,7 @@ use warnings;
 use Test::More tests => 7;
 use IO::All;
 
-use IO_All_ParTest;
+use IO_All_Test;
 
 my $data = join '', <DATA>;
 my $io = io(o_dir() . '/subtleties1') < $data;

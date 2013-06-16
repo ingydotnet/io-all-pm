@@ -25,3 +25,5 @@ is($io->blocks, $blocks);
 
 my @stat = $io->stat;
 ok(defined $stat[0]);
+
+del_output_dir();

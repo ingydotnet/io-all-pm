@@ -7,3 +7,5 @@ use IO_All_Test;
 
 ok("xxx" > io->devnull);
 ok(io->devnull->print("yyy"));
+
+del_output_dir();
