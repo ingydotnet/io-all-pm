@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use Test::More;
 use IO::All;
-use IO_All_Test;
+use IO_All_ParTest;
 
 plan((lc($^O) eq 'mswin32' and defined $ENV{PERL5_CPANPLUS_IS_RUNNING})
     ? (skip_all => "CPANPLUS/MSWin32 breaks this")
@@ -20,4 +20,7 @@ is(io->stdin->fileno, 0);
 is(io->stdout->fileno, 1);
 is(io->stderr->fileno, 2);
 
-ok(io('t/output/xxx')->open('>')->fileno > 2);
+ok(io(o_dir() . '/xxx')->open('>')->fileno > 2);
+
+
+del_output_dir();

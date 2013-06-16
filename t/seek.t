@@ -3,9 +3,12 @@ use strict;
 use warnings;
 use Test::More tests => 1;
 use IO::All;
-use IO_All_Test;
+use IO_All_ParTest;
 
-my $string < (io('t/mystuff') > io('t/output/seek'));
-my $io = io('t/output/seek');
+my $string < (io('t/mystuff') > io(o_dir() . '/seek'));
+my $io = io(o_dir() . '/seek');
 $io->seek(index($string, 'quite'), 0);
 is($io->getline, "quite enough.\n");
+
+
+del_output_dir();

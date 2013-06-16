@@ -4,9 +4,11 @@ use warnings;
 use Test::More tests => 7;
 use IO::All;
 
+use IO_All_ParTest;
+
 my $data = join '', <DATA>;
-my $io = io('t/output/subtleties1') < $data;
-is("$io", 't/output/subtleties1');
+my $io = io(o_dir() . '/subtleties1') < $data;
+is("$io", o_dir() . '/subtleties1');
 
 ok($io->close);
 ok(not $io->close);
@@ -21,7 +23,10 @@ my $io2 = io(io(io('xxx')));
 ok(ref $io2);
 ok($io2->isa('IO::All'));
 # is("$io2", 'xxx');
+del_output_dir();
 
 __DATA__
 test
 data
+
+

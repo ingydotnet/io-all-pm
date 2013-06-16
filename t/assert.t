@@ -3,11 +3,14 @@ use strict;
 use warnings;
 use Test::More tests => 4;
 use IO::All;
-use IO_All_Test;
+use IO_All_ParTest;
 
-ok(not -e 't/output/newpath/hello.txt');
-ok(not -e 't/output/newpath');
-my $io = io('t/output/newpath/hello.txt')->assert;
-ok(not -e 't/output/newpath');
+ok(not -e o_dir() . '/newpath/hello.txt');
+ok(not -e o_dir() . '/newpath');
+my $io = io(o_dir() . '/newpath/hello.txt')->assert;
+ok(not -e o_dir() . '/newpath');
 "Hello\n" > $io;
-ok(-f 't/output/newpath/hello.txt');
+ok(-f o_dir() . '/newpath/hello.txt');
+
+
+del_output_dir();

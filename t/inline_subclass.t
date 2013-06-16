@@ -18,7 +18,7 @@ sub dump {
 
 package main;
 use Test::More tests => 5;
-use IO_All_Test;
+use IO_All_ParTest;
 
 IO::Dumper->import;
 
@@ -28,18 +28,20 @@ my $hash = {
     pink => 'triangle',
 };
 
-die if -f 't/output/dump1';
-my $io = io('t/output/dump1')->file->dump($hash);
-ok(-f 't/output/dump1');
+die if -f o_dir() . '/dump1';
+my $io = io(o_dir() . '/dump1')->file->dump($hash);
+ok(-f o_dir() . '/dump1');
 ok($io->close);
-ok(-s 't/output/dump1');
+ok(-s o_dir() . '/dump1');
 
 my $VAR1;
-my $a = do 't/output/dump1';
+my $a = do (o_dir() . '/dump1');
 my $b = eval join('',<DATA>);
 is_deeply($a,$b);
 
 ok($io->unlink);
+
+del_output_dir();
 
 __END__
 $VAR1 = {

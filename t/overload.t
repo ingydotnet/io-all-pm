@@ -2,12 +2,12 @@ use lib 't'; #, 'lib';
 use strict;
 use warnings;
 use Test::More tests => 24;
-use IO_All_Test;
+use IO_All_ParTest;
 use IO::All;
 
-unlink('t/output/overload1');
-unlink('t/output/overload2');
-unlink('t/output/overload3');
+unlink(o_dir() . '/overload1');
+unlink(o_dir() . '/overload2');
+unlink(o_dir() . '/overload3');
 
 my $data < io('t/mystuff');
 test_file_contents($data, 't/mystuff');
@@ -25,30 +25,30 @@ is($data, $data2);
 io('t/mystuff') > $data;
 is($data, $data1);
 
-$data > io('t/output/overload1');
-test_file_contents($data, 't/output/overload1');
-$data > io('t/output/overload1');
-test_file_contents($data, 't/output/overload1');
-$data >> io('t/output/overload1');
-test_file_contents($data2, 't/output/overload1');
+$data > io(o_dir() . '/overload1');
+test_file_contents($data, o_dir() . '/overload1');
+$data > io(o_dir() . '/overload1');
+test_file_contents($data, o_dir() . '/overload1');
+$data >> io(o_dir() . '/overload1');
+test_file_contents($data2, o_dir() . '/overload1');
 
-io('t/output/overload1') < $data;
-test_file_contents($data, 't/output/overload1');
-io('t/output/overload1') < $data;
-test_file_contents($data, 't/output/overload1');
-io('t/output/overload1') << $data;
-test_file_contents($data2, 't/output/overload1');
+io(o_dir() . '/overload1') < $data;
+test_file_contents($data, o_dir() . '/overload1');
+io(o_dir() . '/overload1') < $data;
+test_file_contents($data, o_dir() . '/overload1');
+io(o_dir() . '/overload1') << $data;
+test_file_contents($data2, o_dir() . '/overload1');
 
-$data > io('t/output/overload1');
-test_file_contents($data, 't/output/overload1');
-io('t/output/overload1') > io('t/output/overload2');
-test_matching_files('t/output/overload1', 't/output/overload2');
-io('t/output/overload3') < io('t/output/overload2');
-test_matching_files('t/output/overload1', 't/output/overload3');
-io('t/output/overload3') << io('t/output/overload2');
-io('t/output/overload1') >> io('t/output/overload2');
-test_matching_files('t/output/overload2', 't/output/overload3');
-test_file_contents($data2, 't/output/overload3');
+$data > io(o_dir() . '/overload1');
+test_file_contents($data, o_dir() . '/overload1');
+io(o_dir() . '/overload1') > io(o_dir() . '/overload2');
+test_matching_files(o_dir() . '/overload1', o_dir() . '/overload2');
+io(o_dir() . '/overload3') < io(o_dir() . '/overload2');
+test_matching_files(o_dir() . '/overload1', o_dir() . '/overload3');
+io(o_dir() . '/overload3') << io(o_dir() . '/overload2');
+io(o_dir() . '/overload1') >> io(o_dir() . '/overload2');
+test_matching_files(o_dir() . '/overload2', o_dir() . '/overload3');
+test_file_contents($data2, o_dir() . '/overload3');
 
 is(io('foo') . '', 'foo');
 
@@ -66,12 +66,15 @@ is(join(' ', sort map {"$_"} values %{io 't/mydir'}),
      't/mydir/dir1 t/mydir/dir2 t/mydir/file1 t/mydir/file2 t/mydir/file3',
 );
 
-${io('t/mystuff')} . ${io('t/mystuff')} > io('t/output/overload1');
-test_file_contents2('t/output/overload1', $data2);
+${io('t/mystuff')} . ${io('t/mystuff')} > io(o_dir() . '/overload1');
+test_file_contents2(o_dir() . '/overload1', $data2);
 
-${io('t/mystuff')} . "xxx\n" . ${io('t/mystuff')} > io('t/output/overload1');
+${io('t/mystuff')} . "xxx\n" . ${io('t/mystuff')} > io(o_dir() . '/overload1');
 $data < io('t/mystuff');
 my $cat3 = $data . "xxx\n" . $data;
-test_file_contents2('t/output/overload1', $cat3);
+test_file_contents2(o_dir() . '/overload1', $cat3);
 
 is "" . ${io("t")}, "t", "scalar overload of directory (for mst)";
+
+
+del_output_dir();

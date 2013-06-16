@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use Test::More tests => 5;
 use IO_Dumper;
-use IO_All_Test;
+use IO_All_ParTest;
 
 my $hash = {
     red => 'square',
@@ -11,17 +11,19 @@ my $hash = {
     pink => 'triangle',
 };
 
-my $io = io->file('t/output/dump2')->dump($hash);
-ok(-f 't/output/dump2');
+my $io = io->file(o_dir() . '/dump2')->dump($hash);
+ok(-f o_dir() . '/dump2');
 ok($io->close);
-ok(-s 't/output/dump2');
+ok(-s o_dir() . '/dump2');
 
 my $VAR1;
-my $a = do 't/output/dump2';
+my $a = do (o_dir() . '/dump2');
 my $b = eval join('',<DATA>);
 is_deeply($a,$b);
 
 ok($io->unlink);
+
+del_output_dir();
 
 package main;
 __END__

@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use Test::More;
 use IO::All;
-use IO_All_Test;
+use IO_All_ParTest;
 
 plan((lc($^O) eq 'mswin32' and defined $ENV{PERL5_CPANPLUS_IS_RUNNING})
     ? (skip_all => "CPANPLUS/MSWin32 breaks this")
@@ -13,7 +13,7 @@ plan((lc($^O) eq 'mswin32' and defined $ENV{PERL5_CPANPLUS_IS_RUNNING})
 );
 
 {
-    my $log = io->file("t/output/myappend.txt")->mode('>>')->open();
+    my $log = io->file(o_dir() . "/myappend.txt")->mode('>>')->open();
 
     $log->print("Hello World!\n");
 
@@ -22,9 +22,9 @@ plan((lc($^O) eq 'mswin32' and defined $ENV{PERL5_CPANPLUS_IS_RUNNING})
 
 {
     # TEST
-    ok (scalar(-f "t/output/myappend.txt"), "myappend.txt exists.");
+    ok (scalar(-f o_dir() . "/myappend.txt"), "myappend.txt exists.");
 
-    my $contents = _slurp("t/output/myappend.txt");
+    my $contents = _slurp(o_dir() . "/myappend.txt");
 
     # TEST
     is ($contents, "Hello World!\n", "contents of the file are OK.");
@@ -32,7 +32,7 @@ plan((lc($^O) eq 'mswin32' and defined $ENV{PERL5_CPANPLUS_IS_RUNNING})
 
 
 {
-    my $log = io->file("t/output/myappend.txt")->mode('>>')->open();
+    my $log = io->file(o_dir() . "/myappend.txt")->mode('>>')->open();
 
     $log->print("Message No. 2!\n");
 
@@ -41,9 +41,9 @@ plan((lc($^O) eq 'mswin32' and defined $ENV{PERL5_CPANPLUS_IS_RUNNING})
 
 {
     # TEST
-    ok (scalar(-f "t/output/myappend.txt"), "myappend.txt exists.");
+    ok (scalar(-f o_dir() . "/myappend.txt"), "myappend.txt exists.");
 
-    my $contents = _slurp("t/output/myappend.txt");
+    my $contents = _slurp(o_dir() . "/myappend.txt");
 
     # TEST
     is ($contents, "Hello World!\nMessage No. 2!\n",
@@ -65,3 +65,4 @@ sub _slurp
     return $contents;
 }
 
+del_output_dir();

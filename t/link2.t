@@ -3,10 +3,10 @@ use strict;
 use warnings;
 use Test::More;
 use IO::All;
-use IO_All_Test;
+use IO_All_ParTest;
 use Cwd qw(abs_path);
 
-my $linkname = 't/output/mylink';
+my $linkname = o_dir() . '/mylink';
 
 my $cwd = abs_path('.');
 eval { symlink("t/mydir", $linkname) or die $! };
@@ -25,3 +25,6 @@ is(scalar @files, 3);
 
 @files = $io->All_Files;
 is(scalar @files, 6);
+
+
+del_output_dir();

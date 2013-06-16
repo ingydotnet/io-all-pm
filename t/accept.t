@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use Test::More tests => 20;
 use IO::All;
-use IO_All_Test;
+use IO_All_ParTest;
 use IO::Socket::INET;
 
 # This test tests for the ability of a non-forking socket to handle more
@@ -18,7 +18,7 @@ if (! $pid)
     while (1)
     {
         # Log the port to a file.
-        open my $out, ">t/output/server-port.t";
+        open my $out, ">", o_dir() . "/server-port.t";
         print {$out} $port;
         close($out);
 
@@ -51,7 +51,7 @@ if (! $pid)
 # Wait a little for the client to find a port.
 sleep(1);
 
-open my $in, "<t/output/server-port.t";
+open my $in, "<", o_dir() . "/server-port.t";
 my $port = <$in>;
 close($in);
 
@@ -81,3 +81,4 @@ for my $c (1 .. 10)
 
 waitpid($pid, 0);
 
+del_output_dir();
