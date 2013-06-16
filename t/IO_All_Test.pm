@@ -53,9 +53,22 @@ sub flip_slash {
     *f = \&flip_slash;
 }
 
+use vars qw($output_dir);
+
 BEGIN {
-    File::Path::rmtree('t/output');
-    File::Path::mkpath('t/output');
+    $output_dir = 't/output';
+}
+
+sub del_output_dir
+{
+    File::Path::rmtree($output_dir);
+}
+
+# TODO : this common directory that is deleted and recreated may prevent
+# running the tests in parallel.
+BEGIN {
+    del_output_dir();
+    File::Path::mkpath($output_dir);
 }
 
 1;
