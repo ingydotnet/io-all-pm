@@ -1,7 +1,7 @@
 use lib 't', 'lib';
 use strict;
 use warnings;
-use Test::More tests => 27;
+use Test::More tests => 29;
 use IO::All;
 use IO_All_Test;
 
@@ -43,5 +43,8 @@ is("".io->catdir('goo', 'hoo'), f 'goo/hoo');
 is("".io->file('doo/foo')->catfile('goo', 'hoo'), f 'doo/foo/goo/hoo');
 is("".io->file->catfile('goo', 'hoo'), f 'goo/hoo');
 is("".io->catfile('goo', 'hoo'), f 'goo/hoo');
+
+is("".io->file('goo', 'hoo', 'bar.txt'), f 'goo/hoo/bar.txt');
+is("".io->dir('goo', 'hoo'), f 'goo/hoo');
 
 del_output_dir();
