@@ -47,6 +47,7 @@ IO::All - IO::All of it to Graham and Damian!
     print "$io";                                # Object stringifies to name
     print $io;                                  # Quotes not needed here
     print $io->filename;                        # The file portion only
+    print $io->ext;                             # The file extension only
 
     # Read all the files/directories in a directory:
     $io = io('my/directory/');                  # Create new directory object
@@ -199,7 +200,7 @@ C<autoflush>, C<backwards>, C<bcc>, C<binary>, C<binmode>, C<blksize>,
 C<blocks>, C<block_size>, C<buffer>, C<canonpath>, C<case_tolerant>,
 C<catdir>, C<catfile>, C<catpath>, C<cc>, C<chdir>, C<chomp>, C<clear>,
 C<close>, C<confess>, C<content>, C<ctime>, C<curdir>, C<dbm>, C<deep>,
-C<device>, C<device_id>, C<devnull>, C<dir>, C<domain>, C<empty>,
+C<device>, C<device_id>, C<devnull>, C<dir>, C<domain>, C<empty>, C<ext>,
 C<encoding>, C<eof>, C<errors>, C<file>, C<filename>, C<fileno>,
 C<filepath>, C<filter>, C<fork>, C<from>, C<ftp>, C<get>, C<getc>,
 C<getline>, C<getlines>, C<gid>, C<handle>, C<head>, C<http>, C<https>,
@@ -698,7 +699,7 @@ Indicates that the C<pathname> for the object should be made absolute.
     # Print the full path of the current working directory
     # (like pwd).
 
-    use IO::All; 
+    use IO::All;
 
     print io->curdir->absolute;
 
@@ -733,7 +734,7 @@ Here's an example use of it:
     $ ls -l
     total 4
     drwxr-xr-x 3 shlomif shlomif 4096 2010-10-14 18:03 one/
-    $ cat one/two/three/four.txt 
+    $ cat one/two/three/four.txt
     Hello World
     $
 
@@ -1081,6 +1082,10 @@ has no contents.
 =item * eof
 
 Proxy for IO::Handle::eof
+
+=item * ext
+
+Returns the extension of the file.  Can also be spelled as C<extension>
 
 =item * exists
 
