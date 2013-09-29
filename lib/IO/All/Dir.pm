@@ -181,6 +181,22 @@ sub rmtree {
     File::Path::rmtree($self->pathname, @_);
 }
 
+sub glob {
+   my ($self, @rest) = @_;
+
+   map {;
+      my $ret = $self->constructor->($_);
+      $ret->absolute if $self->is_absolute;
+      $ret
+   } $self->glob_raw(@rest);
+}
+
+sub glob_raw {
+   my ($self, $glob) = @_;
+
+   glob $self->_spec_class->catdir( $self->pathname, $_[1] )
+}
+
 sub DESTROY {
     my $self = shift;
     CORE::chdir($self->chdir_from)
