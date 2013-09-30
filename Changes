@@ -1,6 +1,6 @@
 ---
 version: 0.47
-date:
+date:    Mon Sep 30 18:57:52 CDT 2013
 changes:
 - Add ->glob method to ::Dir (Arthur Axel "fREW" Schmidt)
 - Add list based constructors to ::Dir and ::File (Arthur Axel "fREW" Schmidt)

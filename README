@@ -43,6 +43,10 @@ SYNOPSIS
         print "$io";                                # Object stringifies to name
         print $io;                                  # Quotes not needed here
         print $io->filename;                        # The file portion only
+        print $io->ext;                             # The file extension only
+        print $io->mimetype;                        # The mimetype, requires
+                                                    #   File::MimeType
+
 
         # Read all the files/directories in a directory:
         $io = io('my/directory/');                  # Create new directory object
@@ -133,11 +137,11 @@ DESCRIPTION
     IO::All object. And that object can do it all!
 
     The IO::All object is a proxy for IO::File, IO::Dir, IO::Socket,
-    IO::String, Tie::File, File::Spec, File::Path and File::ReadBackwards;
-    as well as all the DBM and MLDBM modules. You can use most of the
-    methods found in these classes and in IO::Handle (which they inherit
-    from). IO::All adds dozens of other helpful idiomatic methods including
-    file stat and manipulation functions.
+    IO::String, Tie::File, File::Spec, File::Path, File::MimeInfo and
+    File::ReadBackwards; as well as all the DBM and MLDBM modules. You can
+    use most of the methods found in these classes and in IO::Handle (which
+    they inherit from). IO::All adds dozens of other helpful idiomatic
+    methods including file stat and manipulation functions.
 
     IO::All is pluggable, and modules like IO::All::LWP and IO::All::Mailto
     add even more functionality. Optionally, every IO::All object can be
@@ -193,24 +197,24 @@ METHOD ROLE CALL
     "canonpath", "case_tolerant", "catdir", "catfile", "catpath", "cc",
     "chdir", "chomp", "clear", "close", "confess", "content", "ctime",
     "curdir", "dbm", "deep", "device", "device_id", "devnull", "dir",
-    "domain", "empty", "encoding", "eof", "errors", "file", "filename",
-    "fileno", "filepath", "filter", "fork", "from", "ftp", "get", "getc",
-    "getline", "getlines", "gid", "handle", "head", "http", "https",
-    "inode", "io_handle", "is_absolute", "is_dir", "is_dbm",
-    "is_executable", "is_file", "is_link", "is_mldbm", "is_open", "is_pipe",
-    "is_readable", "is_socket", "is_stdio", "is_string", "is_temp",
-    "is_writable", "join", "length", "link", "lock", "mailer", "mailto",
-    "mkdir", "mkpath", "mldbm", "mode", "modes", "mtime", "name", "new",
-    "next", "nlink", "open", "password", "path", "pathname", "perms",
-    "pipe", "port", "print", "printf", "println", "put", "rdonly", "rdwr",
-    "read", "readdir", "readlink", "recv", "rel2abs", "relative", "rename",
-    "request", "response", "rmdir", "rmtree", "rootdir", "scalar", "seek",
-    "send", "separator", "shutdown", "size", "slurp", "socket", "sort",
-    "splitdir", "splitpath", "stat", "stdio", "stderr", "stdin", "stdout",
-    "strict", "string", "string_ref", "subject", "sysread", "syswrite",
-    "tail", "tell", "temp", "tie", "tmpdir", "to", "touch", "truncate",
-    "type", "user", "uid", "unlink", "unlock", "updir", "uri", "utf8",
-    "utime" and "write".
+    "domain", "empty", "ext", "encoding", "eof", "errors", "file",
+    "filename", "fileno", "filepath", "filter", "fork", "from", "ftp",
+    "get", "getc", "getline", "getlines", "gid", "glob", "handle", "head",
+    "http", "https", "inode", "io_handle", "is_absolute", "is_dir",
+    "is_dbm", "is_executable", "is_file", "is_link", "is_mldbm", "is_open",
+    "is_pipe", "is_readable", "is_socket", "is_stdio", "is_string",
+    "is_temp", "is_writable", "join", "length", "link", "lock", "mailer",
+    "mailto", "mimetype", "mkdir", "mkpath", "mldbm", "mode", "modes",
+    "mtime", "name", "new", "next", "nlink", "open", "password", "path",
+    "pathname", "perms", "pipe", "port", "print", "printf", "println",
+    "put", "rdonly", "rdwr", "read", "readdir", "readlink", "recv",
+    "rel2abs", "relative", "rename", "request", "response", "rmdir",
+    "rmtree", "rootdir", "scalar", "seek", "send", "separator", "shutdown",
+    "size", "slurp", "socket", "sort", "splitdir", "splitpath", "stat",
+    "stdio", "stderr", "stdin", "stdout", "strict", "string", "string_ref",
+    "subject", "sysread", "syswrite", "tail", "tell", "temp", "tie",
+    "tmpdir", "to", "touch", "truncate", "type", "user", "uid", "unlink",
+    "unlock", "updir", "uri", "utf8", "utime" and "write".
 
     Each method is documented further below.
 
@@ -675,7 +679,7 @@ THE IO::All METHODS
             # Print the full path of the current working directory
             # (like pwd).
 
-            use IO::All; 
+            use IO::All;
 
             print io->curdir->absolute;
 
@@ -711,7 +715,7 @@ THE IO::All METHODS
             $ ls -l
             total 4
             drwxr-xr-x 3 shlomif shlomif 4096 2010-10-14 18:03 one/
-            $ cat one/two/three/four.txt 
+            $ cat one/two/three/four.txt
             Hello World
             $
 
@@ -1055,6 +1059,11 @@ THE IO::All METHODS
 
         Proxy for IO::Handle::eof
 
+    *   ext
+
+        Returns the extension of the file. Can also be spelled as
+        "extension"
+
     *   exists
 
         Returns whether or not the file or directory exists.
@@ -1096,6 +1105,13 @@ THE IO::All METHODS
 
         Calls IO::File::getlines. You can pass in an optional record
         separator.
+
+    *   glob
+
+        Creates IO::All objects for the files matching the glob in the
+        IO::All::Dir. For example:
+
+            io->dir($ENV{HOME})->glob('*.txt')
 
     *   head
 
@@ -1178,6 +1194,12 @@ THE IO::All METHODS
     *   length
 
         Return the length of the internal buffer.
+
+    *   mimetype
+
+        Return the mimetype of the file.
+
+        Requires the File::MimeInfo CPAN module.
 
     *   mkdir
 
@@ -1603,7 +1625,7 @@ STABILITY
 
 SEE ALSO
     IO::Handle, IO::File, IO::Dir, IO::Socket, IO::String, File::Spec,
-    File::Path, File::ReadBackwards, Tie::File
+    File::Path, File::ReadBackwards, Tie::File, File::MimeInfo
 
 CREDITS
     A lot of people have sent in suggestions, that have become a part of
