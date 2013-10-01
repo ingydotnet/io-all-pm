@@ -175,7 +175,7 @@ Normally just say:
 
     use IO::All;
 
-and IO::All will export a single function called C<io>, which contructs all IO
+and IO::All will export a single function called C<io>, which constructs all IO
 objects.
 
 You can also pass global flags like this:
@@ -261,7 +261,7 @@ operator.
     io('file3') > io('file4');
     io('file5') < io('file4');
 
-'>>' and '<<' do the same thing except the recipent string or file is
+'>>' and '<<' do the same thing except the recipient string or file is
 appended to.
 
 An IO::All file used as an array reference becomes tied using Tie::File:
@@ -958,7 +958,7 @@ Manually specify the request object for an LWP transaction.
 
 =item * response
 
-Returns the resulting reponse object from an LWP transaction.
+Returns the resulting response object from an LWP transaction.
 
 =item * separator
 
@@ -1430,7 +1430,7 @@ clear the buffer after writing it.
 =head2 Stat Methods
 
 This methods get individual values from a stat call on the file,
-directory or handle represented by th IO::All object.
+directory or handle represented by the IO::All object.
 
 =over 4
 
