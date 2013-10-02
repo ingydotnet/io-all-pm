@@ -202,11 +202,18 @@ sub glob {
    } glob $self->_spec_class->catdir( $self->pathname, @rest );
 }
 
+my %spec_map = (
+   unix  => 'Unix',
+   win32 => 'Win32',
+   vms   => 'VMS',
+   mac   => 'Mac',
+   os2   => 'OS2',
+);
 sub os {
    my ($self, $type) = @_;
 
    my $foreign = $self->constructor->();
-   $foreign->_spec_class($type);
+   $foreign->_spec_class($spec_map{$type});
    my ($v, $d, $f) = $self->_spec_class->splitpath($self->name);
 
    my @d = $self->_spec_class->splitdir($d);
