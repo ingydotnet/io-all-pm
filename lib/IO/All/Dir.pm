@@ -202,7 +202,7 @@ sub glob {
    } glob $self->_spec_class->catdir( $self->pathname, @rest );
 }
 
-sub as_foreign {
+sub os {
    my ($self, $type) = @_;
 
    my $foreign = $self->constructor->();

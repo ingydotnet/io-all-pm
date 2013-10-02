@@ -201,7 +201,7 @@ sub unlink {
     unlink $self->pathname;
 }
 
-sub as_foreign {
+sub os {
    my ($self, $type) = @_;
 
    my $foreign = $self->constructor->();
