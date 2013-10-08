@@ -45,6 +45,13 @@ IO::All - IO::All of it to Graham and Damian!
     print "$io";                                # Object stringifies to name
     print $io;                                  # Quotes not needed here
     print $io->filename;                        # The file portion only
+    $io->os('win32');                           # change the object to be a
+                                                # win32 path
+    print $io->ext;                             # The file extension only
+    print $io->mimetype;                        # The mimetype, requires
+                                                #   File::MimeType
+
+
 
     # Read all the files/directories in a directory:
     $io = io('my/directory/');                  # Create new directory object
@@ -85,7 +92,6 @@ IO::All - IO::All of it to Graham and Damian!
     "Thank you!" > $connection;                 # Thank the caller
     $connection->close;                         # Hang up
     io(':6666')->accept->slurp > io->devnull;   # Take a complaint and file it
-    
 
     # DBM database operations:
     $dbm = io 'my/database';                    # Create a database object
@@ -101,7 +107,7 @@ IO::All - IO::All of it to Graham and Damian!
     @$io = reverse @$io;                        # Reverse lines in a file
 
     # Stat functions:
-    printf "%s %s %s\n",                        # Print name, uid and size of 
+    printf "%s %s %s\n",                        # Print name, uid and size of
       $_->name, $_->uid, $_->size               # contents of current directory
         for io('.')->all;
     print "$_\n" for sort                       # Use mtime method to sort all
@@ -110,11 +116,10 @@ IO::All - IO::All of it to Graham and Damian!
 
     # File::Spec support:
     $contents < io->catfile(qw(dir file.txt));  # Portable IO operation
-    
 
     # Miscellaneous:
     @lines = io('file.txt')->chomp->slurp;      # Chomp as you slurp
-    @chunks = 
+    @chunks =
       io('file.txt')->separator('xxx')->slurp;  # Use alternnate record sep
     $binary = io('file.bin')->binary->all;      # Read a binary file
     io('a-symlink')->readlink->slurp;           # Readlink returns an object
@@ -137,13 +142,13 @@ idioms. It exports a single function called `io`, which returns a new
 IO::All object. And that object can do it all!
 
 The IO::All object is a proxy for IO::File, IO::Dir, IO::Socket,
-IO::String, Tie::File, File::Spec, File::Path and File::ReadBackwards;
-as well as all the DBM and MLDBM modules. You can use most of the
-methods found in these classes and in IO::Handle (which they inherit
-from). IO::All adds dozens of other helpful idiomatic methods
-including file stat and manipulation functions. 
+IO::String, Tie::File, File::Spec, File::Path, File::MimeInfo and
+File::ReadBackwards; as well as all the DBM and MLDBM modules. You
+can use most of the methods found in these classes and in IO::Handle
+(which they inherit from). IO::All adds dozens of other helpful idiomatic
+methods including file stat and manipulation functions.
 
-IO::All is pluggable, and modules like IO::All::LWP and IO::All::Mailto
+IO::All is pluggable, and modules like [IO::All::LWP](http://search.cpan.org/perldoc?IO::All::LWP) and [IO::All::Mailto](http://search.cpan.org/perldoc?IO::All::Mailto)
 add even more functionality. Optionally, every IO::All object can be
 tied to itself. This means that you can use most perl IO builtins on it:
 readline, <>, getc, print, printf, syswrite, sysread, close.
@@ -161,7 +166,7 @@ by the usage context. That means you can replace this:
 
 with this:
 
-    my $stuff < io"./mystuff";
+    my $stuff < io './mystuff';
 
 And that is a __good thing__!
 
@@ -171,7 +176,7 @@ Normally just say:
 
     use IO::All;
 
-and IO::All will export a single function called `io`, which contructs all IO
+and IO::All will export a single function called `io`, which constructs all IO
 objects.
 
 You can also pass global flags like this:
@@ -200,17 +205,17 @@ on an IO::All object.
 `catdir`, `catfile`, `catpath`, `cc`, `chdir`, `chomp`, `clear`,
 `close`, `confess`, `content`, `ctime`, `curdir`, `dbm`, `deep`,
 `device`, `device_id`, `devnull`, `dir`, `domain`, `empty`,
-`encoding`, `eof`, `errors`, `file`, `filename`, `fileno`,
+`ext`, `encoding`, `eof`, `errors`, `file`, `filename`, `fileno`,
 `filepath`, `filter`, `fork`, `from`, `ftp`, `get`, `getc`,
-`getline`, `getlines`, `gid`, `handle`, `head`, `http`, `https`,
-`inode`, `io_handle`, `is_absolute`, `is_dir`, `is_dbm`,
-`is_executable`, `is_file`, `is_link`, `is_mldbm`, `is_open`,
-`is_pipe`, `is_readable`, `is_socket`, `is_stdio`, `is_string`,
-`is_temp`, `is_writable`, `join`, `length`, `link`, `lock`,
-`mailer`, `mailto`, `mkdir`, `mkpath`, `mldbm`, `mode`, `modes`,
-`mtime`, `name`, `new`, `next`, `nlink`, `open`, `password`,
-`path`, `pathname`, `perms`, `pipe`, `port`, `print`, `printf`,
-`println`, `put`, `rdonly`, `rdwr`, `read`, `readdir`,
+`getline`, `getlines`, `gid`, `glob`, `handle`, `head`,
+`http`, `https`, `inode`, `io_handle`, `is_absolute`, `is_dir`,
+`is_dbm`, `is_executable`, `is_file`, `is_link`, `is_mldbm`,
+`is_open`, `is_pipe`, `is_readable`, `is_socket`, `is_stdio`,
+`is_string`, `is_temp`, `is_writable`, `join`, `length`, `link`,
+`lock`, `mailer`, `mailto`, `mimetype`, `mkdir`, `mkpath`, `mldbm`,
+`mode`, `modes`, `mtime`, `name`, `new`, `next`, `nlink`, `open`, `os`
+`password`, `path`, `pathname`, `perms`, `pipe`, `port`, `print`,
+`printf`, `println`, `put`, `rdonly`, `rdwr`, `read`, `readdir`,
 `readlink`, `recv`, `rel2abs`, `relative`, `rename`, `request`,
 `response`, `rmdir`, `rmtree`, `rootdir`, `scalar`, `seek`,
 `send`, `separator`, `shutdown`, `size`, `slurp`, `socket`,
@@ -233,9 +238,9 @@ a huge matrix of possibilities for magic. That's because the overloading
 is sensitive to the types, position and context of the arguments, and an
 IO::All object can be one of many types.
 
-The most important overload to grok is stringification. IO::All objects
-stringify to their file or directory name. Here we print the contents of
-the current directory:
+The most important overload to become familiar with is stringification.
+IO::All objects stringify to their file or directory name. Here we print the
+contents of the current directory:
 
     perl -MIO::All -le 'print for io(".")->all'
 
@@ -257,12 +262,12 @@ operator.
     io('file3') > io('file4');
     io('file5') < io('file4');
 
-'>>' and '<<' do the same thing except the recipent string or file is
+'>>' and '<<' do the same thing except the recipient string or file is
 appended to.
 
 An IO::All file used as an array reference becomes tied using Tie::File:
 
-    $file = io"file";
+    $file = io "file";
     # Print last line of file
     print $file->[-1];
     # Insert new line in middle of file
@@ -332,7 +337,7 @@ lock. If all goes well the child will print 3 lines.
 This simple example will read lines from a file forever. When the last
 line is read, it will reopen the file and read the first one again.
 
-    my $io = io'file1.txt';
+    my $io = io 'file1.txt';
     $io->autoclose(1);
     while (my $line = $io->getline || $io->getline) {
         print $line;
@@ -358,9 +363,8 @@ or more simply:
 The `backwards` method returns the IO::All object so that you can
 chain the calls.
 
-NOTE: This operation requires that you have the File::ReadBackwards 
+NOTE: This operation requires that you have the [File::ReadBackwards](http://search.cpan.org/perldoc?File::ReadBackwards)
 module installed.
-    
 
 ## Client/Server Sockets
 
@@ -403,7 +407,7 @@ dynamic pages:
 
 There is are a lot of subtle things going on here. First we accept a socket
 and fork the server. Then we overload the new socket as a code ref. This code
-ref takes one argument, another code ref, which is used as a callback. 
+ref takes one argument, another code ref, which is used as a callback.
 
 The callback is called once for every line read on the socket. The line
 is put into `$_` and the socket itself is passed in to the callback.
@@ -415,14 +419,14 @@ we create a piped command as our IO::All object. This somewhat approximates
 CGI support.
 
 Whatever the resulting object is, we direct the contents back at our socket
-which is in `$_[0]`. Pretty simple, eh? 
+which is in `$_[0]`. Pretty simple, eh?
 
 ## DBM Files
 
 IO::All file objects used as a hash reference, treat the file as a DBM tied to
 a hash. Here I write my DB record to STDERR:
 
-    io("names.db")->{ingy} > io'=';
+    io("names.db")->{ingy} > io('=');
 
 Since their are several DBM formats available in Perl, IO::All picks the first
 one of these that is installed on your system:
@@ -453,7 +457,6 @@ then pass control to the real `open`.
 First the code using the module:
 
     use IO::Dumper;
-    
 
     io('./mydump')->dump($hash);
 
@@ -462,13 +465,11 @@ And next the IO::Dumper module itself:
     package IO::Dumper;
     use IO::All -base;
     use Data::Dumper;
-    
 
     sub dump {
         my $self = shift;
         Dumper(@_) > $self;
     }
-    
 
     1;
 
@@ -481,12 +482,10 @@ method manually.
 
     IO::Dumper->import;
     io('./mydump')->dump($hash);
-    
 
     package IO::Dumper;
     use IO::All -base;
     use Data::Dumper;
-    
 
     sub dump {
         my $self = shift;
@@ -502,169 +501,168 @@ methods and support for specific modules.
 
 ## Object Construction and Initialization Methods
 
-- * new
+- new
 
-There are three ways to create a new IO::All object. The first is with
-the special function `io` which really just calls `IO::All->new`.
-The second is by calling `new` as a class method. The third is calling
-`new` as an object instance method. In this final case, the new objects
-attributes are copied from the instance object.
+    There are three ways to create a new IO::All object. The first is with
+    the special function `io` which really just calls `IO::All->new`.
+    The second is by calling `new` as a class method. The third is calling
+    `new` as an object instance method. In this final case, the new objects
+    attributes are copied from the instance object.
 
-    io(file-descriptor);
-    IO::All->new(file-descriptor);
-    $io->new(file-descriptor);
-            
+        io(file-descriptor);
+        IO::All->new(file-descriptor);
+        $io->new(file-descriptor);
 
-All three forms take a single argument, a file descriptor. A file
-descriptor can be any of the following:
+    All three forms take a single argument, a file descriptor. A file
+    descriptor can be any of the following:
 
-    - A file name
-    - A file handle
-    - A directory name
-    - A directory handle
-    - A typeglob reference
-    - A piped shell command. eq '| ls -al'
-    - A socket domain/port.  eg 'perl.com:5678'
-    - '-' means STDIN or STDOUT (depending on usage)
-    - '=' means STDERR
-    - '$' means an IO::String object
-    - '?' means a temporary file
-    - A URI including: http, https, ftp and mailto
-    - An IO::All object
+        - A file name
+        - A file handle
+        - A directory name
+        - A directory handle
+        - A typeglob reference
+        - A piped shell command. eq '| ls -al'
+        - A socket domain/port.  eg 'perl.com:5678'
+        - '-' means STDIN or STDOUT (depending on usage)
+        - '=' means STDERR
+        - '$' means an IO::String object
+        - '?' means a temporary file
+        - A URI including: http, https, ftp and mailto
+        - An IO::All object
 
-If you provide an IO::All object, you will simply get that _same
-object_ returned from the constructor.
+    If you provide an IO::All object, you will simply get that _same
+    object_ returned from the constructor.
 
-If no file descriptor is provided, an object will still be created, but
-it must be defined by one of the following methods before it can be used
-for I/O:
+    If no file descriptor is provided, an object will still be created, but
+    it must be defined by one of the following methods before it can be used
+    for I/O:
 
-- * file
+- file
 
-    io->file(file-name);
+        io->file("path/to/my/file.txt");
 
-Using the `file` method sets the type of the object to _file_ and sets
-the pathname of the file if provided.
+    Using the `file` method sets the type of the object to _file_ and sets
+    the pathname of the file if provided.
 
-It might be important to use this method if you had a file whose name
-was `'-'`, or if the name might otherwise be confused with a
-directory or a socket. In this case, either of these statements would
-work the same:
+    It might be important to use this method if you had a file whose name
+    was `'-'`, or if the name might otherwise be confused with a
+    directory or a socket. In this case, either of these statements would
+    work the same:
 
-    my $file = io('-')->file;
-    my $file = io->file('-');
+        my $file = io('-')->file;
+        my $file = io->file('-');
 
-- * dir
+- dir
 
-    io->file(dir-name);
+        io->file($dir_name);
 
-Make the object be of type _directory_.
+    Make the object be of type _directory_.
 
-- * socket
+- socket
 
-    io->file(domain:port);
+        io->socket("${domain}:${port}");
 
-Make the object be of type _socket_.
+    Make the object be of type _socket_.
 
-- * link
+- link
 
-    io->file(link-name);
+        io->link($link_name);
 
-Make the object be of type _link_.
+    Make the object be of type _link_.
 
-- * pipe
+- pipe
 
-    io->file(link-name);
+        io->pipe($pipe_command);
 
-Make the object be of type _pipe_. The following two statements are
-equivalent:
+    Make the object be of type _pipe_. The following two statements are
+    equivalent:
 
-    my $io = io('ls -l |');
-    my $io = io('ls -l')->pipe;
-    my $io = io->pipe('ls -l');
+        my $io = io('ls -l |');
+        my $io = io('ls -l')->pipe;
+        my $io = io->pipe('ls -l');
 
-- * dbm
+- dbm
 
-This method takes the names of zero or more DBM modules. The first one
-that is available is used to process the dbm file.
+    This method takes the names of zero or more DBM modules. The first one
+    that is available is used to process the dbm file.
 
-    io('mydbm')->dbm('NDBM_File', 'SDBM_File')->{author} = 'ingy';
+        io('mydbm')->dbm('NDBM_File', 'SDBM_File')->{author} = 'ingy';
 
-If no module names are provided, the first available of the
-following is used:
+    If no module names are provided, the first available of the
+    following is used:
 
-    DB_File GDBM_File NDBM_File ODBM_File SDBM_File
+        DB_File GDBM_File NDBM_File ODBM_File SDBM_File
 
-- * mldbm
+- mldbm
 
-Similar to the `dbm` method, except create a Multi Level DBM object
-using the MLDBM module.
+    Similar to the `dbm` method, except create a Multi Level DBM object
+    using the MLDBM module.
 
-This method takes the names of zero or more DBM modules and an optional
-serialization module. The first DBM module that is available is used to
-process the MLDBM file. The serialization module can be Data::Dumper,
-Storable or FreezeThaw.
+    This method takes the names of zero or more DBM modules and an optional
+    serialization module. The first DBM module that is available is used to
+    process the MLDBM file. The serialization module can be Data::Dumper,
+    Storable or FreezeThaw.
 
-    io('mymldbm')->mldbm('GDBM_File', 'Storable')->{author} = 
-      {nickname => 'ingy'};
+        io('mymldbm')->mldbm('GDBM_File', 'Storable')->{author} =
+          {nickname => 'ingy'};
 
-- * string
+- string
 
-Make the object be a IO::String object. These are equivalent:
+    Make the object be an IO::String object. These are equivalent:
 
-    my $io = io('$');
-    my $io = io->string;
+        my $io = io('$');
+        my $io = io->string;
 
-- * temp
+- temp
 
-Make the object represent a temporary file. It will automatically be
-open for both read and write.
+    Make the object represent a temporary file. It will automatically be
+    open for both read and write.
 
-- * stdio
+- stdio
 
-Make the object represent either STDIN or STDOUT depending on how it is
-used subsequently. These are equivalent:
+    Make the object represent either STDIN or STDOUT depending on how it is
+    used subsequently. These are equivalent:
 
-    my $io = io('-');
-    my $io = io->stdin;
+        my $io = io('-');
+        my $io = io->stdin;
 
-- * stdin
+- stdin
 
-Make the object represent STDIN.
+    Make the object represent STDIN.
 
-- * stdout
+- stdout
 
-Make the object represent STDOUT.
+    Make the object represent STDOUT.
 
-- * stderr
+- stderr
 
-Make the object represent STDERR.
+    Make the object represent STDERR.
 
-- * handle
+- handle
 
-    io->handle(io-handle);
+        io->handle($io_handle);
 
-Forces the object to be created from an pre-existing IO handle. You can
-chain calls together to indicate the type of handle:
+    Forces the object to be created from an pre-existing IO handle. You can
+    chain calls together to indicate the type of handle:
 
-    my $file_object = io->file->handle($file_handle);
-    my $dir_object = io->dir->handle($dir_handle);
+        my $file_object = io->file->handle($file_handle);
+        my $dir_object = io->dir->handle($dir_handle);
 
-- * http
+- http
 
-Make the object represent an http uri. Requires IO-All-LWP.
+    Make the object represent an HTTP URI. Requires IO-All-LWP.
 
-- * https
+- https
 
-Make the object represent an https uri. Requires IO-All-LWP.
+    Make the object represent an HTTPS URI. Requires IO-All-LWP.
 
-- * ftp
+- ftp
 
-Make the object represent a ftp uri. Requires IO-All-LWP.
+    Make the object represent an FTP URI. Requires IO-All-LWP.
 
-- * mailto
+- mailto
 
-Make the object represent a mailto uri. Requires IO-All-Mailto.
+    Make the object represent a `mailto:` URI. Requires IO-All-Mailto.
 
 If you need to use the same options to create a lot of objects, and
 don't want to duplicate the code, just create a dummy object with the
@@ -692,112 +690,149 @@ together. For example:
 
     my $io = io('path/file')->tie->assert->chomp->lock;
 
-- * absolute
+- absolute
 
-Indicates that the `pathname` for the object should be made absolute.
+    Indicates that the `pathname` for the object should be made absolute.
 
-- * assert
+        # Print the full path of the current working directory
+        # (like pwd).
 
-This method ensures that the path for a file or directory actually exists
-before the file is open. If the path does not exist, it is created.
+        use IO::All;
 
-- * autoclose
+        print io->curdir->absolute;
 
-By default, IO::All will close an object opened for input when EOF is
-reached. By closing the handle early, one can immediately do other
-operations on the object without first having to close it.
+- assert
 
-This option is on by default, so if you don't want this behaviour, say
-so like this:
+    This method ensures that the path for a file or directory actually exists
+    before the file is open. If the path does not exist, it is created.
 
-    $io->autoclose(0);
+    For example, here is a program called "create-cat-to" that outputs to a file
+    that it creates.
 
-The object will then be closed when `$io` goes out of scope, or you
-manually call `$io->close`.
+        #!/usr/bin/perl
 
-- * autoflush
+        # create-cat-to.pl
+        # cat to a file that can be created.
 
-Proxy for IO::Handle::autoflush
+        use strict;
+        use warnings;
 
-- * backwards
+        use IO::All;
 
-Sets the object to 'backwards' mode. All subsequent `getline`
-operations will read backwards from the end of the file.
+        my $filename = shift(@ARGV);
 
-Requires the File::ReadBackwards CPAN module.
+        # Create a file called $filename, including all leading components.
+        io('-') > io->file($filename)->assert;
 
-- * binary
+    Here's an example use of it:
 
-Indicates the file has binary content and should be opened with
-`binmode`.
+        $ ls -l
+        total 0
+        $ echo "Hello World" | create-cat-to one/two/three/four.txt
+        $ ls -l
+        total 4
+        drwxr-xr-x 3 shlomif shlomif 4096 2010-10-14 18:03 one/
+        $ cat one/two/three/four.txt
+        Hello World
+        $
 
-- * chdir
+- autoclose
 
-chdir() to the pathname of a directory object. When object goes out of
-scope, chdir back to starting directory.
+    By default, IO::All will close an object opened for input when EOF is
+    reached. By closing the handle early, one can immediately do other
+    operations on the object without first having to close it.
 
-- * chomp
+    This option is on by default, so if you don't want this behaviour, say
+    so like this:
 
-Indicates that all operations that read lines should chomp the lines. If
-the `separator` method has been called, chomp will remove that value
-from the end of each record.
+        $io->autoclose(0);
 
-- * confess
+    The object will then be closed when `$io` goes out of scope, or you
+    manually call `$io->close`.
 
-Errors should be reported with the very detailed Carp::confess function.
+- autoflush
 
-- * deep
+    Proxy for IO::Handle::autoflush
 
-Indicates that calls to the `all` family of methods should search
-directories as deep as possible.
+- backwards
 
-- * fork
+    Sets the object to 'backwards' mode. All subsequent `getline`
+    operations will read backwards from the end of the file.
 
-Indicates that the process should automatically be forked inside the
-`accept` socket method.
+    Requires the File::ReadBackwards CPAN module.
 
-- * lock
+- binary
 
-Indicate that operations on an object should be locked using flock.
+    Indicates the file has binary content and should be opened with
+    `binmode`.
 
-- * rdonly
+- chdir
 
-This option indicates that certain operations like DBM and Tie::File
-access should be done in read-only mode.
+    chdir() to the pathname of a directory object. When object goes out of
+    scope, chdir back to starting directory.
 
-- * rdwr
+- chomp
 
-This option indicates that DBM and MLDBM files should be opened in read-
-write mode.
+    Indicates that all operations that read lines should chomp the lines. If
+    the `separator` method has been called, chomp will remove that value
+    from the end of each record.
 
-- * relative
+- confess
 
-Indicates that the `pathname` for the object should be made relative.
+    Errors should be reported with the very detailed Carp::confess function.
 
-- * sort
+- deep
 
-Indicates whether objects returned from one of the `all` methods will
-be in sorted order by name. True by default.
+    Indicates that calls to the `all` family of methods should search
+    directories as deep as possible.
 
-- * strict
+- fork
 
-Check the return codes of every single system call. To turn this on for all
-calls in your module, use:
+    Indicates that the process should automatically be forked inside the
+    `accept` socket method.
 
-    use IO::All -strict;
+- lock
 
-- * tie
+    Indicate that operations on an object should be locked using flock.
 
-Indicate that the object should be tied to itself, thus allowing it to
-be used as a filehandle in any of Perl's builtin IO operations.
+- rdonly
 
-    my $io = io('foo')->tie;
-    @lines = <$io>;
+    This option indicates that certain operations like DBM and Tie::File
+    access should be done in read-only mode.
 
-- * utf8
+- rdwr
 
-Indicates that IO should be done using utf8 encoding. Calls binmode with
-`:utf8` layer.
+    This option indicates that DBM and MLDBM files should be opened in read-
+    write mode.
+
+- relative
+
+    Indicates that the `pathname` for the object should be made relative.
+
+- sort
+
+    Indicates whether objects returned from one of the `all` methods will
+    be in sorted order by name. True by default.
+
+- strict
+
+    Check the return codes of every single system call. To turn this on for all
+    calls in your module, use:
+
+        use IO::All -strict;
+
+- tie
+
+    Indicate that the object should be tied to itself, thus allowing it to
+    be used as a filehandle in any of Perl's builtin IO operations.
+
+        my $io = io('foo')->tie;
+        @lines = <$io>;
+
+- utf8
+
+    Indicates that IO should be done using utf8 encoding. Calls binmode with
+    `:utf8` layer.
 
 ## Configuration Methods
 
@@ -809,139 +844,139 @@ current value. If arguments are passed they will be used to set the
 current value, and the object reference will be returned for potential
 method chaining.
 
-- * bcc
+- bcc
 
-Set the Bcc field for a mailto object.
+    Set the Bcc field for a mailto object.
 
-- * binmode
+- binmode
 
-Proxy for binmode. Requires a layer to be passed. Use `binary` for
-plain binary mode.
+    Proxy for binmode. Requires a layer to be passed. Use `binary` for
+    plain binary mode.
 
-- * block_size
+- block\_size
 
-The default length to be used for `read` and `sysread` calls.
-Defaults to 1024.
+    The default length to be used for `read` and `sysread` calls.
+    Defaults to 1024.
 
-- * buffer
+- buffer
 
-Returns a reference to the internal buffer, which is a scalar. You can
-use this method to set the buffer to a scalar of your choice. (You can
-just pass in the scalar, rather than a reference to it.)
+    Returns a reference to the internal buffer, which is a scalar. You can
+    use this method to set the buffer to a scalar of your choice. (You can
+    just pass in the scalar, rather than a reference to it.)
 
-This is the buffer that `read` and `write` will use by default.
+    This is the buffer that `read` and `write` will use by default.
 
-You can easily have IO::All objects use the same buffer:
+    You can easily have IO::All objects use the same buffer:
 
-    my $input = io('abc');
-    my $output = io('xyz');
-    my $buffer;
-    $output->buffer($input->buffer($buffer));
-    $output->write while $input->read;
+        my $input = io('abc');
+        my $output = io('xyz');
+        my $buffer;
+        $output->buffer($input->buffer($buffer));
+        $output->write while $input->read;
 
-- * cc
+- cc
 
-Set the Cc field for a mailto object.
+    Set the Cc field for a mailto object.
 
-- * content
+- content
 
-Get or set the content for an LWP operation manually.
+    Get or set the content for an LWP operation manually.
 
-- * domain
+- domain
 
-Set the domain name or ip address that a socket should use.
+    Set the domain name or ip address that a socket should use.
 
-- * encoding
+- encoding
 
-Set the encoding to be used for the PerlIO layer.
+    Set the encoding to be used for the PerlIO layer.
 
-- * errors
+- errors
 
-Use this to set a subroutine reference that gets called when an internal
-error is thrown.
+    Use this to set a subroutine reference that gets called when an internal
+    error is thrown.
 
-- * filter
+- filter
 
-Use this to set a subroutine reference that will be used to grep
-which objects get returned on a call to one of the `all` methods.
-For example:
+    Use this to set a subroutine reference that will be used to grep
+    which objects get returned on a call to one of the `all` methods.
+    For example:
 
-    my @odd = io->curdir->filter(sub {$_->size % 2})->All_Files;
+        my @odd = io->curdir->filter(sub {$_->size % 2})->All_Files;
 
-`@odd` will contain all the files under the current directory whose
-size is an odd number of bytes.
+    `@odd` will contain all the files under the current directory whose
+    size is an odd number of bytes.
 
-- * from
+- from
 
-Indicate the sender for a mailto object.
+    Indicate the sender for a mailto object.
 
-- * mailer
+- mailer
 
-Set the mailer program for a mailto transaction. Defaults to 'sendmail'.
+    Set the mailer program for a mailto transaction. Defaults to 'sendmail'.
 
-- * mode
+- mode
 
-Set the mode for which the file should be opened. Examples:
+    Set the mode for which the file should be opened. Examples:
 
-    $io->mode('>>')->open;
-    $io->mode(O_RDONLY);
+        $io->mode('>>')->open;
+        $io->mode(O_RDONLY);
 
-    my $log_appender = io->file('/var/log/my-application.log')
-                         ->mode('>>')->open();
+        my $log_appender = io->file('/var/log/my-application.log')
+                             ->mode('>>')->open();
 
-    $log_appender->print("Stardate 5987.6: Mission accomplished.");
+        $log_appender->print("Stardate 5987.6: Mission accomplished.");
 
-- * name
+- name
 
-Set or get the name of the file or directory represented by the IO::All
-object.
+    Set or get the name of the file or directory represented by the IO::All
+    object.
 
-- * password
+- password
 
-Set the password for an LWP transaction.
+    Set the password for an LWP transaction.
 
-- * perms
+- perms
 
-Sets the permissions to be used if the file/directory needs to be created.
+    Sets the permissions to be used if the file/directory needs to be created.
 
-- * port
+- port
 
-Set the port number that a socket should use.
+    Set the port number that a socket should use.
 
-- * request
+- request
 
-Manually specify the request object for an LWP transaction.
+    Manually specify the request object for an LWP transaction.
 
-- * response
+- response
 
-Returns the resulting reponse object from an LWP transaction.
+    Returns the resulting response object from an LWP transaction.
 
-- * separator
+- separator
 
-Sets the record (line) separator to whatever value you pass it. Default
-is \n. Affects the chomp setting too.
+    Sets the record (line) separator to whatever value you pass it. Default
+    is \\n. Affects the chomp setting too.
 
-- * string_ref
+- string\_ref
 
-Proxy for IO::String::string_ref
+    Proxy for IO::String::string\_ref
 
-Returns a reference to the internal string that is acting like a file.
+    Returns a reference to the internal string that is acting like a file.
 
-- * subject
+- subject
 
-Set the subject for a mailto transaction.
+    Set the subject for a mailto transaction.
 
-- * to
+- to
 
-Set the recipient address for a mailto request.
+    Set the recipient address for a mailto request.
 
-- * uri
+- uri
 
-Direct access to the URI used in LWP transactions.
+    Direct access to the URI used in LWP transactions.
 
-- * user
+- user
 
-Set the user name for an LWP transaction.
+    Set the user name for an LWP transaction.
 
 ## IO Action Methods
 
@@ -949,473 +984,495 @@ These are the methods that actually perform I/O operations on an IO::All
 object. The stat methods and the File::Spec methods are documented in
 separate sections below.
 
-- * accept
+- accept
 
-For sockets. Opens a server socket (LISTEN => 1, REUSE => 1). Returns an
-IO::All socket object that you are listening on.
+    For sockets. Opens a server socket (LISTEN => 1, REUSE => 1). Returns an
+    IO::All socket object that you are listening on.
 
-If the `fork` method was called on the object, the process will
-automatically be forked for every connection.
+    If the `fork` method was called on the object, the process will
+    automatically be forked for every connection.
 
-- * all
+- all
 
-Read all contents into a single string.
+    Read all contents into a single string.
 
-    compare(io('file1')->all, io('file2')->all);
+        compare(io('file1')->all, io('file2')->all);
 
-- * all (For directories)
+- all (For directories)
 
-Returns a list of IO::All objects for all files and subdirectories in a
-directory. 
+    Returns a list of IO::All objects for all files and subdirectories in a
+    directory.
 
-'.' and '..' are excluded.
+    '.' and '..' are excluded.
 
-Takes an optional argument telling how many directories deep to search. The
-default is 1. Zero (0) means search as deep as possible.
+    Takes an optional argument telling how many directories deep to search. The
+    default is 1. Zero (0) means search as deep as possible.
 
-The filter method can be used to limit the results.
+    The filter method can be used to limit the results.
 
-The items returned are sorted by name unless `->sort(0)` is used.
+    The items returned are sorted by name unless `->sort(0)` is used.
 
-- * All
+- All
 
-Same as `all(0)`.
+    Same as `all(0)`.
 
-- * all_dirs
+- all\_dirs
 
-Same as `all`, but only return directories.
+    Same as `all`, but only return directories.
 
-- * All_Dirs
+- All\_Dirs
 
-Same as `all_dirs(0)`.
+    Same as `all_dirs(0)`.
 
-- * all_files
+- all\_files
 
-Same as `all`, but only return files.
+    Same as `all`, but only return files.
 
-- * All_Files
+- All\_Files
 
-Same as `all_files(0)`.
+    Same as `all_files(0)`.
 
-- * all_links
+- all\_links
 
-Same as `all`, but only return links.
+    Same as `all`, but only return links.
 
-- * All_Links
+- All\_Links
 
-Same as `all_links(0)`.
+    Same as `all_links(0)`.
 
-- * append
+- append
 
-Same as print, but sets the file mode to '>>'.
+    Same as print, but sets the file mode to '>>'.
 
-- * appendf
+- appendf
 
-Same as printf, but sets the file mode to '>>'.
+    Same as printf, but sets the file mode to '>>'.
 
-- * appendln
+- appendln
 
-Same as println, but sets the file mode to '>>'.
+    Same as println, but sets the file mode to '>>'.
 
-- * clear
+- clear
 
-Clear the internal buffer. This method is called by `write` after it
-writes the buffer. Returns the object reference for chaining.
+    Clear the internal buffer. This method is called by `write` after it
+    writes the buffer. Returns the object reference for chaining.
 
-- * close
+- close
 
-Close will basically unopen the object, which has different meanings for
-different objects. For files and directories it will close and release
-the handle. For sockets it calls shutdown. For tied things it unties
-them, and it unlocks locked things.
+    Close will basically unopen the object, which has different meanings for
+    different objects. For files and directories it will close and release
+    the handle. For sockets it calls shutdown. For tied things it unties
+    them, and it unlocks locked things.
 
-- * empty
+- empty
 
-Returns true if a file exists but has no size, or if a directory exists but
-has no contents.
+    Returns true if a file exists but has no size, or if a directory exists but
+    has no contents.
 
-- * eof
+- eof
 
-Proxy for IO::Handle::eof
+    Proxy for IO::Handle::eof
 
-- * exists
+- ext
 
-Returns whether or not the file or directory exists.
+    Returns the extension of the file.  Can also be spelled as `extension`
 
-- * filename
+- exists
 
-Return the name portion of the file path in the object. For example:
+    Returns whether or not the file or directory exists.
 
-    io('my/path/file.txt')->filename;
+- filename
 
-would return `file.txt`.
+    Return the name portion of the file path in the object. For example:
 
-- * fileno
+        io('my/path/file.txt')->filename;
 
-Proxy for IO::Handle::fileno
+    would return `file.txt`.
 
-- * filepath
+- fileno
 
-Return the path portion of the file path in the object. For example:
+    Proxy for IO::Handle::fileno
 
-    io('my/path/file.txt')->filename;
+- filepath
 
-would return `my/path`.
+    Return the path portion of the file path in the object. For example:
 
-- * get
+        io('my/path/file.txt')->filename;
 
-Perform an LWP GET request manually.
+    would return `my/path`.
 
-- * getc
+- get
 
-Proxy for IO::Handle::getc
+    Perform an LWP GET request manually.
 
-- * getline
+- getc
 
-Calls IO::File::getline. You can pass in an optional record separator.
+    Proxy for IO::Handle::getc
 
-- * getlines
+- getline
 
-Calls IO::File::getlines. You can pass in an optional record separator.
+    Calls IO::File::getline. You can pass in an optional record separator.
 
-- * head
+- getlines
 
-Return the first 10 lines of a file. Takes an optional argument which is the
-number of lines to return. Works as expected in list and scalar context. Is
-subject to the current line separator.
+    Calls IO::File::getlines. You can pass in an optional record separator.
 
-- * io_handle
+- glob
 
-Direct access to the actual IO::Handle object being used on an opened
-IO::All object.
+    Creates IO::All objects for the files matching the glob in the IO::All::Dir.  For
+    example:
 
-- * is_dir
+        io->dir($ENV{HOME})->glob('*.txt')
 
-Returns boolean telling whether or not the IO::All object represents
-a directory.
+- head
 
-- * is_executable
+    Return the first 10 lines of a file. Takes an optional argument which is the
+    number of lines to return. Works as expected in list and scalar context. Is
+    subject to the current line separator.
 
-Returns true if file or directory is executable.
+- io\_handle
 
-- * is_dbm
+    Direct access to the actual IO::Handle object being used on an opened
+    IO::All object.
 
-Returns boolean telling whether or not the IO::All object
-represents a dbm file.
+- is\_dir
 
-- * is_file
+    Returns boolean telling whether or not the IO::All object represents
+    a directory.
 
-Returns boolean telling whether or not the IO::All object
-represents a file.
+- is\_executable
 
-- * is_link
+    Returns true if file or directory is executable.
 
-Returns boolean telling whether or not the IO::All object represents
-a symlink.
+- is\_dbm
 
-- * is_mldbm
+    Returns boolean telling whether or not the IO::All object
+    represents a dbm file.
 
-Returns boolean telling whether or not the IO::All object
-represents a mldbm file.
+- is\_file
 
-- * is_open
+    Returns boolean telling whether or not the IO::All object
+    represents a file.
 
-Indicates whether the IO::All is currently open for input/output.
+- is\_link
 
-- * is_pipe
+    Returns boolean telling whether or not the IO::All object represents
+    a symlink.
 
-Returns boolean telling whether or not the IO::All object represents
-a pipe operation.
+- is\_mldbm
 
-- * is_readable
+    Returns boolean telling whether or not the IO::All object
+    represents a mldbm file.
 
-Returns true if file or directory is readable.
+- is\_open
 
-- * is_socket
+    Indicates whether the IO::All is currently open for input/output.
 
-Returns boolean telling whether or not the IO::All object represents
-a socket.
+- is\_pipe
 
-- * is_stdio
+    Returns boolean telling whether or not the IO::All object represents
+    a pipe operation.
 
-Returns boolean telling whether or not the IO::All object represents
-a STDIO file handle.
+- is\_readable
 
-- * is_string
+    Returns true if file or directory is readable.
 
-Returns boolean telling whether or not the IO::All object represents
-an IO::String object.
+- is\_socket
 
-- * is_temp
+    Returns boolean telling whether or not the IO::All object represents
+    a socket.
 
-Returns boolean telling whether or not the IO::All object represents
-a temporary file.
+- is\_stdio
 
-- * is_writable
+    Returns boolean telling whether or not the IO::All object represents
+    a STDIO file handle.
 
-Returns true if file or directory is writable.  Can also be spelled as
-`is_writeable`.
+- is\_string
 
-- * length
+    Returns boolean telling whether or not the IO::All object represents
+    an IO::String object.
 
-Return the length of the internal buffer.
+- is\_temp
 
-- * mkdir
+    Returns boolean telling whether or not the IO::All object represents
+    a temporary file.
 
-Create the directory represented by the object.
+- is\_writable
 
-- * mkpath
+    Returns true if file or directory is writable.  Can also be spelled as
+    `is_writeable`.
 
-Create the directory represented by the object, when the path contains
-more than one directory that doesn't exist. Proxy for File::Path::mkpath.
+- length
 
-- * next
+    Return the length of the internal buffer.
 
-For a directory, this will return a new IO::All object for each file
-or subdirectory in the directory. Return undef on EOD.
+- mimetype
 
-- * open
+    Return the mimetype of the file.
 
-Open the IO::All object. Takes two optional arguments `mode` and
-`perms`, which can also be set ahead of time using the `mode` and
-`perms` methods.
+    Requires the [File::MimeInfo](http://search.cpan.org/perldoc?File::MimeInfo) CPAN module.
 
-NOTE: Normally you won't need to call open (or mode/perms), since this
-happens automatically for most operations.
+- mkdir
 
-- * pathname
+    Create the directory represented by the object.
 
-Return the absolute or relative pathname for a file or directory, depending on
-whether object is in `absolute` or `relative` mode.
+- mkpath
 
-- * print
+    Create the directory represented by the object, when the path contains
+    more than one directory that doesn't exist. Proxy for File::Path::mkpath.
 
-Proxy for IO::Handle::print
+- next
 
-- * printf
+    For a directory, this will return a new IO::All object for each file
+    or subdirectory in the directory. Return undef on EOD.
 
-Proxy for IO::Handle::printf
+- open
 
-- * println
+    Open the IO::All object. Takes two optional arguments `mode` and
+    `perms`, which can also be set ahead of time using the `mode` and
+    `perms` methods.
 
-Same as print, but adds newline to each argument unless it already
-ends with one.
+    NOTE: Normally you won't need to call open (or mode/perms), since this
+    happens automatically for most operations.
 
-- * put
+- os
 
-Perform an LWP PUT request manually.
+    Change the object's os representation.  Valid options are: `win32`, `unix`,
+    `vms`, `mac`, `os2`.
 
-- * read
+- pathname
 
-This method varies depending on its context. Read carefully (no pun
-intended).
+    Return the absolute or relative pathname for a file or directory, depending on
+    whether object is in `absolute` or `relative` mode.
 
-For a file, this will proxy IO::File::read. This means you must pass
-it a buffer, a length to read, and optionally a buffer offset for where
-to put the data that is read. The function returns the length actually
-read (which is zero at EOF).
+- print
 
-If you don't pass any arguments for a file, IO::All will use its own
-internal buffer, a default length, and the offset will always point at
-the end of the buffer. The buffer can be accessed with the `buffer`
-method. The length can be set with the `block_size` method. The default
-length is 1024 bytes. The `clear` method can be called to clear
-the buffer.
+    Proxy for IO::Handle::print
 
-For a directory, this will proxy IO::Dir::read.
+- printf
 
-- * readdir
+    Proxy for IO::Handle::printf
 
-Similar to the Perl `readdir` builtin. In scalar context, return the next
-directory entry (ie file or directory name), or undef on end of directory. In
-list context, return all directory entries.
+- println
 
-Note that `readdir` does not return the special `.` and `..` entries.
+    Same as print, but adds newline to each argument unless it already
+    ends with one.
 
-- * readline
+- put
 
-Same as `getline`.
+    Perform an LWP PUT request manually.
 
-- * readlink
+- read
 
-Calls Perl's readlink function on the link represented by the object.
-Instead of returning the file path, it returns a new IO::All object
-using the file path.
+    This method varies depending on its context. Read carefully (no pun
+    intended).
 
-- * recv
+    For a file, this will proxy IO::File::read. This means you must pass
+    it a buffer, a length to read, and optionally a buffer offset for where
+    to put the data that is read. The function returns the length actually
+    read (which is zero at EOF).
 
-Proxy for IO::Socket::recv
+    If you don't pass any arguments for a file, IO::All will use its own
+    internal buffer, a default length, and the offset will always point at
+    the end of the buffer. The buffer can be accessed with the `buffer`
+    method. The length can be set with the `block_size` method. The default
+    length is 1024 bytes. The `clear` method can be called to clear
+    the buffer.
 
-- * rename
+    For a directory, this will proxy IO::Dir::read.
 
-    my $new = $io->rename('new-name');
+- readdir
 
-Calls Perl's rename function and returns an IO::All object for the
-renamed file. Returns false if the rename failed.
+    Similar to the Perl `readdir` builtin. In scalar context, return the next
+    directory entry (ie file or directory name), or undef on end of directory. In
+    list context, return all directory entries.
 
-- * rewind
+    Note that `readdir` does not return the special `.` and `..` entries.
 
-Proxy for IO::Dir::rewind
+- readline
 
-- * rmdir
+    Same as `getline`.
 
-Delete the directory represented by the IO::All object.
+- readlink
 
-- * rmtree
+    Calls Perl's readlink function on the link represented by the object.
+    Instead of returning the file path, it returns a new IO::All object
+    using the file path.
 
-Delete the directory represented by the IO::All object and all the files
-and directories beneath it. Proxy for File::Path::rmtree.
+- recv
 
-- * scalar
+    Proxy for IO::Socket::recv
 
-Deprecated. Same as `all()`.
+- rename
 
-- * seek
+        my $new = $io->rename('new-name');
 
-Proxy for IO::Handle::seek. If you use seek on an unopened file, it will
-be opened for both read and write.
+    Calls Perl's rename function and returns an IO::All object for the
+    renamed file. Returns false if the rename failed.
 
-- * send
+- rewind
 
-Proxy for IO::Socket::send
+    Proxy for IO::Dir::rewind
 
-- * shutdown
+- rmdir
 
-Proxy for IO::Socket::shutdown
+    Delete the directory represented by the IO::All object.
 
-- * slurp
+- rmtree
 
-Read all file content in one operation. Returns the file content
-as a string. In list context returns every line in the file.
+    Delete the directory represented by the IO::All object and all the files
+    and directories beneath it. Proxy for File::Path::rmtree.
 
-- * stat
+- scalar
 
-Proxy for IO::Handle::stat
+    Deprecated. Same as `all()`.
 
-- * sysread
+- seek
 
-Proxy for IO::Handle::sysread
+    Proxy for IO::Handle::seek. If you use seek on an unopened file, it will
+    be opened for both read and write.
 
-- * syswrite
+- send
 
-Proxy for IO::Handle::syswrite
+    Proxy for IO::Socket::send
 
-- * tail
+- shutdown
 
-Return the last 10 lines of a file. Takes an optional argument which is the
-number of lines to return. Works as expected in list and scalar context. Is
-subject to the current line separator.
+    Proxy for IO::Socket::shutdown
 
-- * tell
+- slurp
 
-Proxy for IO::Handle::tell
+    Read all file content in one operation. Returns the file content
+    as a string. In list context returns every line in the file.
 
-- * throw
+- stat
 
-This is an internal method that gets called whenever there is an error.
-It could be useful to override it in a subclass, to provide more control
-in error handling.
+    Proxy for IO::Handle::stat
 
-- * touch
+- sysread
 
-Update the atime and mtime values for a file or directory. Creates an empty
-file if the file does not exist.
+    Proxy for IO::Handle::sysread
 
-- * truncate
+- syswrite
 
-Proxy for IO::Handle::truncate
+    Proxy for IO::Handle::syswrite
 
-- * type
+- tail
 
-Returns a string indicated the type of io object. Possible values are:
+    Return the last 10 lines of a file. Takes an optional argument which is the
+    number of lines to return. Works as expected in list and scalar context. Is
+    subject to the current line separator.
 
-    file
-    dir
-    link
-    socket
-    string
-    pipe
+- tell
 
-Returns undef if type is not determinable.
+    Proxy for IO::Handle::tell
 
-- * unlink
+- throw
 
-Unlink (delete) the file represented by the IO::All object.
+    This is an internal method that gets called whenever there is an error.
+    It could be useful to override it in a subclass, to provide more control
+    in error handling.
 
-NOTE: You can unlink a file after it is open, and continue using it
-until it is closed.
+- touch
 
-- * unlock
+    Update the atime and mtime values for a file or directory. Creates an empty
+    file if the file does not exist.
 
-Release a lock from an object that used the `lock` method.
+- truncate
 
-- * utime
+    Proxy for IO::Handle::truncate
 
-Proxy for the utime Perl function.
+- type
 
-- * write
+    Returns a string indicated the type of io object. Possible values are:
 
-Opposite of `read` for file operations only.
+        file
+        dir
+        link
+        socket
+        string
+        pipe
 
-NOTE: When used with the automatic internal buffer, `write` will
-clear the buffer after writing it.
+    Returns undef if type is not determinable.
+
+- unlink
+
+    Unlink (delete) the file represented by the IO::All object.
+
+    NOTE: You can unlink a file after it is open, and continue using it
+    until it is closed.
+
+- unlock
+
+    Release a lock from an object that used the `lock` method.
+
+- utime
+
+    Proxy for the utime Perl function.
+
+- write
+
+    Opposite of `read` for file operations only.
+
+    NOTE: When used with the automatic internal buffer, `write` will
+    clear the buffer after writing it.
 
 ## Stat Methods
 
 This methods get individual values from a stat call on the file,
-directory or handle represented by th IO::All object.
+directory or handle represented by the IO::All object.
 
-- * atime
+- atime
 
-Last access time in seconds since the epoch
+    Last access time in seconds since the epoch
 
-- * blksize
+- blksize
 
-Preferred block size for file system I/O
+    Preferred block size for file system I/O
 
-- * blocks
+- blocks
 
-Actual number of blocks allocated
+    Actual number of blocks allocated
 
-- * ctime
+- ctime
 
-Inode change time in seconds since the epoch
+    Inode change time in seconds since the epoch
 
-- * device
+- device
 
-Device number of filesystem
+    Device number of filesystem
 
-- * device_id
+- device\_id
 
-Device identifier for special files only
+    Device identifier for special files only
 
-- * gid
+- gid
 
-Numeric group id of file's owner
+    Numeric group id of file's owner
 
-- * inode
+- inode
 
-Inode number
+    Inode number
 
-- * modes
+- modes
 
-File mode - type and permissions
+    File mode - type and permissions
 
-- * mtime
+- mtime
 
-Last modify time in seconds since the epoch
+    Last modify time in seconds since the epoch
 
-- * nlink
+- nlink
 
-Number of hard links to the file
+    Number of hard links to the file
 
-- * size
+- size
 
-Total size of file in bytes
+    Total size of file in bytes
 
-- * uid
+- uid
 
-Numeric user id of file's owner
+    Numeric user id of file's owner
 
 ## File::Spec Methods
 
@@ -1425,148 +1482,133 @@ and return values differ slightly. Instead of being file and directory
 __names__, they are IO::All __objects__. Since IO::All objects stringify
 to their names, you can generally use the methods just like File::Spec.
 
-- * abs2rel
+- abs2rel
 
-Returns the relative path for the absolute path in the IO::All object.
-Can take an optional argument indicating the base path.
+    Returns the relative path for the absolute path in the IO::All object.
+    Can take an optional argument indicating the base path.
 
-- * canonpath
+- canonpath
 
-Returns the canonical path for the IO::All object.
+    Returns the canonical path for the IO::All object.
 
-- * case_tolerant
+- case\_tolerant
 
-Returns 0 or 1 indicating whether the file system is case tolerant.
-Since an active IO::All object is not needed for this function, you can
-code it like:
+    Returns 0 or 1 indicating whether the file system is case tolerant.
+    Since an active IO::All object is not needed for this function, you can
+    code it like:
 
-    IO::All->case_tolerant;
+        IO::All->case_tolerant;
 
-or more simply:
+    or more simply:
 
-    io->case_tolerant;
+        io->case_tolerant;
 
-- * catdir
+- catdir
 
-Concatenate the directory components together, and return a new IO::All
-object representing the resulting directory.
+    Concatenate the directory components together, and return a new IO::All
+    object representing the resulting directory.
 
-- * catfile
+- catfile
 
-Concatenate the directory and file components together, and return a new
-IO::All object representing the resulting file.
+    Concatenate the directory and file components together, and return a new
+    IO::All object representing the resulting file.
 
-    my $contents = io->catfile(qw(dir subdir file))->slurp;
+        my $contents = io->catfile(qw(dir subdir file))->slurp;
 
-This is a very portable way to read `dir/subdir/file`.
+    This is a very portable way to read `dir/subdir/file`.
 
-- * catpath
+- catpath
 
-Concatenate the volume, directory and file components together, and
-return a new IO::All object representing the resulting file.
+    Concatenate the volume, directory and file components together, and
+    return a new IO::All object representing the resulting file.
 
-- * curdir
+- curdir
 
-Returns an IO::All object representing the current directory.
+    Returns an IO::All object representing the current directory.
 
-- * devnull
+- devnull
 
-Returns an IO::All object representing the /dev/null file.
+    Returns an IO::All object representing the /dev/null file.
 
-- * is_absolute
+- is\_absolute
 
-Returns 0 or 1 indicating whether the `name` field of the IO::All object is
-an absolute path.
+    Returns 0 or 1 indicating whether the `name` field of the IO::All object is
+    an absolute path.
 
-- * join
+- join
 
-Same as `catfile`.
+    Same as `catfile`.
 
-- * path
+- path
 
-Returns a list of IO::All directory objects for each directory in your path.
+    Returns a list of IO::All directory objects for each directory in your path.
 
-- * rel2abs
+- rel2abs
 
-Returns the absolute path for the relative path in the IO::All object. Can
-take an optional argument indicating the base path.
+    Returns the absolute path for the relative path in the IO::All object. Can
+    take an optional argument indicating the base path.
 
-- * rootdir
+- rootdir
 
-Returns an IO::All object representing the root directory on your
-file system.
+    Returns an IO::All object representing the root directory on your
+    file system.
 
-- * splitdir
+- splitdir
 
-Returns a list of the directory components of a path in an IO::All object.
+    Returns a list of the directory components of a path in an IO::All object.
 
-- * splitpath
+- splitpath
 
-Returns a volume directory and file component of a path in an IO::All object.
+    Returns a volume directory and file component of a path in an IO::All object.
 
-- * tmpdir
+- tmpdir
 
-Returns an IO::All object representing a temporary directory on your
-file system.
+    Returns an IO::All object representing a temporary directory on your
+    file system.
 
-- * updir
+- updir
 
-Returns an IO::All object representing the current parent directory.
+    Returns an IO::All object representing the current parent directory.
 
 # OPERATIONAL NOTES
 
-- *
-
-Each IO::All object gets reblessed into an IO::All::* object as soon as
+- Each IO::All object gets reblessed into an IO::All::\* object as soon as
 IO::All can determine what type of object it should be. Sometimes it gets
 reblessed more than once:
 
-    my $io = io('mydbm.db');
-    $io->dbm('DB_File');
-    $io->{foo} = 'bar';
+        my $io = io('mydbm.db');
+        $io->dbm('DB_File');
+        $io->{foo} = 'bar';
 
-In the first statement, $io has a reference value of 'IO::All::File', if
-`mydbm.db` exists. In the second statement, the object is reblessed into
-class 'IO::All::DBM'.
+    In the first statement, $io has a reference value of 'IO::All::File', if
+    `mydbm.db` exists. In the second statement, the object is reblessed into
+    class 'IO::All::DBM'.
 
-- *
-
-An IO::All object will automatically be opened as soon as there is
+- An IO::All object will automatically be opened as soon as there is
 enough contextual information to know what type of object it is, and
 what mode it should be opened for. This is usually when the first read
 or write operation is invoked but might be sooner.
-
-- *
-
-The mode for an object to be opened with is determined heuristically
+- The mode for an object to be opened with is determined heuristically
 unless specified explicitly.
-
-- *
-
-For input, IO::All objects will automatically be closed after EOF (or
+- For input, IO::All objects will automatically be closed after EOF (or
 EOD). For output, the object closes when it goes out of scope.
 
-To keep input objects from closing at EOF, do this:
+    To keep input objects from closing at EOF, do this:
 
-    $io->autoclose(0);
+        $io->autoclose(0);
 
-- * 
-
-You can always call `open` and `close` explicitly, if you need that
+- You can always call `open` and `close` explicitly, if you need that
 level of control. To test if an object is currently open, use the
 `is_open` method.
+- Overloaded operations return the target object, if one exists.
 
-- *
+    This would set `$xxx` to the IO::All object:
 
-Overloaded operations return the target object, if one exists.
+        my $xxx = $contents > io('file.txt');
 
-This would set `$xxx` to the IO::All object:
+    While this would set `$xxx` to the content string:
 
-    my $xxx = $contents > io('file.txt');
-
-While this would set `$xxx` to the content string:
-
-    my $xxx = $contents < io('file.txt');
+        my $xxx = $contents < io('file.txt');
 
 # STABILITY
 
@@ -1596,7 +1638,7 @@ for improper usage.
 # SEE ALSO
 
 IO::Handle, IO::File, IO::Dir, IO::Socket, IO::String, File::Spec,
-File::Path, File::ReadBackwards, Tie::File
+File::Path, File::ReadBackwards, Tie::File, File::MimeInfo
 
 # CREDITS
 
@@ -1614,9 +1656,9 @@ Finally, thanks to Autrijus Tang, for always having one more good idea.
 # REPOSITORY AND COMMUNITY
 
 The IO::All module can be found on CPAN and on GitHub:
-<http://github.com/ingydotnet/io-all-pm>.
+[http://github.com/ingydotnet/io-all-pm](http://github.com/ingydotnet/io-all-pm).
 
-Please join the IO::All discussion on #io-all on irc.perl.org.
+Please join the IO::All discussion on \#io-all on irc.perl.org.
 
 # AUTHOR
 
@@ -1631,4 +1673,4 @@ Copyright (c) 2006, 2008, 2010. Ingy döt Net.
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
 
-See <http://www.perl.com/perl/misc/Artistic.html>
+See [http://www.perl.com/perl/misc/Artistic.html](http://www.perl.com/perl/misc/Artistic.html)
