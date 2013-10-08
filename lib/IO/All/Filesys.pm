@@ -4,6 +4,26 @@ use warnings;
 use IO::All::Base -base;
 use Fcntl qw(:flock);
 
+my %spec_map = (
+    unix  => 'Unix',
+    win32 => 'Win32',
+    vms   => 'VMS',
+    mac   => 'Mac',
+    os2   => 'OS2',
+);
+sub os {
+    my ($self, $type) = @_;
+
+    my ($v, $d, $f) = $self->_spec_class->splitpath($self->name);
+    my @d = $self->_spec_class->splitdir($d);
+
+    $self->_spec_class($spec_map{$type});
+
+    $self->name( $self->_spec_class->catfile( @d, $f ) );
+
+    return $self
+}
+
 sub exists { my $self = shift; -e $self->name }
 
 sub filename {
