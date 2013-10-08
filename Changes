@@ -1,4 +1,9 @@
 ---
+version: 0.48
+date:    Tue Oct  8 01:45:39 CDT 2013
+changes:
+- Add ->os method to ::Filesys (Arthur Axel "fREW" Schmidt)
+---
 version: 0.47
 date:    Mon Sep 30 18:57:52 CDT 2013
 changes:
