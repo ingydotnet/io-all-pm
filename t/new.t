@@ -5,7 +5,7 @@ use Test::More tests => 4;
 use IO::All;
 use IO_All_Test;
 
-my $filename = 't/mydir/file1';
+my $filename = f 't/mydir/file1';
 
 my $file = io($filename);
 ok($file->isa('IO::All::File'), 'string passed to io() is returned as a file');
