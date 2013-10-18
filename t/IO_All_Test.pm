@@ -34,7 +34,7 @@ sub read_file {
     local(*FILE, $/);
     open FILE, $file
       or die "Can't open $file for input:\n$!";
-    <FILE>;
+    return scalar <FILE>;
 }
 
 sub read_file_lines {
