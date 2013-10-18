@@ -1,4 +1,9 @@
 ---
+version: 0.49
+date:    Fri Oct 18 01:05:39 CDT 2013
+changes:
+- Fix various tests on Windows
+---
 version: 0.48
 date:    Tue Oct  8 01:45:39 CDT 2013
 changes:
