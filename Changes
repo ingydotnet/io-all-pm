@@ -1,4 +1,9 @@
 ---
+version: 0.51
+date:    Mon Dec 30 13:55:00 CDT 2013
+changes:
+- Make '' not become / when using io->dir('')
+---
 version: 0.50
 date:    Fri Oct 18 13:08:41 PDT 2013
 changes:

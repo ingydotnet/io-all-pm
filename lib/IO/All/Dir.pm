@@ -16,12 +16,16 @@ field 'chdir_from';
 sub dir {
     my $self = shift;
     bless $self, __PACKAGE__;
-    $self->name(
-        $self->_spec_class->catdir(
-            ($self->pathname ? ($self->pathname) : () ),
-            @_,
-        )
-    ) if @_;
+    if (@_ && @_ > 1) {
+       $self->name(
+           $self->_spec_class->catdir(
+               ($self->pathname ? ($self->pathname) : () ),
+               @_,
+           )
+       )
+    } elsif (@_) {
+       $self->name($_[0])
+    }
     return $self->_init;
 }
 
@@ -102,8 +106,8 @@ sub all_files {
 }
 
 sub All_Links {
-    my $self = shift;
-    $self->all_links(0);
+ my $self = shift;
+ $self->all_links(0);
 }
 
 sub all_links {
