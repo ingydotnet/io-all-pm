@@ -771,13 +771,14 @@ sub throw {
 sub assert_dirpath {
     my $self = shift;
     my $dir_name = shift;
-    return $dir_name if -d $dir_name or
-      CORE::mkdir($self->pathname, $self->perms || 0755) or
+    return $dir_name if ((! CORE::length($dir_name)) or
+      -d $dir_name or
+      CORE::mkdir($dir_name, $self->perms || 0755) or
       do {
           require File::Path;
           File::Path::mkpath($dir_name);
       } or
-      $self->throw("Can't make $dir_name");
+      $self->throw("Can't make $dir_name"));
 }
 
 sub assert_open {
