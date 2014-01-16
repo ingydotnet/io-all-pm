@@ -1,5 +1,6 @@
 changes:
 - Make io->file('') not break on Windows systems (Roy Ivy III)
+- Fix dangling file handles in tests (Roy Ivy III)
 ---
 version: 0.51
 date:    Mon Dec 30 13:55:00 CDT 2013
