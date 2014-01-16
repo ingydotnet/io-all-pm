@@ -557,7 +557,7 @@ work the same:
 
 =item * dir
 
-    io->file($dir_name);
+    io->dir($dir_name);
 
 Make the object be of type I<directory>.
 
