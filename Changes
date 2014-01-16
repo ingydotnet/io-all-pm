@@ -1,3 +1,5 @@
+---
+version: 0.52
 changes:
 - Add a fix for io->file("foobar")->assert (Shlomi Fish)
 - Make io->file('') not break on Windows systems (Roy Ivy III)
