@@ -22,12 +22,16 @@ ok(io->updir->is_dir);
 like(io->case_tolerant, qr/^[01]$/);
 ok(io('/foo/bar')->is_absolute);
 ok(not io('foo/bar')->is_absolute);
-my @path1 = io->path;
-shift @path1 if $path1[0]->name eq '.';
-my $path2 = $ENV{PATH};
-$path2 =~ s/^\.[;:]//;
-is(scalar(@path1), scalar(
-    @{[split((($^O eq 'MSWin32') ? ';' : ':'), $path2)]}));
+{
+    # if this fails on other OSes more examples for PATH will need to be made
+    local $ENV{PATH} =
+      $^O eq 'MSWin32'
+      ? 'C:\PROGRAM FILES\COMMON FILES\MICROSOFT SHARED\WINDOWS LIVE;C:\PROGRAM FILES (X86)\COMMON FILES\MICROSOFT SHARED\WINDOWS LIVE;C:\PROGRAM FILES (X86)\INTEL\ICLS CLIENT\;C:\PROGRAM FILES\INTEL\ICLS CLIENT\;C:\Windows\SYSTEM32;C:\Windows;C:\Windows\SYSTEM32\WBEM;C:\Windows\SYSTEM32\WINDOWSPOWERSHELL\V1.0\;;C:\PROGRAM FILES (X86)\INTEL\OPENCL SDK\2.0\BIN\X86;C:\PROGRAM FILES (X86)\INTEL\OPENCL SDK\2.0\BIN\X64;C:\PROGRAM FILES\COMMON FILES\LENOVO;C:\PROGRAM FILES (X86)\WINDOWS LIVE\SHARED;C:\PROGRAM FILES (X86)\LENOVO\ACCESS CONNECTIONS\;C:\SWTOOLS\READYAPPS;C:\PROGRAM FILES (X86)\SYMANTEC\VIP ACCESS CLIENT\;C:\PROGRAM FILES (X86)\COMMON FILES\LENOVO;C:\PROGRAM FILES\INTEL\INTEL(R) MANAGEMENT ENGINE COMPONENTS\DAL;C:\PROGRAM FILES\INTEL\INTEL(R) MANAGEMENT ENGINE COMPONENTS\IPT;C:\PROGRAM FILES (X86)\INTEL\INTEL(R) MANAGEMENT ENGINE COMPONENTS\DAL;C:\PROGRAM FILES (X86)\INTEL\INTEL(R) MANAGEMENT ENGINE COMPONENTS\IPT;C:\PROGRAM FILES\INTEL\WIFI\BIN\;C:\PROGRAM FILES\COMMON FILES\INTEL\WIRELESSCOMMON\;C:\Program Files\ThinkPad\Bluetooth Software\;C:\Program Files\ThinkPad\Bluetooth Software\syswow64;C:\Program Files\MiKTeX 2.9\miktex\bin\x64\;C:\Dwimperl\perl\bin;C:\Dwimperl\perl\site\bin;C:\Dwimperl\c\bin;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon'
+      : '/home/frew/.plenv/bin:/home/frew/node/bin::/home/frew/code/git-super-status/bin:/opt/bin:/home/frew/code/teatime/bin:/home/frew/bin:/home/frew/code/dotfiles/bin:/home/frew/Dropbox/bin:/home/frew/Dropbox/go/bin:/home/frew/Dropbox/node/bin:/opt/bin:/home/frew/.plenv/bin:/home/frew/node/bin:/home/frew/code/git-super-status/bin:/opt/bin:/home/frew/code/teatime/bin:/home/frew/bin:/home/frew/code/dotfiles/bin:/home/frew/Dropbox/bin:/home/frew/Dropbox/go/bin:/home/frew/Dropbox/node/bin:/home/frew/.plenv/shims:/home/frew/perl5/perlbrew/bin:/home/frew/perl5/perlbrew/perls/perl-5.16.0/bin:/usr/lib/lightdm/lightdm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/frew/.zsh/adenosine/bin:/home/frew/.zsh/adenosine/bin';
+    my $expected = $^O eq 'MSWin32' ? 31 : 36;
+    my @path1 = io->path;
+    is scalar( @path1 ), $expected, "expected amount of PATH entries returned";
+}
 my ($v, $d, $f) = io('foo/bar')->splitpath;
 is($d, 'foo/');
 is($f, 'bar');
