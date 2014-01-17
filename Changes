@@ -1,3 +1,5 @@
+changes:
+- Pass perms to mkpath in assert_dirpath (thanks Rob Kinyon for RT#53687)
 ---
 version: 0.52
 changes:

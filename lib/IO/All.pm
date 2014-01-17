@@ -776,7 +776,7 @@ sub assert_dirpath {
       CORE::mkdir($dir_name, $self->perms || 0755) or
       do {
           require File::Path;
-          File::Path::mkpath($dir_name);
+          File::Path::mkpath($dir_name, 0, $self->perms || 0755 );
       } or
       $self->throw("Can't make $dir_name"));
 }
