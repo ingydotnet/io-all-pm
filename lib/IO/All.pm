@@ -720,7 +720,7 @@ sub utf8 {
     if ($] < 5.008) {
         die "IO::All -utf8 not supported on Perl older than 5.8";
     }
-    CORE::binmode($self->io_handle, ':utf8')
+    CORE::binmode($self->io_handle, ':encoding(UTF-8)')
       if $self->is_open;
     $self->_utf8(1);
     $self->encoding('utf8');
