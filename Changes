@@ -1,6 +1,7 @@
 changes:
 - Validate UTF-8 in ->utf8 (thanks Ovid for RT#74642)
 - Pass perms to mkpath in assert_dirpath (thanks Rob Kinyon for RT#53687)
+- Fix minor POD niggle (thanks Greg Skyles for RT#83798)
 ---
 version: 0.52
 changes:
