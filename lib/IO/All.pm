@@ -734,7 +734,7 @@ sub encoding {
     if ($] < 5.008) {
         die "IO::All -encoding not supported on Perl older than 5.8";
     }
-    CORE::binmode($self->io_handle, ":$encoding")
+    CORE::binmode($self->io_handle, ":encoding($encoding)")
       if $self->is_open;
     $self->_encoding($encoding);
     return $self;

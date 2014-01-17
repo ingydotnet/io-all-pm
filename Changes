@@ -1,5 +1,6 @@
 changes:
 - Validate UTF-8 in ->utf8 (thanks Ovid for RT#74642)
+- Consistently use :encoding($encoding) (thanks Bernardo Rechea for RT#68512)
 - Pass perms to mkpath in assert_dirpath (thanks Rob Kinyon for RT#53687)
 - Fix minor POD niggle (thanks Greg Skyles for RT#83798)
 ---
