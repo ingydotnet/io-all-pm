@@ -538,6 +538,7 @@ sub binary {
     binmode($self->io_handle)
       if $self->is_open;
     $self->_binary(1);
+    $self->encoding(0);
     return $self;
 }
 
@@ -729,8 +730,7 @@ sub utf8 {
 
 sub encoding {
     my $self = shift;
-    my $encoding = shift
-      or die "No encoding value passed to IO::All::encoding";
+    my $encoding = shift;
     if ($] < 5.008) {
         die "IO::All -encoding not supported on Perl older than 5.8";
     }
