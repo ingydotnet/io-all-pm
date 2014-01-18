@@ -136,8 +136,8 @@ sub empty {
 sub mkdir {
     my $self = shift;
     defined($self->perms)
-    ? CORE::mkdir($self->pathname, $self->perms)
-    : CORE::mkdir($self->pathname);
+    ? (CORE::mkdir($self->pathname, $self->perms) or die "mkdir failed: $!")
+    : (CORE::mkdir($self->pathname) or die "mkdir failed: $!");
     return $self;
 }
 
