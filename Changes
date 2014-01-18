@@ -1,3 +1,5 @@
+---
+version: 0.53
 changes:
 - Make mkdir die if it fails (thanks Martyn Pearce for RT#61697)
 - Fix possible path test issues, esp in Win32 (Thanks Mithlandu)
