@@ -7,6 +7,8 @@ changes:
 - Pass perms to mkpath in assert_dirpath (thanks Rob Kinyon for RT#53687)
 - Fix minor POD niggle (thanks Greg Skyles for RT#83798)
 - Remove broken test for ->mimetype (thanks Slaven Rezić for RT#91743)
+- Skip t/encoding.t for perls built without PerlIO::encoding (thanks
+  Jerry D. Hedden for RT#26230)
 ---
 version: 0.52
 changes:
