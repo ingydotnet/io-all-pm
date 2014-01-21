@@ -2,11 +2,12 @@ use lib 't', 'lib';
 use strict;
 use warnings;
 use IO::All;
+use Try::Tiny;
 use IO_All_Test;
 
 # XXX This needs to be fixed!!!
 $^O !~ /^(cygwin|hpux)$/
-    ? print "1..3\n"
+    ? print "1..6\n"
     : do { print "1..0 # skip - locking problems on $^O\n"; exit(0) };
 
 {
@@ -31,6 +32,16 @@ $io1->unlock;
 waitpid($pid, 0);
 }
 
+my $io1 = io(o_dir() . '/bar')->lock;
+$io1->println('line 1');
+my $pid;
+($pid = fork) or do {
+    my $io2 = io(o_dir() . '/bar')->lock_nb;
+    warn $io2->getline;
+    exit;
+};
+
+waitpid($pid, 0);
 del_output_dir();
 
 1;

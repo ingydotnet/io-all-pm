@@ -99,6 +99,17 @@ sub set_lock {
     flock $io_handle, $flag;
 }
 
+sub set_lock_nb {
+    my $self = shift;
+    return unless $self->_lock_nb;
+    my $io_handle = $self->io_handle;
+    my $flag = $self->mode =~ /^>>?$/
+    ? LOCK_EX
+    : LOCK_SH;
+    flock $io_handle, $flag | LOCK_NB
+      or die "could not obtain lock!"
+}
+
 sub stat {
     my $self = shift;
     return IO::All::stat($self, @_)

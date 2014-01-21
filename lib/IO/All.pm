@@ -408,6 +408,7 @@ option 'backwards';
 option 'chomp';
 option 'confess';
 option 'lock';
+option 'lock_nb';
 option 'rdonly';
 option 'rdwr';
 option 'strict';
