@@ -15,7 +15,7 @@ BEGIN {
 
 use Test::More defined($db_file)
     ? (tests => 2)
-    : (skip_all => 'No DMB modules available');
+    : (skip_all => 'No DBM modules available');
 
 use IO::All;
 use IO_All_Test;
