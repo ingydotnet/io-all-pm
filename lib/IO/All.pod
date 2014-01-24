@@ -182,7 +182,10 @@ objects.
 
 =head2 Note on C<io>
 
-The C<io> function is a I<magic constructor>. It takes a single optional
+The C<io> function is a I<magic constructor>.  It is easy to use
+and will usually do the right thing, but can also blow up easily.
+
+It takes a single optional
 argument and determines what type of IO::All subclass object to return. With no
 arguments it returns an C<IO::All> object, which has no I/O methods, but has
 methods to construct subclass objects like C<IO::All::File>.
