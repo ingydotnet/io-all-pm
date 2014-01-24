@@ -1,14 +1,9 @@
 use lib 't', 'lib';
 use strict;
 use warnings;
-use Test::More;
+use Test::More tests => 3;
 use IO_All_Test;
 use Config;
-
-plan((eval {require IO::String; 1})
-    ? (tests => 3)
-    : (skip_all => "requires IO::String")
-);
 
 sub fix {
     local $_ = shift;

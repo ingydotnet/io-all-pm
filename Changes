@@ -1,3 +1,5 @@
+changes:
+- Change minimum perl version to 5.8.1, and thus remove dep for IO::String
 ---
 version: 0.54
 hanges:

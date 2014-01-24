@@ -83,7 +83,7 @@ IO::All - IO::All of it to Graham and Damian!
     io('-') > io('-');                          # Do it again
     io('-') < io('-');                          # Same. Context sensitive.
     "Bad puppy" > io('=');                      # Message to STDERR
-    $string_file = io('$');                     # Create IO::String Object
+    $string_file = io('$');                     # Create string based filehandle
     $temp_file = io('?');                       # Create a temporary file
 
     # Socket operations:
@@ -143,7 +143,7 @@ idioms. It exports a single function called C<io>, which returns a new
 IO::All object. And that object can do it all!
 
 The IO::All object is a proxy for IO::File, IO::Dir, IO::Socket,
-IO::String, Tie::File, File::Spec, File::Path, File::MimeInfo and
+Tie::File, File::Spec, File::Path, File::MimeInfo and
 File::ReadBackwards; as well as all the DBM and MLDBM modules. You
 can use most of the methods found in these classes and in IO::Handle
 (which they inherit from). IO::All adds dozens of other helpful idiomatic
@@ -528,7 +528,7 @@ descriptor can be any of the following:
     - A socket domain/port.  eg 'perl.com:5678'
     - '-' means STDIN or STDOUT (depending on usage)
     - '=' means STDERR
-    - '$' means an IO::String object
+    - '$' means an in memory filehandle object
     - '?' means a temporary file
     - A URI including: http, https, ftp and mailto
     - An IO::All object
@@ -611,7 +611,7 @@ Storable or FreezeThaw.
 
 =item * string
 
-Make the object be an IO::String object. These are equivalent:
+Make the object be an in memory filehandle. These are equivalent:
 
     my $io = io('$');
     my $io = io->string;
@@ -962,8 +962,6 @@ is \n. Affects the chomp setting too.
 
 =item * string_ref
 
-Proxy for IO::String::string_ref
-
 Returns a reference to the internal string that is acting like a file.
 
 =item * subject
@@ -1198,7 +1196,7 @@ a STDIO file handle.
 =item * is_string
 
 Returns boolean telling whether or not the IO::All object represents
-an IO::String object.
+an in memory filehandle.
 
 =item * is_temp
 
@@ -1674,7 +1672,7 @@ for improper usage.
 
 =head1 SEE ALSO
 
-IO::Handle, IO::File, IO::Dir, IO::Socket, IO::String, File::Spec,
+IO::Handle, IO::File, IO::Dir, IO::Socket, File::Spec,
 File::Path, File::ReadBackwards, Tie::File, File::MimeInfo
 
 =head1 CREDITS
