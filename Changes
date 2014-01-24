@@ -1,4 +1,7 @@
 ---
+changes:
+- RT#61627/GH#29 and Fix RT#82633/GH#32, thanks Graham Knop for helping
+---
 version: 0.55
 changes:
 - Change minimum perl version to 5.8.1, and thus remove dep for IO::String

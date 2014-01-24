@@ -6,7 +6,11 @@ use IO::All;
 use IO_All_Test;
 
 ok(io(o_dir() . '/xxx/yyy/zzz.db')->dbm->assert->{foo} = "bar");
-ok(-f o_dir() . '/xxx/yyy/zzz.db' or -f o_dir() . '/xxx/yyy/zzz.db.dir');
+ok(
+   -f o_dir() . '/xxx/yyy/zzz.db' or
+   -f o_dir() . '/xxx/yyy/zzz.db.dir' or
+   -f o_dir() . '/xxx/yyy/zzz.db.db'
+);
 SKIP: {
     skip "requires MLDBM", 2
       unless eval { require MLDBM; 1};
