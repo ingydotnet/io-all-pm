@@ -180,18 +180,20 @@ Normally just say:
 and IO::All will export a single function called C<io>, which constructs all IO
 objects.
 
-You can also pass global flags like this:
+=head2 Note on C<io>
 
-    use IO::All -encoding => 'big5', -foobar;
+The C<io> function is a I<magic constructor>. It takes a single optional
+argument and determines what type of IO::All subclass object to return. With no
+arguments it returns an C<IO::All> object, which has no I/O methods, but has
+methods to construct subclass objects like C<IO::All::File>.
 
-Which automatically makes those method calls on every new IO object. In other
-words this:
+In other words, these 2 statements are usually the same:
 
-    my $io = io('lalala.txt');
+    $content = io('file.txt')->all;
+    $content = io->file('file.txt')->all;
 
-becomes this:
-
-    my $io = io('lalala.txt')->encoding('big5')->foobar;
+Use the first form when you are demonstrating your Perl virtues of laziness and
+impatience, and use the second form when your job is on the line.
 
 =head1 METHOD ROLE CALL
 
