@@ -6,6 +6,19 @@ IO::All - IO::All of it to Graham and Damian!
 
 =head1 SYNOPSIS
 
+First, some safe examples:
+
+    use IO::All;
+
+    # Some of the many ways to read a whole file into a scalar
+    $contents = io->file('file.txt')->slurp;    # Read an entire file
+    @files    = io->dir('lib')->all;            # Get a list of files
+    $tail     = io->pipe('-| tail app.log');    # Open a pipe to a command
+    $line     = $tail->getline;                 # Read from the pipe
+
+That said, there are a lot more things that are very convenient and will help
+you write code very quickly, though they should be used judiciously:
+
     use IO::All;                                # Let the madness begin...
 
     # Some of the many ways to read a whole file into a scalar
