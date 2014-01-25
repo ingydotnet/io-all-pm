@@ -1,9 +1,15 @@
 IO::All Rewrite Design Document
 ===============================
 
-This document discusses all of the things that the rewrite will strive to accomplish.
+IO::All is a Perl module that attempts to make all Input/Output operations in
+Perl, as simple and normal as possible. IO::All has been in existence since
+2005. It is useful and somewhat extensible, but has a number of
+inconsistencies, flaws and misgivings.
 
-== High Level Goals
+This document will propose a better way to do it, and will also discuss how to
+move the current API forward to the new API.
+
+= High Level Goals
 
 * Backwards compatible (except on highly broken behaviors).
 * Sexy API
@@ -45,6 +51,13 @@ IO::All is locally configurable. Options are specified on the `use` statement:
 
   use IO::All -local, -with => qw(::HTTP ::Socket), -utf8;
 
+Options to `use IO::All` that begin with a `-`, cause a method to be called on
+each new IO::All object:
+
+  use IO::All -strict, -encoding => 'big5';   # causes:
+  io('foo')->print('hi');                     # to mean:
+  io('foo')->strict->encoding('big5')->print('hi');
+
 Options may include:
 
 `-legacy` :: Use old school defaults
@@ -53,6 +66,12 @@ Options may include:
 `-encoding` => <encoding>` :: Specify encoding
 `-strict` :: Extra strict error checking
 `-local` :: Block level scoping
+`-overload` :: Use overloading
+`-noverload` :: Don't use overloading
+`-as => <name>` :: Specify a different name for the constructor
+
+IO::All methods often return more IO::All objects. Like `io->dir->all` returns
+::File and ::Dir objects.
 
 == Pluggable
 
@@ -66,13 +85,22 @@ Maybe something like this:
   use constant heuristic => qr{^foo://};
   use constant constructor => 'foo';
 
+Plugins can register 3 things:
+
+1 Register a method (or methods) that will force a rebless in that class.
+2 Register a regexp (or function) that will cause a rebless when the input
+  to io(...) matches.
+3 Register overloads that the plugin responds to.
+
+These things are register according to the scope of the IO::All, so that the
+`io` function will do the right things.
+
 == Object Oriented
 
-This is always a difficult choice in Perl5. I don't plan to use any OO
-framework, and I don't plan to use accessor methods (unless they are part of
-the external facing API). However I do want to have something like roles, so
-we'll have to think about that. (::File and ::Dir both need a role called
-::Filesys).
+OO is always a difficult choice in Perl5. I don't plan to use any OO framework,
+and I don't plan to use accessor methods (except when they are part of the
+external facing API). However I do want to have something like roles, so we'll
+have to think about that. (::File and ::Dir both need a role called ::Filesys).
 
 The old IO::All uses a blessed glob so that we can use the object as a
 filehandle. This is of dubious importance, and we'd be better off with a hash
@@ -111,3 +139,16 @@ Make unicode just work as simply and consistent as possible.
 
 I want to make IO::All be easily portable to other languages. I think it will
 be the best way to do I/O in lots of languages.
+
+= Problems to Resolve
+
+== Plugin Migration
+
+There aren't a lot of old IO::All plugins, but we need to make sure they move
+forward at the same rate as IO::All. We should contact the old plugin authors
+at the appropriate time.
+
+== Packaging
+
+We'll probably use Dist::Zilla but I have avante garde packaging ideals that
+will require some new dz plugins.
