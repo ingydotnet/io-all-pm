@@ -1,0 +1,113 @@
+IO::All Rewrite Design Document
+===============================
+
+This document discusses all of the things that the rewrite will strive to accomplish.
+
+== High Level Goals
+
+* Backwards compatible (except on highly broken behaviors).
+* Sexy API
+* Pluggable
+* Object Oriented
+* Sane Defaults
+* Exceptions
+* Target 5.8.1+
+* Unicode aware
+* Eye on Acmeism
+
+== Backwards Compatibility
+
+We want the new IO::All to not cause any damage out of the box. We will form
+good deprecation strategies for things in the grey areas.
+
+For the first releases we can make the simple usage:
+
+  use IO::All;
+
+do almost all the old behavior, including overloading. We can put bad defaults
+on a deprecation diet.
+
+Most new usages will include at least one option:
+
+  use IO::All -something;
+
+Any option usage will indicate new usage, so we can use the preferred defaults.
+
+== Sexy API
+
+Sexy is the main attraction to IO::All. Don't ruin what is already great. Make
+it more clean and consistent.
+
+The `io` constructor stays, but it becomes composed in deterministic ways.
+Simple things simple… production ready things possible.
+
+IO::All is locally configurable. Options are specified on the `use` statement:
+
+  use IO::All -local, -with => qw(::HTTP ::Socket), -utf8;
+
+Options may include:
+
+`-legacy` :: Use old school defaults
+`-with => qw(<plugin list>)` :: List the plugin modules that will be used.
+`-utf8` :: Encode/Decode using UTF8
+`-encoding` => <encoding>` :: Specify encoding
+`-strict` :: Extra strict error checking
+`-local` :: Block level scoping
+
+== Pluggable
+
+All of the actual IO operations/methods will happen in plugins. Plugins will
+have an API that lets them hook into the constructor heuristics and expose a
+chainable constructor method of their own.
+
+Maybe something like this:
+
+  package IO::All::Foo;
+  use constant heuristic => qr{^foo://};
+  use constant constructor => 'foo';
+
+== Object Oriented
+
+This is always a difficult choice in Perl5. I don't plan to use any OO
+framework, and I don't plan to use accessor methods (unless they are part of
+the external facing API). However I do want to have something like roles, so
+we'll have to think about that. (::File and ::Dir both need a role called
+::Filesys).
+
+The old IO::All uses a blessed glob so that we can use the object as a
+filehandle. This is of dubious importance, and we'd be better off with a hash
+based object. We can still get the handle with something like:
+
+  say $io->handle "O HAI";
+
+IO::All will keep its chainable setters, but will also support immutable
+creation of objects that seem to be all the rage with the MOP crowd. Need to
+figure out that API detail.
+
+All plugins will be subclassable. IO::All itself will be subclassable (not sure
+on this one). I'd like to provide a Role class that can be used when other
+modules want IO::All behavior API.
+
+== Sane Defaults
+
+* Overloading off by default.
+* Only ::File/::Dir plugins on by default.
+* Strict error checking on by default.
+
+== Exceptions
+
+We'll throw exceptions early and often. Exceptions will be the only way that
+failure is reported.
+
+== Target 5.8.1
+
+Target the toolchain recognized oldest Perl (currently 5.8.1).
+
+== Unicode
+
+Make unicode just work as simply and consistent as possible.
+
+== Acmeism
+
+I want to make IO::All be easily portable to other languages. I think it will
+be the best way to do I/O in lots of languages.
