@@ -274,4 +274,15 @@ See http://www.perl.com/perl/misc/Artistic.html
 
 =cut
 
+sub GETC   { shift->getc(@_) }
+sub PRINT  { shift->print(@_) }
+sub PRINTF { shift->printf(@_) }
+sub READ   { shift->read(@_) }
+sub WRITE  { shift->write(@_) }
+sub SEEK   { shift->seek(@_) }
+sub TELL   { shift->getpos(@_) }
+sub EOF    { shift->eof(@_) }
+sub CLOSE  { shift->close(@_) }
+sub FILENO { shift->fileno(@_) }
+
 1;
