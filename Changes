@@ -1,6 +1,7 @@
 ---
 changes:
 - RT#61627/GH#29 and Fix RT#82633/GH#32, thanks Graham Knop for helping
+- Some doc cleanup around the SYNOPSIS (Thanks Mithlandu)
 ---
 version: 0.55
 changes:
