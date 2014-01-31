@@ -1,4 +1,5 @@
 ---
+version: 0.56
 changes:
 - Return realpath for canonpath when possible (closes GH#34)
 - Fix regression related to chaining dirs caused by making '' not become '/'
