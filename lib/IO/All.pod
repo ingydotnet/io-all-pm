@@ -1521,7 +1521,8 @@ Can take an optional argument indicating the base path.
 
 =item * canonpath
 
-Returns the canonical path for the IO::All object.
+Returns the canonical path for the IO::All object.  The canonical path is the
+fully resolved path if the file exists, so any symlinks will be resolved.
 
 =item * case_tolerant
 

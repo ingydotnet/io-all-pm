@@ -12,6 +12,7 @@ use IO::All::Base -base;
 use File::Spec();
 use Symbol();
 use Fcntl;
+use Cwd ();
 
 # ABSTRACT: IO::All of it to Graham and Damian!
 # VERSION
@@ -435,7 +436,11 @@ proxy_open 'getc';
 #===============================================================================
 # File::Spec Interface
 #===============================================================================
-sub canonpath {my $self = shift; File::Spec->canonpath($self->pathname) }
+sub canonpath {my $self = shift;
+   Cwd::abs_path($self->pathname) ||
+      File::Spec->canonpath($self->pathname)
+}
+
 sub catdir {
     my $self = shift;
     my @args = grep defined, $self->name, @_;

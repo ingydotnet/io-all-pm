@@ -1,5 +1,6 @@
 ---
 changes:
+- Return realpath for canonpath when possible (closes GH#34)
 - Fix regression related to chaining dirs caused by making '' not become '/'
 - correctly check exists for ::File, ::Dir, and ::Link
 - RT#61627/GH#29 and Fix RT#82633/GH#32, thanks Graham Knop for helping
