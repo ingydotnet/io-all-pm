@@ -63,6 +63,8 @@ sub open_msg {
     return qq{Can't open directory$name:\n$!};
 }
 
+sub exists { -d shift->pathname }
+
 #===============================================================================
 sub All {
     my $self = shift;

@@ -99,6 +99,8 @@ sub open {
     $self->set_binmode;
 }
 
+sub exists { -f shift->pathname }
+
 my %mode_msg = (
     '>' => 'output',
     '<' => 'input',
