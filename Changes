@@ -1,4 +1,7 @@
 ---
+changes:
+- Fix printing to a tie'd object, closes GH#26 (thanks Graham Knop for helping)
+---
 version: 0.56
 changes:
 - Return realpath for canonpath when possible (closes GH#34)
