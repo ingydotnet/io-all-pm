@@ -1,4 +1,44 @@
 ---
+changes:
+- Fix printing to a tie'd object, closes GH#26 (thanks Graham Knop for helping)
+---
+version: 0.56
+changes:
+- Return realpath for canonpath when possible (closes GH#34)
+- Fix regression related to chaining dirs caused by making '' not become '/'
+- correctly check exists for ::File, ::Dir, and ::Link
+- RT#61627/GH#29 and Fix RT#82633/GH#32, thanks Graham Knop for helping
+- Some doc cleanup around the SYNOPSIS (Thanks Mithlandu)
+---
+version: 0.55
+changes:
+- Change minimum perl version to 5.8.1, and thus remove dep for IO::String
+---
+version: 0.54
+changes:
+- Remove mentions of unimplemented strict (Thanks Mithlandu, GH#15)
+- Allow testing on non SDBM DBM's (thanks Jerry D. Hedden)
+- Abandon RT in favor of GitHub Issues
+---
+version: 0.53
+changes:
+- Make mkdir die if it fails (thanks Martyn Pearce for RT#61697)
+- Fix possible path test issues, esp in Win32 (Thanks Mithlandu)
+- Fix ->binary under -utf8 import mode (thanks T. Linden for RT#81224)
+- Validate UTF-8 in ->utf8 (thanks Ovid for RT#74642)
+- Consistently use :encoding($encoding) (thanks Bernardo Rechea for RT#68512)
+- Pass perms to mkpath in assert_dirpath (thanks Rob Kinyon for RT#53687)
+- Fix minor POD niggle (thanks Greg Skyles for RT#83798)
+- Remove broken test for ->mimetype (thanks Slaven Rezić for RT#91743)
+- Skip t/encoding.t for perls built without PerlIO::encoding (thanks
+  Jerry D. Hedden for RT#26230)
+---
+version: 0.52
+changes:
+- Add a fix for io->file("foobar")->assert (Shlomi Fish)
+- Make io->file('') not break on Windows systems (Roy Ivy III)
+- Fix dangling file handles in tests (Roy Ivy III)
+---
 version: 0.51
 date:    Mon Dec 30 13:55:00 CDT 2013
 changes:

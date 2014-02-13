@@ -53,6 +53,8 @@ sub target {
     *$self->{target} = $new;
 }
 
+sub exists { -l shift->pathname }
+
 =encoding utf8
 
 =head1 NAME

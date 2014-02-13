@@ -6,6 +6,19 @@ IO::All - IO::All of it to Graham and Damian!
 
 =head1 SYNOPSIS
 
+First, some safe examples:
+
+    use IO::All;
+
+    # Some of the many ways to read a whole file into a scalar
+    $contents = io->file('file.txt')->slurp;    # Read an entire file
+    @files    = io->dir('lib')->all;            # Get a list of files
+    $tail     = io->pipe('-| tail app.log');    # Open a pipe to a command
+    $line     = $tail->getline;                 # Read from the pipe
+
+That said, there are a lot more things that are very convenient and will help
+you write code very quickly, though they should be used judiciously:
+
     use IO::All;                                # Let the madness begin...
 
     # Some of the many ways to read a whole file into a scalar
@@ -50,8 +63,8 @@ IO::All - IO::All of it to Graham and Damian!
     $io->os('win32');                           # change the object to be a
                                                 # win32 path
     print $io->ext;                             # The file extension only
-    print $io->mimetype;                        # The mimetype, requires
-                                                #   File::MimeType
+    print $io->mimetype;                        # The mimetype, requires a
+                                                #  working File::MimeType
 
 
     # Read all the files/directories in a directory:
@@ -83,7 +96,7 @@ IO::All - IO::All of it to Graham and Damian!
     io('-') > io('-');                          # Do it again
     io('-') < io('-');                          # Same. Context sensitive.
     "Bad puppy" > io('=');                      # Message to STDERR
-    $string_file = io('$');                     # Create IO::String Object
+    $string_file = io('$');                     # Create string based filehandle
     $temp_file = io('?');                       # Create a temporary file
 
     # Socket operations:
@@ -143,7 +156,7 @@ idioms. It exports a single function called C<io>, which returns a new
 IO::All object. And that object can do it all!
 
 The IO::All object is a proxy for IO::File, IO::Dir, IO::Socket,
-IO::String, Tie::File, File::Spec, File::Path, File::MimeInfo and
+Tie::File, File::Spec, File::Path, File::MimeInfo and
 File::ReadBackwards; as well as all the DBM and MLDBM modules. You
 can use most of the methods found in these classes and in IO::Handle
 (which they inherit from). IO::All adds dozens of other helpful idiomatic
@@ -180,18 +193,23 @@ Normally just say:
 and IO::All will export a single function called C<io>, which constructs all IO
 objects.
 
-You can also pass global flags like this:
+=head2 Note on C<io>
 
-    use IO::All -strict -encoding => 'big5', -foobar;
+The C<io> function is a I<magic constructor>.  It is easy to use
+and will usually do the right thing, but can also blow up easily.
 
-Which automatically makes those method calls on every new IO object. In other
-words this:
+It takes a single optional
+argument and determines what type of IO::All subclass object to return. With no
+arguments it returns an C<IO::All> object, which has no I/O methods, but has
+methods to construct subclass objects like C<IO::All::File>.
 
-    my $io = io('lalala.txt');
+In other words, these 2 statements are usually the same:
 
-becomes this:
+    $content = io('file.txt')->all;
+    $content = io->file('file.txt')->all;
 
-    my $io = io('lalala.txt')->strict->encoding('big5')->foobar;
+Use the first form when you are demonstrating your Perl virtues of laziness and
+impatience, and use the second form when your job is on the line.
 
 =head1 METHOD ROLE CALL
 
@@ -221,7 +239,7 @@ C<readlink>, C<recv>, C<rel2abs>, C<relative>, C<rename>, C<request>,
 C<response>, C<rmdir>, C<rmtree>, C<rootdir>, C<scalar>, C<seek>,
 C<send>, C<separator>, C<shutdown>, C<size>, C<slurp>, C<socket>,
 C<sort>, C<splitdir>, C<splitpath>, C<stat>, C<stdio>, C<stderr>,
-C<stdin>, C<stdout>, C<strict>, C<string>, C<string_ref>, C<subject>,
+C<stdin>, C<stdout>, C<string>, C<string_ref>, C<subject>,
 C<sysread>, C<syswrite>, C<tail>, C<tell>, C<temp>, C<tie>, C<tmpdir>,
 C<to>, C<touch>, C<truncate>, C<type>, C<user>, C<uid>, C<unlink>,
 C<unlock>, C<updir>, C<uri>, C<utf8>, C<utime> and C<write>.
@@ -528,7 +546,7 @@ descriptor can be any of the following:
     - A socket domain/port.  eg 'perl.com:5678'
     - '-' means STDIN or STDOUT (depending on usage)
     - '=' means STDERR
-    - '$' means an IO::String object
+    - '$' means an in memory filehandle object
     - '?' means a temporary file
     - A URI including: http, https, ftp and mailto
     - An IO::All object
@@ -557,7 +575,7 @@ work the same:
 
 =item * dir
 
-    io->file($dir_name);
+    io->dir($dir_name);
 
 Make the object be of type I<directory>.
 
@@ -611,7 +629,7 @@ Storable or FreezeThaw.
 
 =item * string
 
-Make the object be an IO::String object. These are equivalent:
+Make the object be an in memory filehandle. These are equivalent:
 
     my $io = io('$');
     my $io = io->string;
@@ -821,13 +839,6 @@ Indicates that the C<pathname> for the object should be made relative.
 Indicates whether objects returned from one of the C<all> methods will
 be in sorted order by name. True by default.
 
-=item * strict
-
-Check the return codes of every single system call. To turn this on for all
-calls in your module, use:
-
-    use IO::All -strict;
-
 =item * tie
 
 Indicate that the object should be tied to itself, thus allowing it to
@@ -968,8 +979,6 @@ Sets the record (line) separator to whatever value you pass it. Default
 is \n. Affects the chomp setting too.
 
 =item * string_ref
-
-Proxy for IO::String::string_ref
 
 Returns a reference to the internal string that is acting like a file.
 
@@ -1112,7 +1121,7 @@ Proxy for IO::Handle::fileno
 
 Return the path portion of the file path in the object. For example:
 
-    io('my/path/file.txt')->filename;
+    io('my/path/file.txt')->filepath;
 
 would return C<my/path>.
 
@@ -1205,7 +1214,7 @@ a STDIO file handle.
 =item * is_string
 
 Returns boolean telling whether or not the IO::All object represents
-an IO::String object.
+an in memory filehandle.
 
 =item * is_temp
 
@@ -1225,7 +1234,7 @@ Return the length of the internal buffer.
 
 Return the mimetype of the file.
 
-Requires the L<File::MimeInfo> CPAN module.
+Requires a working installation of the L<File::MimeInfo> CPAN module.
 
 =item * mkdir
 
@@ -1512,7 +1521,8 @@ Can take an optional argument indicating the base path.
 
 =item * canonpath
 
-Returns the canonical path for the IO::All object.
+Returns the canonical path for the IO::All object.  The canonical path is the
+fully resolved path if the file exists, so any symlinks will be resolved.
 
 =item * case_tolerant
 
@@ -1681,7 +1691,7 @@ for improper usage.
 
 =head1 SEE ALSO
 
-IO::Handle, IO::File, IO::Dir, IO::Socket, IO::String, File::Spec,
+IO::Handle, IO::File, IO::Dir, IO::Socket, File::Spec,
 File::Path, File::ReadBackwards, Tie::File, File::MimeInfo
 
 =head1 CREDITS

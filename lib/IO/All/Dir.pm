@@ -1,6 +1,7 @@
 package IO::All::Dir;
 use strict;
 use warnings;
+use Scalar::Util 'blessed';
 use IO::All::Filesys -base;
 use IO::All -base;
 use IO::Dir;
@@ -15,8 +16,10 @@ field 'chdir_from';
 #===============================================================================
 sub dir {
     my $self = shift;
-    bless $self, __PACKAGE__;
-    if (@_ && @_ > 1) {
+    my $had_prev = blessed($self) && $self->pathname;
+
+    bless $self, __PACKAGE__ unless $had_prev;
+    if (@_ && @_ > 1 || @_ && $had_prev) {
        $self->name(
            $self->_spec_class->catdir(
                ($self->pathname ? ($self->pathname) : () ),
@@ -62,6 +65,8 @@ sub open_msg {
       : '';
     return qq{Can't open directory$name:\n$!};
 }
+
+sub exists { -d shift->pathname }
 
 #===============================================================================
 sub All {
@@ -136,8 +141,8 @@ sub empty {
 sub mkdir {
     my $self = shift;
     defined($self->perms)
-    ? CORE::mkdir($self->pathname, $self->perms)
-    : CORE::mkdir($self->pathname);
+    ? (CORE::mkdir($self->pathname, $self->perms) or die "mkdir failed: $!")
+    : (CORE::mkdir($self->pathname) or die "mkdir failed: $!");
     return $self;
 }
 

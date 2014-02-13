@@ -12,6 +12,7 @@ use IO::All::Base -base;
 use File::Spec();
 use Symbol();
 use Fcntl;
+use Cwd ();
 
 # ABSTRACT: IO::All of it to Graham and Damian!
 # VERSION
@@ -139,55 +140,6 @@ sub handle {
     my $self = shift;
     $self->_handle(shift) if @_;
     return $self->_init;
-}
-
-#===============================================================================
-# Tie Interface
-#===============================================================================
-sub tie {
-    my $self = shift;
-    tie *$self, $self;
-    return $self;
-}
-
-sub TIEHANDLE {
-    return $_[0] if ref $_[0];
-    my $class = shift;
-    my $self = bless Symbol::gensym(), $class;
-    $self->init(@_);
-}
-
-sub READLINE {
-    goto &getlines if wantarray;
-    goto &getline;
-}
-
-sub DESTROY {
-    my $self = shift;
-    no warnings;
-    unless ( $] < 5.008 ) {
-        untie *$self if tied *$self;
-    }
-    $self->close if $self->is_open;
-}
-
-sub BINMODE {
-    my $self = shift;
-    binmode *$self->io_handle;
-}
-
-{
-    no warnings;
-    *GETC   = \&getc;
-    *PRINT  = \&print;
-    *PRINTF = \&printf;
-    *READ   = \&read;
-    *WRITE  = \&write;
-    *SEEK   = \&seek;
-    *TELL   = \&getpos;
-    *EOF    = \&eof;
-    *CLOSE  = \&close;
-    *FILENO = \&fileno;
 }
 
 #===============================================================================
@@ -433,9 +385,62 @@ proxy_open seek => $^O eq 'MSWin32' ? '<' : '+<';
 proxy_open 'getc';
 
 #===============================================================================
+# Tie Interface
+#===============================================================================
+sub tie {
+    my $self = shift;
+    tie *$self, $self;
+    return $self;
+}
+
+sub TIEHANDLE {
+    return $_[0] if ref $_[0];
+    my $class = shift;
+    my $self = bless Symbol::gensym(), $class;
+    $self->init(@_);
+}
+
+sub READLINE {
+    goto &getlines if wantarray;
+    goto &getline;
+}
+
+sub DESTROY {
+    my $self = shift;
+    no warnings;
+    unless ( $] < 5.008 ) {
+        untie *$self if tied *$self;
+    }
+    $self->close if $self->is_open;
+}
+
+sub BINMODE {
+    my $self = shift;
+    binmode *$self->io_handle;
+}
+
+{
+    no warnings;
+    *GETC   = \&getc;
+    *PRINT  = \&print;
+    *PRINTF = \&printf;
+    *READ   = \&read;
+    *WRITE  = \&write;
+    *SEEK   = \&seek;
+    *TELL   = \&getpos;
+    *EOF    = \&eof;
+    *CLOSE  = \&close;
+    *FILENO = \&fileno;
+}
+
+#===============================================================================
 # File::Spec Interface
 #===============================================================================
-sub canonpath {my $self = shift; File::Spec->canonpath($self->pathname) }
+sub canonpath {my $self = shift;
+   Cwd::abs_path($self->pathname) ||
+      File::Spec->canonpath($self->pathname)
+}
+
 sub catdir {
     my $self = shift;
     my @args = grep defined, $self->name, @_;
@@ -538,6 +543,7 @@ sub binary {
     binmode($self->io_handle)
       if $self->is_open;
     $self->_binary(1);
+    $self->encoding(0);
     return $self;
 }
 
@@ -720,7 +726,7 @@ sub utf8 {
     if ($] < 5.008) {
         die "IO::All -utf8 not supported on Perl older than 5.8";
     }
-    CORE::binmode($self->io_handle, ':utf8')
+    CORE::binmode($self->io_handle, ':encoding(UTF-8)')
       if $self->is_open;
     $self->_utf8(1);
     $self->encoding('utf8');
@@ -729,12 +735,11 @@ sub utf8 {
 
 sub encoding {
     my $self = shift;
-    my $encoding = shift
-      or die "No encoding value passed to IO::All::encoding";
+    my $encoding = shift;
     if ($] < 5.008) {
         die "IO::All -encoding not supported on Perl older than 5.8";
     }
-    CORE::binmode($self->io_handle, ":$encoding")
+    CORE::binmode($self->io_handle, ":encoding($encoding)")
       if $self->is_open;
     $self->_encoding($encoding);
     return $self;
@@ -776,7 +781,7 @@ sub assert_dirpath {
       CORE::mkdir($dir_name, $self->perms || 0755) or
       do {
           require File::Path;
-          File::Path::mkpath($dir_name);
+          File::Path::mkpath($dir_name, 0, $self->perms || 0755 );
       } or
       $self->throw("Can't make $dir_name"));
 }

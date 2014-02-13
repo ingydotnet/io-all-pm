@@ -14,7 +14,11 @@ sub file {
     my $self = shift;
     bless $self, __PACKAGE__;
     # should we die here if $self->name is already set and there are args?
-    $self->name( $self->_spec_class->catfile( @_ ) ) if @_;
+    if (@_ && @_ > 1) {
+        $self->name( $self->_spec_class->catfile( @_ ) )
+    } elsif (@_) {
+        $self->name($_[0])
+    }
     return $self->_init;
 }
 
@@ -94,6 +98,8 @@ sub open {
     $self->set_lock;
     $self->set_binmode;
 }
+
+sub exists { -f shift->pathname }
 
 my %mode_msg = (
     '>' => 'output',

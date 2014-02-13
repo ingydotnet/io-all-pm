@@ -9,4 +9,6 @@ my $io = io('t/tie.t')->tie;
 my $file = join '', <$io>;
 test_file_contents($file, 't/tie.t');
 
+my $io1 = io(o_dir() . '/tie.t')->tie;
+print $io1 "test";
 del_output_dir();

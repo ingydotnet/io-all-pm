@@ -2,10 +2,18 @@ package IO::All::String;
 use strict;
 use warnings;
 use IO::All -base;
-use IO::String;
 
 const type => 'string';
-proxy 'string_ref';
+
+
+sub string_ref {
+   my ($self, $ref) = @_;
+
+   no strict 'refs';
+   *$self->{ref} = $ref if exists $_[1];
+
+   return *$self->{ref}
+}
 
 sub string {
     my $self = shift;
@@ -15,7 +23,11 @@ sub string {
 
 sub open {
     my $self = shift;
-    $self->io_handle(IO::String->new);
+    my $str = '';
+    my $ref = \$str;
+    $self->string_ref($ref);
+    open my $fh, '+<', $ref;
+    $self->io_handle($fh);
     $self->set_binmode;
     $self->is_open(1);
 }

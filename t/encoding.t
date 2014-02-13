@@ -5,6 +5,8 @@ use Test::More;
 use IO_All_Test;
 
 BEGIN {
+    eval { require PerlIO::encoding };
+    plan(skip_all => 'no PerlIO::encoding') if $@;
     plan(($] < 5.008003)
           ? (skip_all => 'Broken on older perls')
           : (tests => 4)
