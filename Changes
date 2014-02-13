@@ -1,4 +1,5 @@
 ---
+version: 0.57
 changes:
 - Fix printing to a tie'd object, closes GH#26 (thanks Graham Knop for helping)
 - Fix tests if $^X ne 'perl', closes GH#35 (thanks Hugemeir for the report)
