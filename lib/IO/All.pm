@@ -437,7 +437,7 @@ sub BINMODE {
 # File::Spec Interface
 #===============================================================================
 sub canonpath {my $self = shift;
-   Cwd::abs_path($self->pathname) ||
+   eval { Cwd::abs_path($self->pathname); 0 } ||
       File::Spec->canonpath($self->pathname)
 }
 
