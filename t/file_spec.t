@@ -5,8 +5,8 @@ use Test::More tests => 33;
 use IO::All;
 use IO_All_Test;
 
-my $path = f('t/file_spec.t') . q($);
-like(io('././t/file_spec.t')->canonpath, qr/$path/, 'give full canonical path for real files' );
+my $path = f('t/file_spec.t');
+like(io('././t/file_spec.t')->canonpath, qr/\Q$path\E$/, 'give full canonical path for real files' );
 is(io('././t/file_spec.t')->ext, 't');
 is(io('././t/file_spec.t')->extension, 't');
 $path = f('t/bogus') . q($);
