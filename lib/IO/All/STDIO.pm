@@ -1,4 +1,5 @@
 package IO::All::STDIO;
+
 use strict;
 use warnings;
 use IO::All -base;

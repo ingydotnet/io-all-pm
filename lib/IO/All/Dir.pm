@@ -1,4 +1,5 @@
 package IO::All::Dir;
+
 use strict;
 use warnings;
 use Scalar::Util 'blessed';

@@ -1,4 +1,5 @@
 package IO::All::Pipe;
+
 use strict;
 use warnings;
 use IO::All -base;

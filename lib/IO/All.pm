@@ -1,4 +1,5 @@
 package IO::All;
+
 use 5.006001;
 use strict;
 use warnings;
@@ -15,7 +16,7 @@ use Fcntl;
 use Cwd ();
 
 # ABSTRACT: IO::All of it to Graham and Damian!
-# VERSION
+
 our @EXPORT = qw(io);
 
 #===============================================================================

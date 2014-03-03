@@ -1,4 +1,5 @@
 package IO::All::Base;
+
 use strict;
 use warnings;
 use Fcntl;
