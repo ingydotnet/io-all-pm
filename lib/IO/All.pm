@@ -730,7 +730,7 @@ sub utf8 {
     CORE::binmode($self->io_handle, ':encoding(UTF-8)')
       if $self->is_open;
     $self->_utf8(1);
-    $self->encoding('utf8');
+    $self->encoding('UTF-8');
     return $self;
 }
 

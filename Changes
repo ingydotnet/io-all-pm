@@ -1,4 +1,8 @@
 ---
+changes:
+- Fix yet another utf8 validation issue (Thanks Mithlandu for complaining)
+  (closes #38)
+---
 version: 0.58
 changes:
 - Fix canonpath on MSWin32
