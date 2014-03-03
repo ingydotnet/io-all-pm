@@ -813,15 +813,10 @@ sub copy {
 
 sub set_binmode {
     my $self = shift;
-    if (my $encoding = $self->_encoding) {
-        CORE::binmode($self->io_handle, ":encoding($encoding)");
-    }
-    elsif ($self->_binary) {
-        CORE::binmode($self->io_handle);
-    }
-    elsif ($self->_binmode) {
-        CORE::binmode($self->io_handle, $self->_binmode);
-    }
+    my $encoding = $self->_encoding;
+    CORE::binmode($self->io_handle, ":encoding($encoding)") if $encoding;
+    CORE::binmode($self->io_handle) if $self->_binary;
+    CORE::binmode($self->io_handle, $self->_binmode) if $self->_binmode;
     return $self;
 }
 
