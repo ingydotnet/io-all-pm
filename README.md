@@ -1659,9 +1659,9 @@ Ingy döt Net <ingy@cpan.org>
 
 # COPYRIGHT
 
-Copyright (c) 2004. Brian Ingerson.
+Copyright (c) 2004-2005. Brian Ingerson.
 
-Copyright (c) 2006, 2008, 2010. Ingy döt Net.
+Copyright (c) 2006-2014. Ingy döt Net.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
