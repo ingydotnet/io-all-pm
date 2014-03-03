@@ -1,6 +1,7 @@
 ---
 changes:
 - Fix canonpath on MSWin32
+- Fix marking files as both binary and utf8 (Thanks Mithlandu!) (closes GH#36)
 ---
 version: 0.57
 changes:
