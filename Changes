@@ -1,12 +1,12 @@
 ---
 changes:
-- Fix yet another utf8 validation issue (Thanks Mithlandu for complaining)
+- Fix yet another utf8 validation issue (Thanks Mithaldu for complaining)
   (closes #38)
 ---
 version: 0.58
 changes:
 - Fix canonpath on MSWin32
-- Fix marking files as both binary and utf8 (Thanks Mithlandu!) (closes GH#36)
+- Fix marking files as both binary and utf8 (Thanks Mithaldu!) (closes GH#36)
 ---
 version: 0.57
 changes:
@@ -19,7 +19,7 @@ changes:
 - Fix regression related to chaining dirs caused by making '' not become '/'
 - correctly check exists for ::File, ::Dir, and ::Link
 - RT#61627/GH#29 and Fix RT#82633/GH#32, thanks Graham Knop for helping
-- Some doc cleanup around the SYNOPSIS (Thanks Mithlandu)
+- Some doc cleanup around the SYNOPSIS (Thanks Mithaldu)
 ---
 version: 0.55
 changes:
@@ -27,14 +27,14 @@ changes:
 ---
 version: 0.54
 changes:
-- Remove mentions of unimplemented strict (Thanks Mithlandu, GH#15)
+- Remove mentions of unimplemented strict (Thanks Mithaldu, GH#15)
 - Allow testing on non SDBM DBM's (thanks Jerry D. Hedden)
 - Abandon RT in favor of GitHub Issues
 ---
 version: 0.53
 changes:
 - Make mkdir die if it fails (thanks Martyn Pearce for RT#61697)
-- Fix possible path test issues, esp in Win32 (Thanks Mithlandu)
+- Fix possible path test issues, esp in Win32 (Thanks Mithaldu)
 - Fix ->binary under -utf8 import mode (thanks T. Linden for RT#81224)
 - Validate UTF-8 in ->utf8 (thanks Ovid for RT#74642)
 - Consistently use :encoding($encoding) (thanks Bernardo Rechea for RT#68512)
