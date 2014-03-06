@@ -15,6 +15,7 @@ if (! $pid)
     # Let the child process listen on a port
     my $port = 5555;
     my $accepted = 0;
+    my $start = time;
     while (1)
     {
         # Log the port to a file.
@@ -38,6 +39,7 @@ if (! $pid)
             # We have a listening socket on a port, so we can continue
             last;
         }
+        last if time > $start + 10
     }
     continue
     {

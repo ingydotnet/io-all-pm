@@ -1,5 +1,7 @@
 ---
 changes:
+- Fix possible infinite loop in t/accept.t (Thanks C. Wallace for complaining)
+  (closes #42)
 - Fix yet another utf8 validation issue (Thanks Mithaldu for complaining)
   (closes #38)
 ---
