@@ -4,6 +4,8 @@ changes:
   (closes #42)
 - Fix yet another utf8 validation issue (Thanks Mithaldu for complaining)
   (closes #38)
+- Fix warnings running t/tie.t on windows (Thanks Mithaldu for complaining)
+  (closes #37)
 ---
 version: 0.58
 changes:
