@@ -1,4 +1,5 @@
 ---
+version: 0.59
 changes:
 - Fix possible infinite loop in t/accept.t (Thanks C. Wallace for complaining)
   (closes #42)
