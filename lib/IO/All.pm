@@ -17,7 +17,7 @@ use Cwd ();
 
 # ABSTRACT: IO::All of it to Graham and Damian!
 
-our @EXPORT = qw(io);
+our @EXPORT = qw(io file dir);
 
 #===============================================================================
 # Object creation and setup methods
@@ -141,6 +141,20 @@ sub handle {
     my $self = shift;
     $self->_handle(shift) if @_;
     return $self->_init;
+}
+
+sub file {
+    io->()->file(@_);
+}
+
+use XXX -with => 'YAML::XS';
+sub dir {
+    my $package = scalar(caller);
+    no strict 'refs';
+    my $io = \&{"${package}::io"};
+    print(main::io('Changes')->all);
+    my @args = @_;
+    @args = ('.') unless @args;
 }
 
 #===============================================================================
