@@ -417,7 +417,7 @@ sub DESTROY {
 
 sub BINMODE {
     my $self = shift;
-    binmode *$self->io_handle;
+    CORE::binmode *$self->io_handle;
 }
 
 {
@@ -541,8 +541,7 @@ sub appendln {
 
 sub binary {
     my $self = shift;
-    binmode($self->io_handle)
-      if $self->is_open;
+    CORE::binmode($self->io_handle) if $self->is_open;
     $self->_binary(1);
     return $self;
 }
