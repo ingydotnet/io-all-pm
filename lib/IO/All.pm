@@ -544,7 +544,6 @@ sub binary {
     binmode($self->io_handle)
       if $self->is_open;
     $self->_binary(1);
-    $self->encoding(0);
     return $self;
 }
 
@@ -740,6 +739,7 @@ sub encoding {
     if ($] < 5.008) {
         die "IO::All -encoding not supported on Perl older than 5.8";
     }
+    die "No valid encoding string sent" if !$encoding;
     CORE::binmode($self->io_handle, ":encoding($encoding)")
       if $self->is_open and $encoding;
     $self->_encoding($encoding);
