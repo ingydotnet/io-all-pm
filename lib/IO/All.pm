@@ -318,7 +318,6 @@ sub overload_scalar_to_any {
 field 'package';
 field _strict => undef;
 field _layers => [];
-field _encoding => undef;
 field _utf8 => undef;
 field _handle => undef;
 
@@ -741,7 +740,7 @@ sub encoding {
     }
     die "No valid encoding string sent" if !$encoding;
     $self->_set_encoding($encoding) if $self->is_open and $encoding;
-    $self->_encoding($encoding);
+    push @{$self->_layers}, ":encoding($encoding)";
     return $self;
 }
 
@@ -819,8 +818,6 @@ sub copy {
 sub set_binmode {
     my $self = shift;
     $self->_sane_binmode($_) for @{$self->_layers};
-    my $encoding = $self->_encoding;
-    $self->_set_encoding($encoding) if $encoding;
     return $self;
 }
 
