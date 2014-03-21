@@ -316,7 +316,6 @@ sub overload_scalar_to_any {
 # Private Accessors
 #===============================================================================
 field 'package';
-field _binmode => undef;
 field _strict => undef;
 field _layers => [];
 field _encoding => undef;
@@ -550,7 +549,7 @@ sub binmode {
     my $self = shift;
     my $layer = shift;
     $self->_sane_binmode($layer) if $self->is_open;
-    $self->_binmode($layer);
+    push @{$self->_layers}, $layer;
     return $self;
 }
 
@@ -822,7 +821,6 @@ sub set_binmode {
     $self->_sane_binmode($_) for @{$self->_layers};
     my $encoding = $self->_encoding;
     $self->_set_encoding($encoding) if $encoding;
-    CORE::binmode($self->io_handle, $self->_binmode) if $self->_binmode;
     return $self;
 }
 
