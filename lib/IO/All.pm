@@ -726,8 +726,7 @@ sub utf8 {
     if ($] < 5.008) {
         die "IO::All -utf8 not supported on Perl older than 5.8";
     }
-    CORE::binmode($self->io_handle, ':encoding(UTF-8)')
-      if $self->is_open;
+    $self->_set_encoding("UTF-8") if $self->is_open;
     $self->_utf8(1);
     $self->encoding('UTF-8');
     return $self;
@@ -740,10 +739,14 @@ sub encoding {
         die "IO::All -encoding not supported on Perl older than 5.8";
     }
     die "No valid encoding string sent" if !$encoding;
-    CORE::binmode($self->io_handle, ":encoding($encoding)")
-      if $self->is_open and $encoding;
+    $self->_set_encoding($encoding) if $self->is_open and $encoding;
     $self->_encoding($encoding);
     return $self;
+}
+
+sub _set_encoding {
+    my ($self, $encoding) = @_;
+    return CORE::binmode($self->io_handle, ":encoding($encoding)");
 }
 
 sub write {
@@ -815,7 +818,7 @@ sub copy {
 sub set_binmode {
     my $self = shift;
     my $encoding = $self->_encoding;
-    CORE::binmode($self->io_handle, ":encoding($encoding)") if $encoding;
+    $self->_set_encoding($encoding) if $encoding;
     CORE::binmode($self->io_handle) if $self->_binary;
     CORE::binmode($self->io_handle, $self->_binmode) if $self->_binmode;
     return $self;
