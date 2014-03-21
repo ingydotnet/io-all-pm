@@ -318,7 +318,6 @@ sub overload_scalar_to_any {
 field 'package';
 field _strict => undef;
 field _layers => [];
-field _utf8 => undef;
 field _handle => undef;
 
 #===============================================================================
@@ -726,10 +725,12 @@ sub utf8 {
     if ($] < 5.008) {
         die "IO::All -utf8 not supported on Perl older than 5.8";
     }
-    $self->_set_encoding("UTF-8") if $self->is_open;
-    $self->_utf8(1);
     $self->encoding('UTF-8');
     return $self;
+}
+
+sub _has_utf8 {
+    grep { $_ eq ':encoding(UTF-8)' } @{shift->_layers}
 }
 
 sub encoding {

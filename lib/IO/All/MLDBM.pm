@@ -28,7 +28,7 @@ sub tie_dbm {
         @{$self->_dbm_extra}
       or $self->throw("Can't open '$filename' as MLDBM file:\n$!");
     $self->add_utf8_dbm_filter($db)
-      if $self->_utf8;
+      if $self->_has_utf8;
     $self->tied_file($hash);
 }
 
