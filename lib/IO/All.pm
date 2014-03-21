@@ -319,6 +319,7 @@ field 'package';
 field _binary => undef;
 field _binmode => undef;
 field _strict => undef;
+field _layers => [];
 field _encoding => undef;
 field _utf8 => undef;
 field _handle => undef;
@@ -549,13 +550,16 @@ sub binary {
 sub binmode {
     my $self = shift;
     my $layer = shift;
-    if ($self->is_open) {
-        $layer
-        ? CORE::binmode($self->io_handle, $layer)
-        : CORE::binmode($self->io_handle);
-    }
+    $self->_sane_binmode($layer) if $self->is_open;
     $self->_binmode($layer);
     return $self;
+}
+
+sub _sane_binmode {
+    my ($self, $layer) = @_;
+    $layer
+    ? CORE::binmode($self->io_handle, $layer)
+    : CORE::binmode($self->io_handle);
 }
 
 sub buffer {
@@ -816,6 +820,7 @@ sub copy {
 
 sub set_binmode {
     my $self = shift;
+    $self->_sane_binmode($_) for @{$self->_layers};
     my $encoding = $self->_encoding;
     $self->_set_encoding($encoding) if $encoding;
     CORE::binmode($self->io_handle) if $self->_binary;
