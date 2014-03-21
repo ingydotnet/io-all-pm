@@ -316,11 +316,8 @@ sub overload_scalar_to_any {
 # Private Accessors
 #===============================================================================
 field 'package';
-field _binary => undef;
-field _binmode => undef;
 field _strict => undef;
-field _encoding => undef;
-field _utf8 => undef;
+field _layers => [];
 field _handle => undef;
 
 #===============================================================================
@@ -417,7 +414,7 @@ sub DESTROY {
 
 sub BINMODE {
     my $self = shift;
-    binmode *$self->io_handle;
+    CORE::binmode *$self->io_handle;
 }
 
 {
@@ -541,23 +538,24 @@ sub appendln {
 
 sub binary {
     my $self = shift;
-    binmode($self->io_handle)
-      if $self->is_open;
-    $self->_binary(1);
-    $self->encoding(0);
+    CORE::binmode($self->io_handle) if $self->is_open;
+    push @{$self->_layers}, ":raw";
     return $self;
 }
 
 sub binmode {
     my $self = shift;
     my $layer = shift;
-    if ($self->is_open) {
-        $layer
-        ? CORE::binmode($self->io_handle, $layer)
-        : CORE::binmode($self->io_handle);
-    }
-    $self->_binmode($layer);
+    $self->_sane_binmode($layer) if $self->is_open;
+    push @{$self->_layers}, $layer;
     return $self;
+}
+
+sub _sane_binmode {
+    my ($self, $layer) = @_;
+    $layer
+    ? CORE::binmode($self->io_handle, $layer)
+    : CORE::binmode($self->io_handle);
 }
 
 sub buffer {
@@ -727,11 +725,12 @@ sub utf8 {
     if ($] < 5.008) {
         die "IO::All -utf8 not supported on Perl older than 5.8";
     }
-    CORE::binmode($self->io_handle, ':encoding(UTF-8)')
-      if $self->is_open;
-    $self->_utf8(1);
     $self->encoding('UTF-8');
     return $self;
+}
+
+sub _has_utf8 {
+    grep { $_ eq ':encoding(UTF-8)' } @{shift->_layers}
 }
 
 sub encoding {
@@ -740,10 +739,15 @@ sub encoding {
     if ($] < 5.008) {
         die "IO::All -encoding not supported on Perl older than 5.8";
     }
-    CORE::binmode($self->io_handle, ":encoding($encoding)")
-      if $self->is_open and $encoding;
-    $self->_encoding($encoding);
+    die "No valid encoding string sent" if !$encoding;
+    $self->_set_encoding($encoding) if $self->is_open and $encoding;
+    push @{$self->_layers}, ":encoding($encoding)";
     return $self;
+}
+
+sub _set_encoding {
+    my ($self, $encoding) = @_;
+    return CORE::binmode($self->io_handle, ":encoding($encoding)");
 }
 
 sub write {
@@ -814,10 +818,7 @@ sub copy {
 
 sub set_binmode {
     my $self = shift;
-    my $encoding = $self->_encoding;
-    CORE::binmode($self->io_handle, ":encoding($encoding)") if $encoding;
-    CORE::binmode($self->io_handle) if $self->_binary;
-    CORE::binmode($self->io_handle, $self->_binmode) if $self->_binmode;
+    $self->_sane_binmode($_) for @{$self->_layers};
     return $self;
 }
 
