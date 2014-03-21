@@ -788,8 +788,8 @@ Requires the File::ReadBackwards CPAN module.
 
 =item * binary
 
-Indicates the file has binary content and should be opened with
-C<binmode>.
+Adds C<:raw> to the list of PerlIO layers applied after C<open>,
+and applies it immediately on an open handle.
 
 =item * chdir
 
@@ -849,8 +849,8 @@ be used as a filehandle in any of Perl's builtin IO operations.
 
 =item * utf8
 
-Indicates that IO should be done using utf8 encoding. Calls binmode with
-C<:utf8> layer.
+Adds C<:encoding(UTF-8)> to the list of PerlIO layers applied after C<open>,
+and applies it immediately on an open handle.
 
 =back
 
@@ -872,8 +872,9 @@ Set the Bcc field for a mailto object.
 
 =item * binmode
 
-Proxy for binmode. Requires a layer to be passed. Use C<binary> for
-plain binary mode.
+Adds the specified layer to the list of PerlIO layers applied after C<open>,
+and applies it immediately on an open handle. Does a bare C<binmode> when called
+without argument.
 
 =item * block_size
 
@@ -910,7 +911,8 @@ Set the domain name or ip address that a socket should use.
 
 =item * encoding
 
-Set the encoding to be used for the PerlIO layer.
+Adds the specified encoding to the list of PerlIO layers applied after C<open>,
+and applies it immediately on an open handle. Requires an argument.
 
 =item * errors
 
