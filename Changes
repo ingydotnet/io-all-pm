@@ -1,4 +1,5 @@
 ---
+version: 0.60
 changes:
 - Fix IO Layer situation (Thanks Mithaldu!)
 ---
