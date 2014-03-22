@@ -1,4 +1,7 @@
 ---
+changes:
+- Fix IO Layer situation (Thanks Mithaldu!)
+---
 version: 0.59
 changes:
 - Fix possible infinite loop in t/accept.t (Thanks C. Wallace for complaining)
