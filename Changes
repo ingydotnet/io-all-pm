@@ -1,4 +1,5 @@
 ---
+version: 0.61
 changes:
 - Fix GH#44 (Thanks Shlomi Fish!)
 ---
