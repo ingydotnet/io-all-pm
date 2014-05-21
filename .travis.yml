@@ -11,6 +11,7 @@ install:
   - cpanm -nq Devel::Cover::Report::Coveralls
 script:
    - PERL5OPT=-MDevel::Cover=-coverage,statement,branch,condition,path,subroutine prove -lrsv t
+   - PERLIO=:crlf PERL5OPT=-MDevel::Cover=-coverage,statement,branch,condition,path,subroutine prove -lrsv t
    - cover
 after_success:
   - cover -report coveralls
