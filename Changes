@@ -1,4 +1,10 @@
 ---
+version: 0.62
+date:    Sat Jun  7 13:36:32 PDT 2014
+changes:
+- Convert release to Zilla::Dist
+- Start converting doc to Kwim
+---
 version: 0.61
 changes:
 - Fix GH#44 (Thanks Shlomi Fish!)

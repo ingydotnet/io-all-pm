@@ -15,8 +15,6 @@ use Symbol();
 use Fcntl;
 use Cwd ();
 
-# ABSTRACT: IO::All of it to Graham and Damian!
-
 our @EXPORT = qw(io);
 
 #===============================================================================

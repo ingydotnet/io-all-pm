@@ -1,0 +1,11 @@
+use strict;
+use warnings;
+use File::Basename;
+use lib dirname(__FILE__);
+use Test::More tests => 1;
+use IO::All -utf8;
+my $warnings = 0;
+my $testdir = dirname(__FILE__);
+$SIG{__WARN__} = sub { $warnings++ };
+my $img = io("$testdir/img.jpg")->binary->all;
+ok(!$warnings, 'no unicode warnings');

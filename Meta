@@ -1,0 +1,32 @@
+=meta: 0.0.1
+
+name: IO-All
+version: 0.62
+abstract: IO::All of it to Graham and Damian!
+homepage: https://metacpan.org/release/IO-All
+
+license: perl
+copyright: 2004-2014. Ingy döt Net
+author:
+  name: Ingy döt Net
+  email: ingy@cpan.org
+  github: ingydotnet
+  twitter: ingydotnet
+  freenode: ingy
+  homepage: http://ingy.net
+
+requires:
+  perl: 5.8.1
+  Cwd: 0
+  Scalar::Util: 0
+
+# TODO Add recommends support:
+# recommends 'File::ReadBackwards';
+# recommends 'File::MimeInfo';
+
+devel:
+  git: git@github.org/ingydotnet/io-all-pm
+  irc: irc.perl.org/#io-all
+  bug: https://github.com/ingydotnet/io-all-pm/issues/
+
+=travis: perl
