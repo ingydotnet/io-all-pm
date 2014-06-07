@@ -10,6 +10,9 @@ See http://github.com/ingydotnet/kwim-pm#readme
 
 IO::All - IO::All of it to Graham and Damian!
 
+=for html
+<a href="https://travis-ci.org/ingydotnet/io-all-pm"><img src="https://travis-ci.org/ingydotnet/io-all-pm.png" alt="io-all-pm"></a>
+
 =head1 SYNOPSIS
 
 First, some safe examples:
