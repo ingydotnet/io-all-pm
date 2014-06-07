@@ -1,16 +1,23 @@
 language: perl
+
 perl:
-  - 5.18
-  - 5.16
-  - 5.14
-  - 5.12
-  - 5.10
-  - 5.8
+- 5.18
+- 5.16
+- 5.14
+- 5.12
+- 5.10
+- 5.8
+
 install:
-  - cpanm -nq --installdeps .
-  - cpanm -nq Devel::Cover::Report::Coveralls
+- cpanm -nq
+  Cwd
+  Scalar::Util
+  Devel::Cover::Report::Coveralls
+
 script:
-   - PERL5OPT=-MDevel::Cover=-coverage,statement,branch,condition,path,subroutine prove -lrsv test
-   - cover
+- PERL5OPT=-MDevel::Cover=-coverage,statement,branch,condition,path,subroutine
+  prove -lrsv test
+- cover
+
 after_success:
-  - cover -report coveralls
+- cover -report coveralls
