@@ -5,7 +5,11 @@
 #   > make upgrade
 #
 
-.PHONY: cpan doc test
+.PHONY: cpan test
+
+ifeq (,$(shell which zild))
+    $(error "Error: 'zild' command not found. Please install Zilla::Dist from CPAN")
+endif
 
 NAME := $(shell zild meta name)
 VERSION := $(shell zild meta version)
@@ -21,18 +25,24 @@ help:
 	@echo ''
 	@echo '    make test      - Run the repo tests'
 	@echo '    make install   - Install the repo'
-	@echo '    make doc       - Make the docs'
+	@echo '    make update    - Update generated files'
 	@echo ''
 	@echo '    make cpan      - Make cpan/ dir with dist.ini'
-	@echo '    make cpan      - Open new shell into new cpan/'
+	@echo '    make cpanshell - Open new shell into new cpan/'
+	@echo '    make cpantest  - Make cpan/ dir and run tests in it'
+	@echo ''
 	@echo '    make dist      - Make CPAN distribution tarball'
 	@echo '    make distdir   - Make CPAN distribution directory'
 	@echo '    make distshell - Open new shell into new distdir'
 	@echo '    make disttest  - Run the dist tests'
+	@echo ''
 	@echo '    make publish   - Publish the dist to CPAN'
 	@echo '    make preflight - Dryrun of publish'
 	@echo ''
+	@echo '    make readme    - Make the ReadMe.pod file'
+	@echo '    make travis    - Make a travis.yml file'
 	@echo '    make upgrade   - Upgrade the build system'
+	@echo ''
 	@echo '    make clean     - Clean up build files'
 	@echo ''
 
@@ -43,15 +53,17 @@ install: distdir
 	(cd $(DISTDIR); perl Makefile.PL; make install)
 	make clean
 
-doc:
-	kwim --pod-cpan doc/$(NAMEPATH).kwim > ReadMe.pod
+update: makefile readme travis
 
 cpan:
 	zild-make-cpan
 
 cpanshell: cpan
 	(cd cpan; $$SHELL)
-	rm -fr cpan
+	make clean
+
+cpantest: cpan
+	(cd cpan; prove -lv t) && make clean
 
 dist: clean cpan
 	(cd cpan; dzil build)
@@ -66,33 +78,56 @@ distdir: clean cpan
 
 distshell: distdir
 	(cd $(DISTDIR); $$SHELL)
-	rm -fr $(DISTDIR)
+	make clean
 
 disttest: cpan
-	(cd cpan; dzil test) && rm -fr cpan
+	(cd cpan; dzil test) && make clean
 
-publish release: doc test check-release disttest
+publish release: update test check-release disttest
 	make dist
 	cpan-upload $(DIST)
 	git push
 	git tag $(VERSION)
 	git push --tag
-	rm $(DIST)
+	make clean
+	git status
 
-preflight: doc test check-release disttest
+preflight: update test check-release disttest
 	make dist
 	@echo cpan-upload $(DIST)
 	@echo git push
 	@echo git tag $(VERSION)
 	@echo git push --tag
-	rm $(DIST)
+	make clean
+	git status
 
-clean purge:
-	rm -fr cpan .build $(DIST) $(DISTDIR)
+readme:
+	kwim --pod-cpan doc/$(NAMEPATH).kwim > ReadMe.pod
+
+travis:
+	zild-make-travis
 
 upgrade:
 	cp `zild sharedir`/Makefile ./
 
+clean purge:
+	rm -fr cpan .build $(DIST) $(DISTDIR)
+
 #------------------------------------------------------------------------------
 check-release:
 	zild-check-release
+
+ifeq (Zilla-Dist,$(NAME))
+makefile:
+	@echo Skip 'make upgrade'
+else
+makefile:
+	cp Makefile /tmp/
+	make upgrade
+	@if [ -n "`diff Makefile /tmp/Makefile`" ]; then \
+	    echo "Makefile updated. Try again"; \
+	    exit 1; \
+	fi
+	rm /tmp/Makefile
+endif
+

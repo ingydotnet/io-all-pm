@@ -1,4 +1,10 @@
 ---
+version: 0.63
+date:    Sun Jun  8 12:45:43 PDT 2014
+changes:
+- Add coveralls badge
+- Finish porting pod to kwim
+---
 version: 0.62
 date:    Sat Jun  7 13:36:32 PDT 2014
 changes:

@@ -13,6 +13,9 @@ IO::All - IO::All of it to Graham and Damian!
 =for html
 <a href="https://travis-ci.org/ingydotnet/io-all-pm"><img src="https://travis-ci.org/ingydotnet/io-all-pm.png" alt="io-all-pm"></a>
 
+=for html
+<a href="https://coveralls.io/r/ingydotnet/io-all-pm?branch=master"><img src="https://coveralls.io/repos/ingydotnet/io-all-pm/badge.png" alt="io-all-pm"></a>
+
 =head1 SYNOPSIS
 
 First, some safe examples:
