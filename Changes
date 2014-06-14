@@ -1,4 +1,9 @@
 ---
+version: 0.65
+date:    Sat Jun 14 12:48:31 PDT 2014
+changes:
+- Support recommended modules again
+---
 version: 0.64
 date:    Sat Jun 14 12:33:21 PDT 2014
 changes:

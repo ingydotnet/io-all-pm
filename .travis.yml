@@ -12,6 +12,8 @@ install:
 - cpanm --quiet --notest
   Devel::Cover::Report::Coveralls
   Cwd
+  File::MimeInfo
+  File::ReadBackwards
   Scalar::Util
 
 script:

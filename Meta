@@ -1,7 +1,7 @@
 =meta: 0.0.1
 
 name: IO-All
-version: 0.64
+version: 0.65
 abstract: IO::All to Larry Wall!
 homepage: https://metacpan.org/release/IO-All
 
@@ -20,9 +20,9 @@ requires:
   Cwd: 0
   Scalar::Util: 0
 
-# TODO Add recommends support:
-# recommends 'File::ReadBackwards';
-# recommends 'File::MimeInfo';
+recommends:
+  File::ReadBackwards: 0
+  File::MimeInfo: 0
 
 devel:
   git: git@github.org/ingydotnet/io-all-pm
