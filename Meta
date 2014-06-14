@@ -1,8 +1,8 @@
 =meta: 0.0.1
 
 name: IO-All
-version: 0.63
-abstract: IO::All of it to Graham and Damian!
+version: 0.64
+abstract: IO::All to Larry Wall!
 homepage: https://metacpan.org/release/IO-All
 
 license: perl

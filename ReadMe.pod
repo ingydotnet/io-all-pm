@@ -8,12 +8,10 @@ See http://github.com/ingydotnet/kwim-pm#readme
 
 =head1 NAME
 
-IO::All - IO::All of it to Graham and Damian!
+IO::All - IO::All to Larry Wall!
 
 =for html
 <a href="https://travis-ci.org/ingydotnet/io-all-pm"><img src="https://travis-ci.org/ingydotnet/io-all-pm.png" alt="io-all-pm"></a>
-
-=for html
 <a href="https://coveralls.io/r/ingydotnet/io-all-pm?branch=master"><img src="https://coveralls.io/repos/ingydotnet/io-all-pm/badge.png" alt="io-all-pm"></a>
 
 =head1 SYNOPSIS
@@ -159,8 +157,6 @@ you write code very quickly, though they should be used judiciously:
     # This is just the beginning, read on...
 
 =head1 DESCRIPTION
-
-"Graham Barr for doing it all. Damian Conway for doing it all different."
 
 IO::All combines all of the best Perl IO modules into a single nifty object
 oriented interface to greatly simplify your everyday Perl IO idioms. It

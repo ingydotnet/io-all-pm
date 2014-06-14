@@ -21,3 +21,4 @@ script:
 
 after_success:
 - cover -report coveralls
+

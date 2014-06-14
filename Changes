@@ -1,4 +1,10 @@
 ---
+version: 0.64
+date:    Sat Jun 14 12:33:21 PDT 2014
+changes:
+- New badge syntax
+- Changed the ABSTRACT
+---
 version: 0.63
 date:    Sun Jun  8 12:45:43 PDT 2014
 changes:
