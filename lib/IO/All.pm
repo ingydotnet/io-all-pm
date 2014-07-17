@@ -1,4 +1,5 @@
 package IO::All;
+our $VERSION = '0.66';
 
 use 5.006001;
 use strict;
