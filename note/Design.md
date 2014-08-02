@@ -4,7 +4,7 @@ This is a design document for an upcoming version of IO::All.
 
 IO::All is a Perl module that attempts to make all Input/Output operations in
 Perl, as simple and normal as possible. IO::All has been in existence since
-2005. It is useful and somewhat extensible, but has a number of
+2004. It is useful and somewhat extensible, but has a number of
 inconsistencies, flaws and misgivings.
 
 This document will propose a better way to do it, and will also discuss how to

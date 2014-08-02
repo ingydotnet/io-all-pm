@@ -1,7 +1,7 @@
 =meta: 0.0.1
 
 name: IO-All
-version: 0.66
+version: 0.67
 abstract: IO::All to Larry Wall!
 homepage: https://metacpan.org/release/IO-All
 

@@ -7,19 +7,27 @@
 
 .PHONY: cpan test
 
+PERL ?= $(shell which perl)
+ZILD := $(PERL) -S zild
+
 ifneq (,$(shell which zild))
-    NAME := $(shell zild meta name)
-    VERSION := $(shell zild meta version)
-    RELEASE_BRANCH := $(shell zild meta branch)
+    NAMEPATH := $(shell $(ZILD) meta =cpan/libname)
+ifeq (,$(NAMEPATH))
+    NAMEPATH := $(shell $(ZILD) meta name)
+endif
+    NAME := $(shell $(ZILD) meta name)
+    VERSION := $(shell $(ZILD) meta version)
+    RELEASE_BRANCH := $(shell $(ZILD) meta branch)
 else
     NAME := No-Name
+    NAMEPATH := $(NAME)
     VERSION := 0
     RELEASE_BRANCH := master
 endif
 
 DISTDIR := $(NAME)-$(VERSION)
 DIST := $(DISTDIR).tar.gz
-NAMEPATH := $(subst -,/,$(NAME))
+NAMEPATH := $(subst -,/,$(NAMEPATH))
 SUCCESS := "$(DIST) Released!!!"
 
 default: help
@@ -29,7 +37,8 @@ help:
 	@echo 'Makefile targets:'
 	@echo ''
 	@echo '    make test      - Run the repo tests'
-	@echo '    make install   - Install the repo'
+	@echo '    make install   - Install the dist from this repo'
+	@echo '    make prereqs   - Install the CPAN prereqs'
 	@echo '    make update    - Update generated files'
 	@echo '    make release   - Release the dist to CPAN'
 	@echo ''
@@ -45,6 +54,7 @@ help:
 	@echo '    make upgrade   - Upgrade the build system (Makefile)'
 	@echo '    make readme    - Make the ReadMe.pod file'
 	@echo '    make travis    - Make a travis.yml file'
+	@echo '    make uninstall - Uninstall the dist from this repo'
 	@echo ''
 	@echo '    make clean     - Clean up build files'
 	@echo '    make help      - Show this help'
@@ -52,22 +62,36 @@ help:
 
 test:
 ifeq ($(wildcard pkg/no-test),)
-	prove -lv test
+	$(PERL) -S prove -lv test
 else
 	@echo "Testing not available. Use 'disttest' instead."
 endif
 
 install: distdir
+	@echo '***** Installing $(DISTDIR)'
 	(cd $(DISTDIR); perl Makefile.PL; make install)
 	make clean
 
-update: makefile
-	make readme contrib travis version
+prereqs:
+	cpanm `$(ZILD) meta requires`
 
-release: clean update check-release test disttest
+update: makefile
+	@echo '***** Updating/regenerating repo content'
+	make readme contrib travis version webhooks
+
+release:
+	make self-install
+	make clean
+	make update
+	make check-release
+	make date
+	make test
+	make disttest
+	@echo '***** Releasing $(DISTDIR)'
 	make dist
-	[ -n "$$(git status -s)" ] && git commit -am '$(VERSION)'
 	cpan-upload $(DIST)
+	make clean
+	[ -z "$$(git status -s)" ] || zild-git-commit
 	git push
 	git tag $(VERSION)
 	git push --tag
@@ -78,48 +102,60 @@ release: clean update check-release test disttest
 	@echo
 
 cpan:
+	@echo '***** Creating the `cpan/` directory'
 	zild-make-cpan
 
 cpanshell: cpan
+	@echo '***** Starting new shell in `cpan/` directory'
 	(cd cpan; $$SHELL)
 	make clean
 
 cpantest: cpan
 ifeq ($(wildcard pkg/no-test),)
-	(cd cpan; prove -lv t) && make clean
+	@echo '***** Running tests in `cpan/` directory'
+	(cd cpan; $(PERL) -S prove -lv t) && make clean
 else
 	@echo "Testing not available. Use 'disttest' instead."
 endif
 
 dist: clean cpan
+	@echo '***** Creating new dist: $(DIST)'
 	(cd cpan; dzil build)
 	mv cpan/$(DIST) .
 	rm -fr cpan
 
 distdir: clean cpan
+	@echo '***** Creating new dist directory: $(DISTDIR)'
 	(cd cpan; dzil build)
 	mv cpan/$(DIST) .
 	tar xzf $(DIST)
 	rm -fr cpan $(DIST)
 
 distshell: distdir
+	@echo '***** Starting new shell in `$(DISTDIR)` directory'
 	(cd $(DISTDIR); $$SHELL)
 	make clean
 
 disttest: cpan
+	@echo '***** Running tests in `$(DISTDIR)` directory'
 	(cd cpan; dzil test) && make clean
 
 upgrade:
-	cp `zild sharedir`/Makefile ./
+	@echo '***** Checking that Zilla-Dist Makefile is up to date'
+	cp `$(ZILD) sharedir`/Makefile ./
 
 readme:
 	swim --pod-cpan doc/$(NAMEPATH).swim > ReadMe.pod
 
 contrib:
-	zild-render-template Contributing
+	$(PERL) -S zild-render-template Contributing
 
 travis:
-	zild-render-template travis.yml .travis.yml
+	$(PERL) -S zild-render-template travis.yml .travis.yml
+
+uninstall: distdir
+	(cd $(DISTDIR); perl Makefile.PL; make uninstall)
+	make clean
 
 clean purge:
 	rm -fr cpan .build $(DIST) $(DISTDIR)
@@ -128,16 +164,38 @@ clean purge:
 # Non-pulic-facing targets:
 #------------------------------------------------------------------------------
 check-release:
+	@echo '***** Checking readiness to release $(DIST)'
 	RELEASE_BRANCH=$(RELEASE_BRANCH) zild-check-release
+	git stash
+	git pull --rebase origin $(RELEASE_BRANCH)
+	git stash pop
 
 # We don't want to update the Makefile in Zilla::Dist since it is the real
 # source, and would be reverting to whatever was installed.
 ifeq (Zilla-Dist,$(NAME))
 makefile:
 	@echo Skip 'make upgrade'
+
+self-install: install
+	[ -n "which plenv" ] && plenv rehash
 else
-makefile: upgrade
+makefile:
+	@cp Makefile /tmp/
+	make upgrade
+	@if [ -n "`diff Makefile /tmp/Makefile`" ]; then \
+	    echo "ATTENTION: Dist-Zilla Makefile updated. Please re-run the command."; \
+	    exit 1; \
+	fi
+	@rm /tmp/Makefile
+
+self-install:
 endif
 
+date:
+	$(ZILD) changes date "`date`"
+
 version:
-	zild-version-update
+	$(PERL) -S zild-version-update
+
+webhooks:
+	$(PERL) -S zild webhooks

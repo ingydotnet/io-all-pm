@@ -1,4 +1,9 @@
 ---
+version: 0.67
+date:    Sat Aug  2 11:58:01 PDT 2014
+changes:
+- Fix Copyright years.
+---
 version: 0.66
 date:    Wed Jul 16 23:39:38 PDT 2014
 changes:
@@ -29,14 +34,17 @@ changes:
 - Start converting doc to Kwim
 ---
 version: 0.61
+date:
 changes:
 - Fix GH#44 (Thanks Shlomi Fish!)
 ---
 version: 0.60
+date:
 changes:
 - Fix IO Layer situation (Thanks Mithaldu!)
 ---
 version: 0.59
+date:
 changes:
 - Fix possible infinite loop in t/accept.t (Thanks C. Wallace for complaining)
   (closes #42)
@@ -46,16 +54,19 @@ changes:
   (closes #37)
 ---
 version: 0.58
+date:
 changes:
 - Fix canonpath on MSWin32
 - Fix marking files as both binary and utf8 (Thanks Mithaldu!) (closes GH#36)
 ---
 version: 0.57
+date:
 changes:
 - Fix printing to a tie'd object, closes GH#26 (thanks Graham Knop for helping)
 - Fix tests if $^X ne 'perl', closes GH#35 (thanks Hugemeir for the report)
 ---
 version: 0.56
+date:
 changes:
 - Return realpath for canonpath when possible (closes GH#34)
 - Fix regression related to chaining dirs caused by making '' not become '/'
@@ -64,16 +75,19 @@ changes:
 - Some doc cleanup around the SYNOPSIS (Thanks Mithaldu)
 ---
 version: 0.55
+date:
 changes:
 - Change minimum perl version to 5.8.1, and thus remove dep for IO::String
 ---
 version: 0.54
+date:
 changes:
 - Remove mentions of unimplemented strict (Thanks Mithaldu, GH#15)
 - Allow testing on non SDBM DBM's (thanks Jerry D. Hedden)
 - Abandon RT in favor of GitHub Issues
 ---
 version: 0.53
+date:
 changes:
 - Make mkdir die if it fails (thanks Martyn Pearce for RT#61697)
 - Fix possible path test issues, esp in Win32 (Thanks Mithaldu)
@@ -87,6 +101,7 @@ changes:
   Jerry D. Hedden for RT#26230)
 ---
 version: 0.52
+date:
 changes:
 - Add a fix for io->file("foobar")->assert (Shlomi Fish)
 - Make io->file('') not break on Windows systems (Roy Ivy III)
@@ -182,8 +197,8 @@ changes:
 - Applied the patch from http://rt.cpan.org/Public/Bug/Display.html?id=20053 Made sure Carp is required and the sub Carp::carp is predeclared in IO/All.pm.
 ---
 version: 0.35
-date:    
-Tue May  9 08:25:37 PDT 2006 changes:
+date:    Tue May  9 08:25:37 PDT 2006
+changes:
 - Remove dependency on XXX.pm *groan*
 ---
 version: 0.34
@@ -250,7 +265,7 @@ changes:
 - File::Path support
 - lots of new methods
 ---
-version: 0.20
+version: 0.19
 date:    Mon May 24 17:02:24 PDT 2004
 changes:
 - DBM support
@@ -258,7 +273,7 @@ changes:
 - chomp support
 - Fixed forking server zombie issues
 - Replaced flags with methods (-tie -fork -lock, etc)
-- Added chainable options: assert, chomp, deep, rdonly, rdwr, sort
+- Added chainable options `assert, chomp, deep, rdonly, rdwr, sort`
 - Fixed problems with perl-5.6.1 and Solaris
 ---
 version: 0.18
