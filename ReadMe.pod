@@ -547,7 +547,7 @@ can be any of the following:
     - A directory name
     - A directory handle
     - A typeglob reference
-    - A piped shell command. eq '| ls -al'
+    - A piped shell command. eg '| ls -al'
     - A socket domain/port.  eg 'perl.com:5678'
     - '-' means STDIN or STDOUT (depending on usage)
     - '=' means STDERR
@@ -1556,7 +1556,7 @@ Returns an IO::All object representing the current directory.
 
 =item devnull
 
-Returns an IO::All object representing the I<dev>null file.
+Returns an IO::All object representing the C</dev/null> file.
 
 =item is_absolute
 

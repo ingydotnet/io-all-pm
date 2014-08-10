@@ -1,4 +1,9 @@
 ---
+version: 0.68
+date:    Sun Aug 10 08:56:08 PDT 2014
+changes:
+- PR/47. Doc fixes. @ginzel++
+---
 version: 0.67
 date:    Sat Aug  2 11:58:01 PDT 2014
 changes:
