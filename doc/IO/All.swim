@@ -538,7 +538,7 @@ support for specific modules.
     - A directory name
     - A directory handle
     - A typeglob reference
-    - A piped shell command. eq '| ls -al'
+    - A piped shell command. eg '| ls -al'
     - A socket domain/port.  eg 'perl.com:5678'
     - '-' means STDIN or STDOUT (depending on usage)
     - '=' means STDERR
@@ -1533,7 +1533,7 @@ use the methods just like File::Spec.
 
 - devnull
 
-  Returns an IO::All object representing the /dev/null file.
+  Returns an IO::All object representing the `/dev/null` file.
 
 - is_absolute
 
