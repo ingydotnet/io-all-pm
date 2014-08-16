@@ -9,6 +9,7 @@
 
 PERL ?= $(shell which perl)
 ZILD := $(PERL) -S zild
+LOG := $(PERL_ZILLA_DIST_RELEASE_LOG)
 
 ifneq (,$(shell which zild))
     NAMEPATH := $(shell $(ZILD) meta =cpan/libname)
@@ -38,6 +39,9 @@ help:
 	@echo 'Makefile targets:'
 	@echo ''
 	@echo '    make test      - Run the repo tests'
+	@echo '    make test-dev  - Run the developer only tests'
+	@echo '    make test-all  - Run all tests'
+	@echo ''
 	@echo '    make install   - Install the dist from this repo'
 	@echo '    make prereqs   - Install the CPAN prereqs'
 	@echo '    make update    - Update generated files'
@@ -68,6 +72,13 @@ else
 	@echo "Testing not available. Use 'disttest' instead."
 endif
 
+test-dev:
+ifneq ($(wildcard test/devel),)
+	$(PERL) -S prove -lv test/devel
+endif
+
+test-all: test test-dev
+
 install: distdir
 	@echo '***** Installing $(DISTDIR)'
 	(cd $(DISTDIR); perl Makefile.PL; make install)
@@ -81,16 +92,30 @@ update: makefile
 	make readme contrib travis version webhooks
 
 release:
+ifneq ($(LOG),)
+	@echo "$$(date) - Release $(DIST) STARTED" >> $(LOG)
+endif
 	make self-install
 	make clean
 	make update
 	make check-release
 	make date
-	make test
+	make test-all
 	make disttest
 	@echo '***** Releasing $(DISTDIR)'
 	make dist
+ifneq ($(PERL_ZILLA_DIST_RELEASE_TIME),)
+	@echo $$(( ( $$PERL_ZILLA_DIST_RELEASE_TIME - $$(date +%s) ) / 60 )) \
+	minutes, \
+	$$(( ( $$PERL_ZILLA_DIST_RELEASE_TIME - $$(date +%s) ) % 60 )) \
+	seconds, until RELEASE TIME!
+	@echo sleep $$(( $$PERL_ZILLA_DIST_RELEASE_TIME - $$(date +%s) ))
+	@sleep $$(( $$PERL_ZILLA_DIST_RELEASE_TIME - $$(date +%s) ))
+endif
 	cpan-upload $(DIST)
+ifneq ($(LOG),)
+	@echo "$$(date) - Release $(DIST) UPLOADED" >> $(LOG)
+endif
 	make clean
 	[ -z "$$(git status -s)" ] || zild-git-commit
 	git push
@@ -101,6 +126,9 @@ release:
 	@echo
 	@[ -n "$$(which cowsay)" ] && cowsay "$(SUCCESS)" || echo "$(SUCCESS)"
 	@echo
+ifneq ($(LOG),)
+	@echo "$$(date) - Release $(DIST) COMPLETED" >> $(LOG)
+endif
 
 cpan:
 	@echo '***** Creating the `cpan/` directory'
@@ -168,6 +196,7 @@ check-release:
 	@echo '***** Checking readiness to release $(DIST)'
 	RELEASE_BRANCH=$(RELEASE_BRANCH) zild-check-release
 	git stash
+	rm -fr .git/rebase-apply
 	git pull --rebase origin $(RELEASE_BRANCH)
 	git stash pop
 
