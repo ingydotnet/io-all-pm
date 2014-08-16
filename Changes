@@ -1,4 +1,9 @@
 ---
+version: 0.74
+date:    Sat Aug 16 16:03:33 PDT 2014
+changes:
+- Fix strict/warnings
+---
 version: 0.73
 date:    Sat Aug 16 15:35:55 PDT 2014
 changes:

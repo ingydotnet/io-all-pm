@@ -1,7 +1,6 @@
+use strict; use warnings;
 package IO::All::File;
 
-use strict;
-use warnings;
 use IO::All::Filesys -base;
 use IO::All -base;
 use IO::File;

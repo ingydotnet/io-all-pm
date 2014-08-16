@@ -1,7 +1,6 @@
+use strict; use warnings;
 package IO::All::Temp;
 
-use strict;
-use warnings;
 use IO::All::File -base;
 
 sub temp {

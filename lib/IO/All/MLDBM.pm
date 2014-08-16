@@ -1,7 +1,6 @@
+use strict; use warnings;
 package IO::All::MLDBM;
 
-use strict;
-use warnings;
 use IO::All::DBM -base;
 
 field _serializer => 'Data::Dumper';

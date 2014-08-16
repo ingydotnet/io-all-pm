@@ -1,7 +1,6 @@
+use strict; use warnings;
 package IO::All::Filesys;
 
-use strict;
-use warnings;
 use IO::All::Base -base;
 use Fcntl qw(:flock);
 

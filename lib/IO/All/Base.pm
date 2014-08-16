@@ -1,7 +1,6 @@
+use strict; use warnings;
 package IO::All::Base;
 
-use strict;
-use warnings;
 use Fcntl;
 
 sub import {

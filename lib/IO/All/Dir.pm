@@ -1,7 +1,6 @@
+use strict; use warnings;
 package IO::All::Dir;
 
-use strict;
-use warnings;
 use Scalar::Util 'blessed';
 use IO::All::Filesys -base;
 use IO::All -base;

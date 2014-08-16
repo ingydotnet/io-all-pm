@@ -1,7 +1,6 @@
+use strict; use warnings;
 package IO::All::String;
 
-use strict;
-use warnings;
 use IO::All -base;
 
 const type => 'string';
