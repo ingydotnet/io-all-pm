@@ -41,6 +41,8 @@ help:
 	@echo '    make test      - Run the repo tests'
 	@echo '    make test-dev  - Run the developer only tests'
 	@echo '    make test-all  - Run all tests'
+	@echo '    make test-cpan - Make cpan/ dir and run tests in it'
+	@echo '    make test-dist - Run the dist tests'
 	@echo ''
 	@echo '    make install   - Install the dist from this repo'
 	@echo '    make prereqs   - Install the CPAN prereqs'
@@ -49,12 +51,10 @@ help:
 	@echo ''
 	@echo '    make cpan      - Make cpan/ dir with dist.ini'
 	@echo '    make cpanshell - Open new shell into new cpan/'
-	@echo '    make cpantest  - Make cpan/ dir and run tests in it'
 	@echo ''
 	@echo '    make dist      - Make CPAN distribution tarball'
 	@echo '    make distdir   - Make CPAN distribution directory'
 	@echo '    make distshell - Open new shell into new distdir'
-	@echo '    make disttest  - Run the dist tests'
 	@echo ''
 	@echo '    make upgrade   - Upgrade the build system (Makefile)'
 	@echo '    make readme    - Make the ReadMe.pod file'
@@ -65,11 +65,16 @@ help:
 	@echo '    make help      - Show this help'
 	@echo ''
 
+#------------------------------------------------------------------------------
+# Test Targets:
+#------------------------------------------------------------------------------
 test:
 ifeq ($(wildcard pkg/no-test),)
+ifneq ($(wildcard test),)
 	$(PERL) -S prove -lv test
+endif
 else
-	@echo "Testing not available. Use 'disttest' instead."
+	@echo "Testing not available. Use 'test-dist' instead."
 endif
 
 test-dev:
@@ -79,6 +84,21 @@ endif
 
 test-all: test test-dev
 
+test-cpan: cpan
+ifeq ($(wildcard pkg/no-test),)
+	@echo '***** Running tests in `cpan/` directory'
+	(cd cpan; $(PERL) -S prove -lv t) && make clean
+else
+	@echo "Testing not available. Use 'test-dist' instead."
+endif
+
+test-dist: cpan
+	@echo '***** Running tests in `$(DISTDIR)` directory'
+	(cd cpan; dzil test) && make clean
+
+#------------------------------------------------------------------------------
+# Installation Targets:
+#------------------------------------------------------------------------------
 install: distdir
 	@echo '***** Installing $(DISTDIR)'
 	(cd $(DISTDIR); perl Makefile.PL; make install)
@@ -91,6 +111,9 @@ update: makefile
 	@echo '***** Updating/regenerating repo content'
 	make readme contrib travis version webhooks
 
+#------------------------------------------------------------------------------
+# Release and Build Targets:
+#------------------------------------------------------------------------------
 release:
 ifneq ($(LOG),)
 	@echo "$$(date) - Release $(DIST) STARTED" >> $(LOG)
@@ -101,7 +124,7 @@ endif
 	make check-release
 	make date
 	make test-all
-	make disttest
+	make test-dist
 	@echo '***** Releasing $(DISTDIR)'
 	make dist
 ifneq ($(PERL_ZILLA_DIST_RELEASE_TIME),)
@@ -139,14 +162,6 @@ cpanshell: cpan
 	(cd cpan; $$SHELL)
 	make clean
 
-cpantest: cpan
-ifeq ($(wildcard pkg/no-test),)
-	@echo '***** Running tests in `cpan/` directory'
-	(cd cpan; $(PERL) -S prove -lv t) && make clean
-else
-	@echo "Testing not available. Use 'disttest' instead."
-endif
-
 dist: clean cpan
 	@echo '***** Creating new dist: $(DIST)'
 	(cd cpan; dzil build)
@@ -164,10 +179,6 @@ distshell: distdir
 	@echo '***** Starting new shell in `$(DISTDIR)` directory'
 	(cd $(DISTDIR); $$SHELL)
 	make clean
-
-disttest: cpan
-	@echo '***** Running tests in `$(DISTDIR)` directory'
-	(cd cpan; dzil test) && make clean
 
 upgrade:
 	@echo '***** Checking that Zilla-Dist Makefile is up to date'

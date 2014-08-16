@@ -201,7 +201,7 @@ Normally just say:
 and IO::All will export a single function called C<io>, which constructs all
 IO objects.
 
-=head2 Note on `io`
+=head2 Note on C<io>
 
 The C<io> function is a I<magic constructor>. It is easy to use and will
 usually do the right thing, but can also blow up easily.
