@@ -8,8 +8,8 @@ use Test::More tests => 2;
 
 use IO::All;
 
-my $testdir = -e 'test' ? 'test' : 't';
-my $fn = File::Spec->catfile(File::Spec->curdir, $testdir, 'data', 'head_test.txt');
+my $t = -e 't' ? 't' : 'test';
+my $fn = File::Spec->catfile(File::Spec->curdir, $t, 'data', 'head_test.txt');
 
 {
     # See: https://github.com/ingydotnet/io-all-pm/issues/44
