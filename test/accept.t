@@ -1,10 +1,8 @@
-use strict;
-use warnings;
-use File::Basename;
-use lib dirname(__FILE__);
+use strict; use warnings;
+use lib -e 't' ? 't' : 'test';
 use Test::More tests => 20;
-use IO::All;
 use IO_All_Test;
+use IO::All;
 use IO::Socket::INET;
 
 # This test tests for the ability of a non-forking socket to handle more

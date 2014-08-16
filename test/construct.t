@@ -1,40 +1,37 @@
-use strict;
-use warnings;
-use File::Basename;
-use lib dirname(__FILE__);
+use strict; use warnings;
+my $t; use lib ($t = -e 't' ? 't' : 'test');
 use Test::More tests => 18;
 use IO::All;
 use IO_All_Test;
 
-my $testdir = dirname(__FILE__);
-my $io1 = IO::All->new("$testdir/mystuff");
+my $io1 = IO::All->new("$t/mystuff");
 is(ref($io1), 'IO::All::File');
-test_file_contents($$io1, "$testdir/mystuff");
+test_file_contents($$io1, "$t/mystuff");
 
-my $io2 = io("$testdir/mystuff");
+my $io2 = io("$t/mystuff");
 is(ref($io2), 'IO::All::File');
-test_file_contents($$io2, "$testdir/mystuff");
+test_file_contents($$io2, "$t/mystuff");
 
-my $io3 = io->file("$testdir/mystuff");
+my $io3 = io->file("$t/mystuff");
 is(ref($io3), 'IO::All::File');
-test_file_contents($$io3, "$testdir/mystuff");
+test_file_contents($$io3, "$t/mystuff");
 
-my $io4 = $io3->file("$testdir/construct.t");
+my $io4 = $io3->file("$t/construct.t");
 is(ref($io4), 'IO::All::File');
-test_file_contents($$io4, "$testdir/construct.t");
+test_file_contents($$io4, "$t/construct.t");
 
-my $io5 = io->dir("$testdir/mydir");
+my $io5 = io->dir("$t/mydir");
 is(ref($io5), 'IO::All::Dir');
 is(join('+', map $_->filename, grep {! /CVS|\.svn/} $io5->all), 'dir1+dir2+file1+file2+file3');
 
-my $io6 = io->rdonly->new->file("$testdir/construct.t");
+my $io6 = io->rdonly->new->file("$t/construct.t");
 ok($io6->_rdonly);
 
 SKIP: {
     eval {require Tie::File};
     skip "requires Tie::File", 1	if $@;
 
-    test_file_contents(join('', map {"$_\n"} @$io6), "$testdir/construct.t");
+    test_file_contents(join('', map {"$_\n"} @$io6), "$t/construct.t");
 }
 
 my $io7 = io->socket('foo.com:80')->get_socket_domain_port;

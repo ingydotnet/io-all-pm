@@ -1,14 +1,11 @@
-use strict;
-use warnings;
-use File::Basename;
-use lib dirname(__FILE__);
+use strict; use warnings;
+my $t; use lib ($t = -e 't' ? 't' : 'test');
 use Test::More tests => 1;
 use IO::All;
 use IO_All_Test;
 
-my $testdir = dirname(__FILE__);
 {
-my $string < (io("$testdir/mystuff") > io(o_dir() . '/seek'));
+my $string < (io("$t/mystuff") > io(o_dir() . '/seek'));
 my $io = io(o_dir() . '/seek');
 $io->seek(index($string, 'quite'), 0);
 is($io->getline, "quite enough.\n");

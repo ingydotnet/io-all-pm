@@ -1,13 +1,10 @@
-use strict;
-use warnings;
-use File::Basename;
-use lib dirname(__FILE__);
+use strict; use warnings;
+my $t; use lib ($t = -e 't' ? 't' : 'test');
 use Test::More 'no_plan';
 use IO::All;
 use IO_All_Test;
 
-my $testdir = dirname(__FILE__);
-my $io = io("$testdir/chomp.t")->chomp;
+my $io = io("$t/chomp.t")->chomp;
 for ($io->slurp) {
     ok(not /\n/);
 }

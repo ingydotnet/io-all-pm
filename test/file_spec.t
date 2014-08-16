@@ -1,21 +1,18 @@
-use strict;
-use warnings;
-use File::Basename;
-use lib dirname(__FILE__);
+use strict; use warnings;
+my $t; use lib ($t = -e 't' ? 't' : 'test');
 use Test::More tests => 33;
 use IO::All;
 use IO_All_Test;
 
-my $testdir = -e 'test' ? 'test' : 't';
-my $path = f("$testdir/file_spec.t");
-like(io("././$testdir/file_spec.t")->canonpath, qr/\Q$path\E$/, 'give full canonical path for real files' );
-is(io("././$testdir/file_spec.t")->ext, 't');
-is(io("././$testdir/file_spec.t")->extension, 't');
-$path = f("$testdir/bogus");
-like(io("././$testdir/bogus")->canonpath, qr/\Q$path\E$/, 'give full canonical path for files that could exist');
-is(join(';', grep {! /CVS|\.svn/} io->catdir($testdir, 'mydir')->all), f "$testdir/mydir/dir1;$testdir/mydir/dir2;$testdir/mydir/file1;$testdir/mydir/file2;$testdir/mydir/file3");
-test_file_contents(io->catfile($testdir, 'mystuff')->scalar, "$testdir/mystuff");
-test_file_contents(io->join($testdir, 'mystuff')->scalar, "$testdir/mystuff");
+my $path = f("$t/file_spec.t");
+like(io("././$t/file_spec.t")->canonpath, qr/\Q$path\E$/, 'give full canonical path for real files' );
+is(io("././$t/file_spec.t")->ext, 't');
+is(io("././$t/file_spec.t")->extension, 't');
+$path = f("$t/bogus");
+like(io("././$t/bogus")->canonpath, qr/\Q$path\E$/, 'give full canonical path for files that could exist');
+is(join(';', grep {! /CVS|\.svn/} io->catdir($t, 'mydir')->all), f "$t/mydir/dir1;$t/mydir/dir2;$t/mydir/file1;$t/mydir/file2;$t/mydir/file3");
+test_file_contents(io->catfile($t, 'mystuff')->scalar, "$t/mystuff");
+test_file_contents(io->join($t, 'mystuff')->scalar, "$t/mystuff");
 is(ref(io->devnull), 'IO::All::File');
 ok(io->devnull->print('IO::All'));
 # Not supporting class calls anymore. Objects only.
@@ -42,7 +39,7 @@ is($f, 'bar');
 my @dirs = io('foo/bar/baz')->splitdir;
 is(scalar(@dirs), 3);
 is(join('+', @dirs), 'foo+bar+baz');
-test_file_contents(io->catpath('', $testdir, 'mystuff')->scalar, "$testdir/mystuff");
+test_file_contents(io->catpath('', $t, 'mystuff')->scalar, "$t/mystuff");
 is(io('/foo/bar/baz')->abs2rel('/foo'), f 'bar/baz');
 is(io('foo/bar/baz')->rel2abs('/moo'), f '/moo/foo/bar/baz');
 

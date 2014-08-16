@@ -1,14 +1,11 @@
-use strict;
-use warnings;
-use File::Basename;
-use lib dirname(__FILE__);
+use strict; use warnings;
+my $t; use lib ($t = -e 't' ? 't' : 'test');
 use Test::More tests => 10;
 use IO::All;
 use IO_All_Test;
 
-my $testdir = dirname(__FILE__);
 # Print name and first line of all files in a directory
-my $dir = io("$testdir/mydir");
+my $dir = io("$t/mydir");
 ok($dir->is_dir);
 my @results;
 while (my $io = $dir->next) {
@@ -26,7 +23,7 @@ for my $line (sort @results) {
 # Print name of all files recursively
 for (
     sort {$a->name cmp $b->name}
-    grep {! /CVS|\.svn/} io("$testdir/mydir")->all_files(0)
+    grep {! /CVS|\.svn/} io("$t/mydir")->all_files(0)
 ) {
     my $dataline = <DATA>;
     $dataline =~ s/^t\//test\// if -e 'test';

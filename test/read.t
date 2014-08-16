@@ -1,13 +1,10 @@
-use strict;
-use warnings;
-use File::Basename;
-use lib dirname(__FILE__);
+use strict; use warnings;
+my $t; use lib ($t = -e 't' ? 't' : 'test');
 use Test::More tests => 8;
 use IO::All;
 use IO_All_Test;
 
-my $testdir = dirname(__FILE__);
-my $outfile = "$testdir/out.pm";
+my $outfile = "$t/out.pm";
 ok(not -f $outfile);
 my $input = io('lib/IO/All.pm')->open;
 ok(ref $input);

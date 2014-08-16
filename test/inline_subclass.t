@@ -1,7 +1,5 @@
-use strict;
-use warnings;
-use File::Basename;
-use lib dirname(__FILE__);
+use strict; use warnings;
+use lib -e 't' ? 't' : 'test';
 
 package IO::Dumper;
 use IO::All -base;

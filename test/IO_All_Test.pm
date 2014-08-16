@@ -61,14 +61,13 @@ use vars qw($output_dir);
 BEGIN {
     use FindBin qw($Script);
     use File::Temp qw(tempdir);
-    use File::Basename;
-    my $testdir = dirname(__FILE__);
+    my $t = -e 't' ? 't' : 'test';
 
     if ($Script =~ m{([\w\-]+)\.t\z}) {
-        $output_dir = "$testdir/output__$1";
+        $output_dir = "$t/output__$1";
     }
     else {
-        $output_dir = tempdir("$testdir/output__XXXXXXXX");
+        $output_dir = tempdir("$t/output__XXXXXXXX");
     }
 }
 

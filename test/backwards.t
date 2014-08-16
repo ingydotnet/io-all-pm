@@ -1,7 +1,5 @@
-use strict;
-use warnings;
-use File::Basename;
-use lib dirname(__FILE__);
+use strict; use warnings;
+my $t; use lib ($t = -e 't' ? 't' : 'test');
 use Test::More;
 use IO::All;
 use IO_All_Test;
@@ -11,18 +9,17 @@ plan((eval {require File::ReadBackwards; 1})
     : (skip_all => "requires File::ReadBackwards")
 );
 
-my $testdir = dirname(__FILE__);
 my @reversed;
-my $io = io("$testdir/mystuff");
+my $io = io("$t/mystuff");
 $io->backwards;
 while (my $line = $io->getline) {
     push @reversed, $line;
 }
 
-test_file_contents(join('', reverse @reversed), "$testdir/mystuff");
+test_file_contents(join('', reverse @reversed), "$t/mystuff");
 
-@reversed = io("$testdir/mystuff")->backwards->getlines;
+@reversed = io("$t/mystuff")->backwards->getlines;
 
-test_file_contents(join('', reverse @reversed), "$testdir/mystuff");
+test_file_contents(join('', reverse @reversed), "$t/mystuff");
 
 del_output_dir();
