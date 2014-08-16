@@ -60,7 +60,7 @@ require something like this:
         $io->print('IO::All');        # calls IO::All::PrintingPress::print
         # is ref($io), 'IO::All::PrintingPress';
     }
-        
+
 So you need to load any extensions that you want to use, within the scope that
 you want them in. Exceptions are IO::All::File and IO::All::Dir, which are
 automatically loaded, unless you say:
