@@ -1,19 +1,25 @@
-=meta: 0.0.1
+=meta: 0.0.2
 
 name: IO-All
-version: 0.71
+version: 0.72
 abstract: IO::All to Larry Wall!
 homepage: https://metacpan.org/release/IO-All
-
+language: perl
 license: perl
-copyright: 2004-2014. Ingy döt Net
+copyright: 2004-2014
+
 author:
   name: Ingy döt Net
   email: ingy@cpan.org
+  homepage: http://ingy.net
   github: ingydotnet
   twitter: ingydotnet
   freenode: ingy
-  homepage: http://ingy.net
+
+devel:
+  git: https://github.com/ingydotnet/io-all-pm
+  bug: https://github.com/ingydotnet/io-all-pm/issues
+  irc: irc.perl.org#io-all
 
 requires:
   perl: 5.8.1
@@ -23,10 +29,3 @@ requires:
 recommends:
   File::ReadBackwards: 0
   File::MimeInfo: 0
-
-devel:
-  git: https://github.com/ingydotnet/io-all-pm
-  bug: https://github.com/ingydotnet/io-all-pm/issues
-  irc: irc.perl.org#io-all
-
-=travis: perl
