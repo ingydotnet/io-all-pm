@@ -29,7 +29,7 @@ ok($io6->_rdonly);
 
 SKIP: {
     eval {require Tie::File};
-    skip "requires Tie::File", 1	if $@;
+    skip "requires Tie::File", 1 if $@;
 
     test_file_contents(join('', map {"$_\n"} @$io6), "$t/construct.t");
 }

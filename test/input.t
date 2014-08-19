@@ -25,7 +25,7 @@ test_file_contents($contents, "$t/input.t");
 
 SKIP: {
     eval {require Tie::File};
-    skip "requires Tie::File", 2	if $@;
+    skip "requires Tie::File", 2 if $@;
 
     $io->rdonly;
     $contents = join '', map "$_\n", @$io;
