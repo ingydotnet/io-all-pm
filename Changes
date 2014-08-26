@@ -1,4 +1,9 @@
 ---
+version: 0.77
+date:    Tue Aug 26 12:37:29 PDT 2014
+changes:
+- Add new overloads from PR/49 @ginzel++
+---
 version: 0.76
 date:    Tue Aug 19 16:21:05 PDT 2014
 changes:

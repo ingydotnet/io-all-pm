@@ -54,6 +54,9 @@ you write code very quickly, though they should be used judiciously:
     io('copy.txt') < io('file.txt');            $ Copy a file
     io('file.txt') > io('copy.txt');            # Invokes File::Copy
     io('more.txt') >> io('all.txt');            # Add on to a file
+    io('dir/') < io('file.txt');                $ Copy a file to a directory
+    io('file.txt') > io('dir/');                # Invokes File::Copy
+    io('more.txt') >> io('dir/');               # Add on to a file in the dir
 
     # UTF-8 Support
     $contents = io('file.txt')->utf8->all;      # Turn on utf8
