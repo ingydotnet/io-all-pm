@@ -1,4 +1,4 @@
-# Introduction
+= Introduction
 
 This is a design document for an upcoming version of IO::All.
 
@@ -10,7 +10,7 @@ inconsistencies, flaws and misgivings.
 This document will propose a better way to do it, and will also discuss how to
 move the current API forward to the new API.
 
-# Basic Principles of how IO::All should work
+= Basic Principles of how IO::All should work
 
 * IO::All provides a single entry point function called `io`.
 * `use IO::All` should make this function available in a lexical scope.
@@ -45,27 +45,27 @@ move the current API forward to the new API.
   is loved by some and hated by others. It should probably be off by default
   for 2.0.
 
-# IO::All Extensions
+= IO::All Extensions
 
 Currently the extension API is fairly muddy. I would like the new API to
 require something like this:
 
-    {
-        use strict;
-        use IO::All -overload;
-        use IO::All::PrintingPress;
+  {
+      use strict;
+      use IO::All -overload;
+      use IO::All::PrintingPress;
 
-        my $io = io('path:to:printing:press#1');
-        # is ref($io), 'IO::All';
-        $io->print('IO::All');        # calls IO::All::PrintingPress::print
-        # is ref($io), 'IO::All::PrintingPress';
-    }
+      my $io = io('path:to:printing:press#1');
+      # is ref($io), 'IO::All';
+      $io->print('IO::All');        # calls IO::All::PrintingPress::print
+      # is ref($io), 'IO::All::PrintingPress';
+  }
 
 So you need to load any extensions that you want to use, within the scope that
 you want them in. Exceptions are IO::All::File and IO::All::Dir, which are
 automatically loaded, unless you say:
 
-    use IO::All -none;
+  use IO::All -none;
 
 Extensions can register 2 things:
 
@@ -76,7 +76,7 @@ Extensions can register 2 things:
 These things are register according to the scope of the IO::All, so that the
 `io` function will do the right things.
 
-# Transition to the new API
+= Transition to the new API
 
 It needs to be determined if the changes that need to be made are too
 destructive to coexist with the current IO::All. That determination obviously

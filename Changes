@@ -1,4 +1,9 @@
 ---
+version: 0.78
+date:    Thu Aug 28 11:56:36 PDT 2014
+changes:
+- Release to steal indexing back from Alt::IO::All::new.
+---
 version: 0.77
 date:    Tue Aug 26 12:37:29 PDT 2014
 changes:
