@@ -1,4 +1,9 @@
 ---
+version: 0.79
+date:    Tue Sep  2 14:34:27 MDT 2014
+changes:
+- Doc enhancement. PR/51. @nheinric++
+---
 version: 0.78
 date:    Thu Aug 28 11:56:36 PDT 2014
 changes:
