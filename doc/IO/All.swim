@@ -795,6 +795,16 @@ This is so that the option methods can be chained together. For example:
   `separator` method has been called, chomp will remove that value from the
   end of each record.
 
+  Note that `chomp` may cause the following idiom to halt prematurely
+  (e.g., if `separator` is `\n` (the default) and `chomp` is in effect,
+  then this command will stop reading at the first blank line):
+
+  `while ( my $line = $io->getline ) {...}`
+
+  Try the following, instead:
+
+  `while ( defined(my $line = $io->getline) ) {...}`
+
 - confess
 
   Errors should be reported with the very detailed Carp::confess function.
