@@ -806,6 +806,16 @@ Indicates that all operations that read lines should chomp the lines. If the
 C<separator> method has been called, chomp will remove that value from the end
 of each record.
 
+Note that C<chomp> may cause the following idiom to halt prematurely (e.g., if
+C<separator> is C<\n> (the default) and C<chomp> is in effect, then this
+command will stop reading at the first blank line):
+
+    while ( my $line = $io->getline ) {...}
+
+Try the following instead:
+
+    while ( defined(my $line = $io->getline) ) {...}
+
 =item confess
 
 Errors should be reported with the very detailed Carp::confess function.
