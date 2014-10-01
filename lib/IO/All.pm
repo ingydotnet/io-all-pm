@@ -716,6 +716,13 @@ sub slurp {
     }
 }
 
+sub rows {
+    my $self = shift;
+    my @lines = map {chomp; $_} $self->slurp;
+	return scalar @lines;
+}
+
+
 sub utf8 {
     my $self = shift;
     if ($] < 5.008) {
