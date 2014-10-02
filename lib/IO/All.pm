@@ -718,7 +718,7 @@ sub slurp {
 
 sub lines_count {
     my $self = shift;
-     return scalar map{$_}$_->slurp;
+     return scalar map{$_}$self->slurp;
 }
 
 
