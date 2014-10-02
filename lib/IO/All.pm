@@ -716,9 +716,9 @@ sub slurp {
     }
 }
 
-sub rows {
+sub lines_count {
     my $self = shift;
-	return scalar map {chomp; $_} $self->slurp;
+     return scalar map{$_}$_->slurp;
 }
 
 
