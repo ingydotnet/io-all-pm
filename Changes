@@ -1,4 +1,9 @@
 ---
+version: 0.80
+date:    Tue Nov  4 11:13:18 PST 2014
+changes:
+- Make the Role Call list link to their doc sections.
+---
 version: 0.79
 date:    Tue Sep  2 14:34:27 MDT 2014
 changes:
