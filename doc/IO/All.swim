@@ -153,26 +153,25 @@ you write code very quickly, though they should be used judiciously:
 = Description
 
 IO::All combines all of the best Perl IO modules into a single nifty object
-oriented interface to greatly simplify your everyday Perl IO idioms. It
-exports a single function called `io`, which returns a new IO::All object. And
-that object can do it all!
+oriented interface to greatly simplify your everyday Perl IO idioms. It exports
+a single function called `io`, which returns a new IO::All object. And that
+object can do it all!
 
-The IO::All object is a proxy for IO::File, IO::Dir, IO::Socket,
-Tie::File, File::Spec, File::Path, File::MimeInfo and
-File::ReadBackwards; as well as all the DBM and MLDBM modules. You
-can use most of the methods found in these classes and in IO::Handle
-(which they inherit from). IO::All adds dozens of other helpful idiomatic
-methods including file stat and manipulation functions.
+The IO::All object is a proxy for IO::File, IO::Dir, IO::Socket, Tie::File,
+File::Spec, File::Path, File::MimeInfo and File::ReadBackwards; as well as all
+the DBM and MLDBM modules. You can use most of the methods found in these
+classes and in IO::Handle (which they inherit from). IO::All adds dozens of
+other helpful idiomatic methods including file stat and manipulation functions.
 
-IO::All is pluggable, and modules like [IO::All::LWP] and [IO::All::Mailto]
-add even more functionality. Optionally, every IO::All object can be
-tied to itself. This means that you can use most perl IO builtins on it:
-readline, <>, getc, print, printf, syswrite, sysread, close.
+IO::All is pluggable, and modules like [IO::All::LWP] and [IO::All::Mailto] add
+even more functionality. Optionally, every IO::All object can be tied to
+itself. This means that you can use most perl IO builtins on it: readline, <>,
+getc, print, printf, syswrite, sysread, close.
 
-The distinguishing magic of IO::All is that it will automatically open
-(and close) files, directories, sockets and other IO things for you. You
-never need to specify the mode ('<', '>>', etc), since it is determined
-by the usage context. That means you can replace this:
+The distinguishing magic of IO::All is that it will automatically open (and
+close) files, directories, sockets and other IO things for you. You never need
+to specify the mode ('<', '>>', etc), since it is determined by the usage
+context. That means you can replace this:
 
   open STUFF, '<', './mystuff'
     or die "Can't open './mystuff' for input:\n$!";
@@ -197,13 +196,13 @@ objects.
 
 == Note on `io`
 
-The `io` function is a /magic constructor/.  It is easy to use
-and will usually do the right thing, but can also blow up easily.
+The `io` function is a /magic constructor/. It is easy to use and will usually
+do the right thing, but can also blow up easily.
 
-It takes a single optional
-argument and determines what type of IO::All subclass object to return. With no
-arguments it returns an `IO::All` object, which has no I/O methods, but has
-methods to construct subclass objects like `IO::All::File`.
+It takes a single optional argument and determines what type of IO::All
+subclass object to return. With no arguments it returns an `IO::All` object,
+which has no I/O methods, but has methods to construct subclass objects like
+`IO::All::File`.
 
 In other words, these 2 statements are usually the same:
 
@@ -215,8 +214,8 @@ impatience, and use the second form when your job is on the line.
 
 = Method role Call
 
-Here is an alphabetical list of all the public methods that you can call
-on an IO::All object.
+Here is an alphabetical list of all the public methods that you can call on an
+IO::All object.
 
 [/abs2rel], [/absolute], [/accept], [/All], [/all], [/All_Dirs], [/all_dirs],
 [/All_Files], [/all_files], [/All_Links], [/all_links], [/append], [/appendf],
@@ -248,7 +247,7 @@ Each method is documented further below.
 
 = Operator Overloading
 
-IO::All objects overload a small set of Perl operators to great effect.  The
+IO::All objects overload a small set of Perl operators to great effect. The
 overloads are limited to <, <<, >, >>, dereferencing operations, and
 stringification.
 
@@ -268,8 +267,8 @@ is the same as:
   perl -MIO::All -le 'print $_->name for io(".")->all'
 
 Stringification is important because it allows IO::All operations to return
-objects when they might otherwise return file names. Then the recipient can
-use the result either as an object or a string.
+objects when they might otherwise return file names. Then the recipient can use
+the result either as an object or a string.
 
 '>' and '<' move data between objects in the direction pointed to by the
 operator.
@@ -423,18 +422,18 @@ dynamic pages:
 
   perl -MIO::All -e 'io(":8080")->fork->accept->(sub { $_[0] < io(-x $1 ? "./$1 |" : $1) if /^GET \/(.*) / })'
 
-There is are a lot of subtle things going on here. First we accept a socket
-and fork the server. Then we overload the new socket as a code ref. This code
-ref takes one argument, another code ref, which is used as a callback.
+There is are a lot of subtle things going on here. First we accept a socket and
+fork the server. Then we overload the new socket as a code ref. This code ref
+takes one argument, another code ref, which is used as a callback.
 
 The callback is called once for every line read on the socket. The line is put
 into `$_` and the socket itself is passed in to the callback.
 
 Our callback is scanning the line in `$_` for an HTTP GET request. If one is
 found it parses the file name into `$1`. Then we use `$1` to create an new
-IO::All file object... with a twist. If the file is executable (`-x`), then
-we create a piped command as our IO::All object. This somewhat approximates
-CGI support.
+IO::All file object... with a twist. If the file is executable (`-x`), then we
+create a piped command as our IO::All object. This somewhat approximates CGI
+support.
 
 Whatever the resulting object is, we direct the contents back at our socket
 which is in `$_[0]`. Pretty simple, eh?
@@ -463,14 +462,13 @@ the base class, like this:
   package NewModule;
   use IO::All -base;
 
-You need to do it this way so that IO::All will export the `io` function.
-Here is a simple recipe for subclassing:
+You need to do it this way so that IO::All will export the `io` function. Here
+is a simple recipe for subclassing:
 
 IO::Dumper inherits everything from IO::All and adds an extra method called
 `dump`, which will dump a data structure to the file we specify in the `io`
-function. Since it needs Data::Dumper to do the dumping, we override the
-`open` method to `require Data::Dumper` and then pass control to the real
-`open`.
+function. Since it needs Data::Dumper to do the dumping, we override the `open`
+method to `require Data::Dumper` and then pass control to the real `open`.
 
 First the code using the module:
 
@@ -494,9 +492,8 @@ And next the IO::Dumper module itself:
 == Inline Subclassing
 
 This recipe does the same thing as the previous one, but without needing to
-write a separate module. The only real difference is the first line.  Since
-you don't "use" IO::Dumper, you need to still call its `import` method
-manually.
+write a separate module. The only real difference is the first line. Since you
+don't "use" IO::Dumper, you need to still call its `import` method manually.
 
   IO::Dumper->import;
   io('./mydump')->dump($hash);
@@ -522,7 +519,7 @@ support for specific modules.
 - new
 
   There are three ways to create a new IO::All object. The first is with the
-  special function `io` which really just calls `IO::All->new`.  The second is
+  special function `io` which really just calls `IO::All->new`. The second is
   by calling `new` as a class method. The third is calling `new` as an object
   instance method. In this final case, the new objects attributes are copied
   from the instance object.
@@ -755,8 +752,8 @@ This is so that the option methods can be chained together. For example:
 - autoclose
 
   By default, IO::All will close an object opened for input when EOF is
-  reached. By closing the handle early, one can immediately do other
-  operations on the object without first having to close it.
+  reached. By closing the handle early, one can immediately do other operations
+  on the object without first having to close it.
 
   This option is on by default, so if you don't want this behaviour, say so
   like this:
@@ -784,8 +781,8 @@ This is so that the option methods can be chained together. For example:
 
 - chdir
 
-  chdir() to the pathname of a directory object. When object goes out of
-  scope, chdir back to starting directory.
+  chdir() to the pathname of a directory object. When object goes out of scope,
+  chdir back to starting directory.
 
 - chomp
 
@@ -814,8 +811,8 @@ This is so that the option methods can be chained together. For example:
 
 - fork
 
-  Indicates that the process should automatically be forked inside the
-  `accept` socket method.
+  Indicates that the process should automatically be forked inside the `accept`
+  socket method.
 
 - lock
 
@@ -874,7 +871,7 @@ object reference will be returned for potential method chaining.
 
 - block_size
 
-  The default length to be used for `read` and `sysread` calls.  Defaults to
+  The default length to be used for `read` and `sysread` calls. Defaults to
   1024.
 
 - buffer
@@ -918,7 +915,7 @@ object reference will be returned for potential method chaining.
 - filter
 
   Use this to set a subroutine reference that will be used to grep which
-  objects get returned on a call to one of the `all` methods.  For example:
+  objects get returned on a call to one of the `all` methods. For example:
 
     my @odd = io->curdir->filter(sub {$_->size % 2})->All_Files;
 
@@ -1092,7 +1089,7 @@ sections below.
 
 - ext
 
-  Returns the extension of the file.  Can also be spelled as `extension`
+  Returns the extension of the file. Can also be spelled as `extension`
 
 - exists
 
@@ -1215,7 +1212,7 @@ sections below.
 
 - is_writable
 
-  Returns true if file or directory is writable.  Can also be spelled as
+  Returns true if file or directory is writable. Can also be spelled as
   `is_writeable`.
 
 - length
@@ -1252,7 +1249,7 @@ sections below.
 
 - os
 
-  Change the object's os representation.  Valid options are: `win32`, `unix`,
+  Change the object's os representation. Valid options are: `win32`, `unix`,
   `vms`, `mac`, `os2`.
 
 - pathname
@@ -1287,11 +1284,11 @@ sections below.
   the data that is read. The function returns the length actually read (which
   is zero at EOF).
 
-  If you don't pass any arguments for a file, IO::All will use its own
-  internal buffer, a default length, and the offset will always point at the
-  end of the buffer. The buffer can be accessed with the `buffer` method. The
-  length can be set with the `block_size` method. The default length is 1024
-  bytes. The `clear` method can be called to clear the buffer.
+  If you don't pass any arguments for a file, IO::All will use its own internal
+  buffer, a default length, and the offset will always point at the end of the
+  buffer. The buffer can be accessed with the `buffer` method. The length can
+  be set with the `block_size` method. The default length is 1024 bytes. The
+  `clear` method can be called to clear the buffer.
 
   For a directory, this will proxy IO::Dir::read.
 
@@ -1310,8 +1307,8 @@ sections below.
 - readlink
 
   Calls Perl's readlink function on the link represented by the object.
-  Instead of returning the file path, it returns a new IO::All object using
-  the file path.
+  Instead of returning the file path, it returns a new IO::All object using the
+  file path.
 
 - recv
 
@@ -1383,7 +1380,7 @@ sections below.
 
 - throw
 
-  This is an internal method that gets called whenever there is an error.  It
+  This is an internal method that gets called whenever there is an error. It
   could be useful to override it in a subclass, to provide more control in
   error handling.
 
@@ -1491,25 +1488,25 @@ handle represented by the IO::All object.
 == File::Spec Methods
 
 These methods are all adaptations from File::Spec. Each method actually does
-call the matching File::Spec method, but the arguments and return values
-differ slightly. Instead of being file and directory *names*, they are IO::All
+call the matching File::Spec method, but the arguments and return values differ
+slightly. Instead of being file and directory *names*, they are IO::All
 *objects*. Since IO::All objects stringify to their names, you can generally
 use the methods just like File::Spec.
 
 - abs2rel
 
-  Returns the relative path for the absolute path in the IO::All object.  Can
+  Returns the relative path for the absolute path in the IO::All object. Can
   take an optional argument indicating the base path.
 
 - canonpath
 
-  Returns the canonical path for the IO::All object.  The canonical path is
+  Returns the canonical path for the IO::All object. The canonical path is
   the fully resolved path if the file exists, so any symlinks will be
   resolved.
 
 - case_tolerant
 
-  Returns 0 or 1 indicating whether the file system is case tolerant.  Since
+  Returns 0 or 1 indicating whether the file system is case tolerant. Since
   an active IO::All object is not needed for this function, you can code it
   like:
 
@@ -1658,8 +1655,8 @@ ideas and suggestions to ingy@cpan.org.
 
 == Known Bugs and Deficiencies
 
-Not all possible combinations of objects and methods have been tested.  There
-are many many combinations. All of the examples have been tested.  If you find
+Not all possible combinations of objects and methods have been tested. There
+are many many combinations. All of the examples have been tested. If you find
 a bug with a particular combination of calls, let me know.
 
 If you call a method that does not make sense for a particular object, the
