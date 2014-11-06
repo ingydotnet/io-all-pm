@@ -590,7 +590,7 @@ support for specific modules.
 
     io->pipe($pipe_command);
 
-  Make the object be of type /pipe/. The following two statements are
+  Make the object be of type /pipe/. The following three statements are
   equivalent:
 
     my $io = io('ls -l |');
