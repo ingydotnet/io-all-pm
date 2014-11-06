@@ -353,8 +353,7 @@ a standalone program that demonstrates locking for both write and read:
 
 There are a lot of subtle things going on here. An exclusive lock is issued
 for C<$io1> on the first C<println>. That's because the file isn't actually
-
-      opened until the first IO operation.
+opened until the first IO operation.
 
 When the child process tries to read the file using C<$io2>, there is a shared
 lock put on it. Since C<$io1> has the exclusive lock, the slurp blocks.
