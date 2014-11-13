@@ -1,7 +1,7 @@
 =meta: 0.0.2
 
 name: IO-All
-version: 0.81
+version: 0.82
 abstract: IO::All to Larry Wall!
 homepage: https://metacpan.org/release/IO-All
 language: perl

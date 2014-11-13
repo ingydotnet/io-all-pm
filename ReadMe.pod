@@ -603,7 +603,7 @@ Make the object be of type I<link>.
 
     io->pipe($pipe_command);
 
-Make the object be of type I<pipe>. The following two statements are
+Make the object be of type I<pipe>. The following three statements are
 equivalent:
 
     my $io = io('ls -l |');
