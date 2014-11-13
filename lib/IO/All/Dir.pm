@@ -2,6 +2,7 @@ use strict; use warnings;
 package IO::All::Dir;
 
 use Scalar::Util 'blessed';
+use File::Glob 'bsd_glob';
 use IO::All::Filesys -base;
 use IO::All -base;
 use IO::Dir;
@@ -208,7 +209,7 @@ sub glob {
       my $ret = $self->constructor->($_);
       $ret->absolute if $self->is_absolute;
       $ret
-   } glob $self->_spec_class->catdir( $self->pathname, @rest );
+   } bsd_glob $self->_spec_class->catdir( $self->pathname, @rest );
 }
 
 sub DESTROY {
