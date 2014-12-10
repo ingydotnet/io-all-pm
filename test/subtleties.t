@@ -1,4 +1,5 @@
-use strict; use warnings;
+use strict;
+use warnings;
 use lib -e 't' ? 't' : 'test';
 use Test::More tests => 7;
 use IO::All;
@@ -21,6 +22,7 @@ ok(not $io->close);
 my $io2 = io(io(io('xxx')));
 ok(ref $io2);
 ok($io2->isa('IO::All'));
+
 # is("$io2", 'xxx');
 del_output_dir();
 

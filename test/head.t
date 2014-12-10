@@ -17,18 +17,19 @@ my $fn = File::Spec->catfile(File::Spec->curdir, $t, 'data', 'head_test.txt');
     # TEST
     is_deeply(
         [io->file($fn)->chomp->head()],
-        [qw(
-            1
-            2
-            0
-            3
-            4
-            5
-            6
-            7
-            8
-            9
-            )
+        [
+            qw(
+              1
+              2
+              0
+              3
+              4
+              5
+              6
+              7
+              8
+              9
+              )
         ],
         "Read the first 10 lines with chomp (should not stop at 0).",
     );
@@ -36,13 +37,14 @@ my $fn = File::Spec->catfile(File::Spec->curdir, $t, 'data', 'head_test.txt');
     # TEST
     is_deeply(
         [io->file($fn)->chomp->head(5)],
-        [qw(
-            1
-            2
-            0
-            3
-            4
-            )
+        [
+            qw(
+              1
+              2
+              0
+              3
+              4
+              )
         ],
         "Read the first 5 lines.",
     );

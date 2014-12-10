@@ -1,4 +1,5 @@
-use strict; use warnings;
+use strict;
+use warnings;
 use lib -e 't' ? 't' : 'test';
 
 package IO::Dumper;
@@ -7,9 +8,10 @@ use Data::Dumper;
 
 our @EXPORT = 'io';
 
-sub io { return IO::Dumper->new(@_) };
+sub io {return IO::Dumper->new(@_)}
 
 package IO::All::Filesys;
+
 sub dump {
     my $self = shift;
     $self->print(Data::Dumper::Dumper(@_));
@@ -23,9 +25,9 @@ use IO_All_Test;
 IO::Dumper->import;
 
 my $hash = {
-    red => 'square',
+    red    => 'square',
     yellow => 'circle',
-    pink => 'triangle',
+    pink   => 'triangle',
 };
 
 die if -f o_dir() . '/dump1';
@@ -35,9 +37,9 @@ ok($io->close);
 ok(-s o_dir() . '/dump1');
 
 my $VAR1;
-my $a = do (o_dir() . '/dump1');
-my $b = eval join('',<DATA>);
-is_deeply($a,$b);
+my $a = do(o_dir() . '/dump1');
+my $b = eval join('', <DATA>);
+is_deeply($a, $b);
 
 ok($io->unlink);
 

@@ -1,4 +1,5 @@
-use strict; use warnings;
+use strict;
+use warnings;
 use lib -e 't' ? 't' : 'test';
 use Test::More tests => 20;
 use IO_All_Test;
@@ -9,14 +10,14 @@ use IO::Socket::INET;
 # than one connection.
 
 my $pid = fork();
-if (! $pid)
-{
+if (!$pid) {
+
     # Let the child process listen on a port
-    my $port = 5555;
+    my $port     = 5555;
     my $accepted = 0;
-    my $start = time;
-    while (1)
-    {
+    my $start    = time;
+    while (1) {
+
         # Log the port to a file.
         open my $out, ">", o_dir() . "/server-port.t";
         print {$out} $port;
@@ -25,28 +26,27 @@ if (! $pid)
         my $server = io("localhost:$port");
 
         eval {
-            for my $count (1 .. 10)
-            {
+            for my $count (1 .. 10) {
                 my $connection = $server->accept();
                 $accepted = 1;
                 $connection->print(sprintf("Ingy-%.2d", $count));
                 $connection->close();
             }
         };
-        if ($accepted)
-        {
+        if ($accepted) {
+
             # We have a listening socket on a port, so we can continue
             last;
         }
-        last if time > $start + 10
+        last if time > $start + 10;
     }
-    continue
-    {
+    continue {
         # Try a different port.
         $port++;
     }
     exit(0);
 }
+
 # Let the parent process handle the testing.
 
 # Wait a little for the client to find a port.
@@ -57,18 +57,16 @@ my $port = <$in>;
 close($in);
 
 # TEST*2*10
-for my $c (1 .. 10)
-{
+for my $c (1 .. 10) {
     my $sock = IO::Socket::INET->new(
         PeerAddr => "localhost",
         PeerPort => $port,
-        Proto => "tcp"
+        Proto    => "tcp"
     );
 
     ok(defined($sock), "Checking for validity of sock No. $c");
 
-    if (!defined($sock))
-    {
+    if (!defined($sock)) {
         last;
     }
 
@@ -77,7 +75,7 @@ for my $c (1 .. 10)
 
     $sock->close();
 
-    is ($data, sprintf("Ingy-%.2d", $c), "Checking for connection No. $c.");
+    is($data, sprintf("Ingy-%.2d", $c), "Checking for connection No. $c.");
 }
 
 waitpid($pid, 0);

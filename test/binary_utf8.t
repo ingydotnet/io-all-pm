@@ -1,4 +1,5 @@
-use strict; use warnings;
+use strict;
+use warnings;
 use lib -e 't' ? 't' : 'test';
 use utf8;
 

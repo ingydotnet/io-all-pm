@@ -1,0 +1,5 @@
+--maximum-line-length=120
+--backup-and-modify-in-place
+--output-line-ending=unix
+--indent-columns=4
+--all-containers-tightness=2

@@ -1,5 +1,7 @@
-use strict; use warnings;
-my $t; use lib ($t = -e 't' ? 't' : 'test');
+use strict;
+use warnings;
+my $t;
+use lib ($t = -e 't' ? 't' : 'test');
 use Test::More tests => 10;
 use IO::All;
 use IO_All_Test;
@@ -23,11 +25,13 @@ for my $line (sort @results) {
 # Print name of all files recursively
 for (
     sort {$a->name cmp $b->name}
-    grep {! /CVS|\.svn/} io("$t/mydir")->all_files(0)
-) {
+    grep {!/CVS|\.svn/} io("$t/mydir")->all_files(0)
+  )
+{
     my $dataline = <DATA>;
     $dataline =~ s/^t\//test\// if -e 'test';
-    is("$_\n", flip_slash $dataline)
+    is(
+        "$_\n", flip_slash $dataline);
 }
 
 del_output_dir();

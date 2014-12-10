@@ -1,14 +1,14 @@
 package IO_All_Test;
 use File::Path;
 @EXPORT = qw(
-    del_output_dir
-    o_dir
-    test_file_contents
-    test_file_contents2
-    test_matching_files
-    read_file_lines
-    flip_slash f
-    $output_dir
+  del_output_dir
+  o_dir
+  test_file_contents
+  test_file_contents2
+  test_matching_files
+  read_file_lines
+  flip_slash f
+  $output_dir
 );
 use strict;
 use base 'Exporter';
@@ -31,7 +31,7 @@ sub test_matching_files {
 
 sub read_file {
     my ($file) = @_;
-    local(*FILE, $/);
+    local (*FILE, $/);
     open FILE, $file
       or die "Can't open $file for input:\n$!";
     return scalar <FILE>;
@@ -39,7 +39,7 @@ sub read_file {
 
 sub read_file_lines {
     my ($file) = @_;
-    local(*FILE);
+    local (*FILE);
     open FILE, $file or die $!;
     (<FILE>);
 }
@@ -71,21 +71,18 @@ BEGIN {
     }
 }
 
-sub o_dir
-{
+sub o_dir {
     return $output_dir;
 }
 
-sub del_output_dir
-{
+sub del_output_dir {
     File::Path::rmtree($output_dir);
 }
 
 # TODO : this common directory that is deleted and recreated may prevent
 # running the tests in parallel.
 BEGIN {
-    if (-d $output_dir)
-    {
+    if (-d $output_dir) {
         del_output_dir();
     }
     File::Path::mkpath($output_dir);

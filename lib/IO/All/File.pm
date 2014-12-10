@@ -1,4 +1,6 @@
-use strict; use warnings;
+use strict;
+use warnings;
+
 package IO::All::File;
 
 use IO::All::Filesys -base;
@@ -7,18 +9,24 @@ use IO::File;
 use File::Copy ();
 
 #===============================================================================
-const type => 'file';
+const type      => 'file';
 field tied_file => undef;
 
 #===============================================================================
 sub file {
     my $self = shift;
     bless $self, __PACKAGE__;
+
     # should we die here if $self->name is already set and there are args?
     if (@_ && @_ > 1) {
-        $self->name( $self->_spec_class->catfile( @_ ) )
-    } elsif (@_) {
-        $self->name($_[0])
+        $self->name(
+            $self->_spec_class->catfile(@_)
+          );
+    }
+    elsif (@_) {
+        $self->name(
+            $_[0]
+          );
     }
     return $self->_init;
 }
@@ -64,9 +72,9 @@ sub assert_tied_file {
         eval {require Tie::File};
         $self->throw("Tie::File required for file array operations:\n$@")
           if $@;
-        my $array_ref = do { my @array; \@array };
-        my $name = $self->pathname;
-        my @options = $self->_rdonly ? (mode => O_RDONLY) : ();
+        my $array_ref = do {my @array; \@array};
+        my $name      = $self->pathname;
+        my @options   = $self->_rdonly ? (mode => O_RDONLY) : ();
         push @options, (recsep => $self->separator);
         tie @$array_ref, 'Tie::File', $name, @options;
         $self->throw("Can't tie 'Tie::File' to '$name':\n$!")
@@ -85,14 +93,15 @@ sub open {
     $self->perms($perms) if defined $perms;
     my @args = ($self->mode);
     push @args, $self->perms if defined $self->perms;
+
     if (defined $self->pathname) {
         $self->io_handle(IO::File->new);
         $self->io_handle->open($self->pathname, @args)
           or $self->throw($self->open_msg);
     }
-    elsif (defined $self->_handle and
-           not $self->io_handle->opened
-          ) {
+    elsif (defined $self->_handle
+        and not $self->io_handle->opened)
+    {
         # XXX Not tested
         $self->io_handle->fdopen($self->_handle, @args);
     }
@@ -100,19 +109,22 @@ sub open {
     $self->_set_binmode;
 }
 
-sub exists { -f shift->pathname }
+sub exists {-f shift->pathname}
 
 my %mode_msg = (
-    '>' => 'output',
-    '<' => 'input',
+    '>'  => 'output',
+    '<'  => 'input',
     '>>' => 'append',
 );
+
 sub open_msg {
     my $self = shift;
-    my $name = defined $self->pathname
+    my $name =
+      defined $self->pathname
       ? " '" . $self->pathname . "'"
       : '';
-    my $direction = defined $mode_msg{$self->mode}
+    my $direction =
+      defined $mode_msg{$self->mode}
       ? ' for ' . $mode_msg{$self->mode}
       : '';
     return qq{Can't open file$name$direction:\n$!};
@@ -123,8 +135,9 @@ sub copy {
     my ($self, $new) = @_;
 
     File::Copy::copy($self->name, $new)
-        or die "failed to copy $self to $new: $!";
-    $self->file($new)
+      or die "failed to copy $self to $new: $!";
+    $self->file(
+        $new);
 }
 
 sub close {
@@ -136,6 +149,7 @@ sub close {
     $self->io_handle(undef);
     $self->mode(undef);
     if (my $tied_file = $self->tied_file) {
+
         if (ref($tied_file) eq 'ARRAY') {
             untie @$tied_file;
         }
@@ -170,7 +184,7 @@ sub getline_backwards {
 sub getlines_backwards {
     my $self = shift;
     my @lines;
-    while (defined (my $line = $self->getline_backwards)) {
+    while (defined(my $line = $self->getline_backwards)) {
         push @lines, $line;
     }
     return @lines;
@@ -182,9 +196,9 @@ sub head {
     my @return;
     $self->close;
 
-    LINES:
+  LINES:
     while ($lines--) {
-        if (defined (my $l = $self->getline)) {
+        if (defined(my $l = $self->getline)) {
             push @return, $l;
         }
         else {
@@ -231,10 +245,10 @@ sub _overload_table {
         $self->SUPER::_overload_table(@_),
         'file > file' => '_overload_file_to_file',
         'file < file' => '_overload_file_from_file',
-        '${} file' => '_overload_file_as_scalar',
-        '@{} file' => '_overload_file_as_array',
-        '%{} file' => '_overload_file_as_dbm',
-    )
+        '${} file'    => '_overload_file_as_scalar',
+        '@{} file'    => '_overload_file_as_array',
+        '%{} file'    => '_overload_file_as_dbm',
+      );
 }
 
 sub _overload_file_to_file {

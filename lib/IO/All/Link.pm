@@ -1,4 +1,6 @@
-use strict; use warnings;
+use strict;
+use warnings;
+
 package IO::All::Link;
 
 use IO::All::File -base;
@@ -18,7 +20,7 @@ sub readlink {
 }
 
 sub symlink {
-    my $self = shift;
+    my $self   = shift;
     my $target = shift;
     $self->assert_filepath if $self->_assert;
     CORE::symlink($target, $self->pathname);
@@ -53,6 +55,6 @@ sub target {
     *$self->{target} = $new;
 }
 
-sub exists { -l shift->pathname }
+sub exists {-l shift->pathname}
 
 1;

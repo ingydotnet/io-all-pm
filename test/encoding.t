@@ -1,14 +1,17 @@
-use strict; use warnings;
-my $t; use lib ($t = -e 't' ? 't' : 'test');
+use strict;
+use warnings;
+my $t;
+use lib ($t = -e 't' ? 't' : 'test');
 use Test::More;
 use IO_All_Test;
 
 BEGIN {
-    eval { require PerlIO::encoding };
+    eval {require PerlIO::encoding};
     plan(skip_all => 'no PerlIO::encoding') if $@;
-    plan(($] < 5.008003)
-          ? (skip_all => 'Broken on older perls')
-          : (tests => 4)
+    plan(
+          ($] < 5.008003)
+        ? (skip_all => 'Broken on older perls')
+        : (tests => 4)
     );
 }
 
@@ -26,21 +29,14 @@ use IO::All -encoding => 'big5';
 
 package main;
 
-isnt Normal::io("$t/text.big5")->all,
-     Normal::io("$t/text.utf8")->all,
-     'big5 and utf8 tests are different';
+isnt Normal::io("$t/text.big5")->all, Normal::io("$t/text.utf8")->all, 'big5 and utf8 tests are different';
 
-isnt Normal::io("$t/text.big5")->all,
-     Big5::io("$t/text.big5")->all,
-     'Read big5 with different io-s does not match';
+isnt Normal::io("$t/text.big5")->all, Big5::io("$t/text.big5")->all, 'Read big5 with different io-s does not match';
 
-is UTF8::io("$t/text.utf8")->all,
-   Big5::io("$t/text.big5")->all,
-   'Big5 text matches utf8 text after read';
+is UTF8::io("$t/text.utf8")->all, Big5::io("$t/text.big5")->all, 'Big5 text matches utf8 text after read';
 
 is Normal::io("$t/text.utf8")->utf8->all,
-   Normal::io("$t/text.big5")->encoding('big5')->all,
-   'Big5 text matches utf8 text after read';
-
+  Normal::io("$t/text.big5")->encoding('big5')->all,
+  'Big5 text matches utf8 text after read';
 
 del_output_dir();

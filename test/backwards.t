@@ -1,10 +1,13 @@
-use strict; use warnings;
-my $t; use lib ($t = -e 't' ? 't' : 'test');
+use strict;
+use warnings;
+my $t;
+use lib ($t = -e 't' ? 't' : 'test');
 use Test::More;
 use IO::All;
 use IO_All_Test;
 
-plan((eval {require File::ReadBackwards; 1})
+plan(
+      (eval {require File::ReadBackwards; 1})
     ? (tests => 2)
     : (skip_all => "requires File::ReadBackwards")
 );

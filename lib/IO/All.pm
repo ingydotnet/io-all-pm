@@ -1,8 +1,11 @@
-use strict; use warnings;
+use strict;
+use warnings;
+
 package IO::All;
 our $VERSION = '0.86.1';
 
 require Carp;
+
 # So one can use Carp::carp "$message" - without the parenthesis.
 sub Carp::carp;
 
@@ -20,73 +23,75 @@ our @EXPORT = qw(io);
 #===============================================================================
 my $autoload = {
     qw(
-        touch file
+      touch file
 
-        dir_handle dir
-        All dir
-        all_files dir
-        All_Files dir
-        all_dirs dir
-        All_Dirs dir
-        all_links dir
-        All_Links dir
-        mkdir dir
-        mkpath dir
-        next dir
+      dir_handle dir
+      All dir
+      all_files dir
+      All_Files dir
+      all_dirs dir
+      All_Dirs dir
+      all_links dir
+      All_Links dir
+      mkdir dir
+      mkpath dir
+      next dir
 
-        stdin stdio
-        stdout stdio
-        stderr stdio
+      stdin stdio
+      stdout stdio
+      stderr stdio
 
-        socket_handle socket
-        accept socket
-        shutdown socket
+      socket_handle socket
+      accept socket
+      shutdown socket
 
-        readlink link
-        symlink link
-    )
+      readlink link
+      symlink link
+      )
 };
 
 # XXX - These should die if the given argument exists but is not a
 # link, dbm, etc.
-sub link  { require IO::All::Link;  goto &IO::All::Link::link; }
-sub dbm   { require IO::All::DBM;   goto &IO::All::DBM::dbm; }
-sub mldbm { require IO::All::MLDBM; goto &IO::All::MLDBM::mldbm; }
+sub link  {require IO::All::Link;  goto &IO::All::Link::link;}
+sub dbm   {require IO::All::DBM;   goto &IO::All::DBM::dbm;}
+sub mldbm {require IO::All::MLDBM; goto &IO::All::MLDBM::mldbm;}
 
-sub autoload { my $self = shift; $autoload; }
+sub autoload {my $self = shift; $autoload;}
 
 sub AUTOLOAD {
-    my $self = shift;
+    my $self   = shift;
     my $method = $IO::All::AUTOLOAD;
     $method =~ s/.*:://;
     my $pkg = ref($self) || $self;
     $self->throw(qq{Can't locate object method "$method" via package "$pkg"})
       if $pkg ne $self->_package;
     my $class = $self->_autoload_class($method);
-    my $foo = "$self";
+    my $foo   = "$self";
     bless $self, $class;
     $self->$method(@_);
 }
 
 sub _autoload_class {
-    my $self = shift;
-    my $method = shift;
-    my $class_id = $self->autoload->{$method} || $method;
+    my $self               = shift;
+    my $method             = shift;
+    my $class_id           = $self->autoload->{$method} || $method;
     my $ucfirst_class_name = 'IO::All::' . ucfirst($class_id);
-    my $ucfirst_class_fn = "IO/All/" . ucfirst($class_id) . ".pm";
+    my $ucfirst_class_fn   = "IO/All/" . ucfirst($class_id) . ".pm";
     return $ucfirst_class_name if $INC{$ucfirst_class_fn};
     return "IO::All::\U$class_id" if $INC{"IO/All/\U$class_id\E.pm"};
     require IO::All::Temp;
+
     if (eval "require $ucfirst_class_name; 1") {
         my $class = $ucfirst_class_name;
-        my $return = $class->can('new')
-        ? $class
-        : do { # (OS X hack)
+        my $return =
+            $class->can('new')
+          ? $class
+          : do {    # (OS X hack)
             my $value = $INC{$ucfirst_class_fn};
             delete $INC{$ucfirst_class_fn};
             $INC{"IO/All/\U$class_id\E.pm"} = $value;
             "IO::All::\U$class_id";
-        };
+          };
         return $return;
     }
     elsif (eval "require IO::All::\U$class_id; 1") {
@@ -96,36 +101,39 @@ sub _autoload_class {
 }
 
 sub new {
-    my $self = shift;
+    my $self    = shift;
     my $package = ref($self) || $self;
-    my $new = bless Symbol::gensym(), $package;
+    my $new     = bless Symbol::gensym(), $package;
     $new->_package($package);
     $new->_copy_from($self) if ref($self);
     my $name = shift;
     return $name if UNIVERSAL::isa($name, 'IO::All');
     return $new->_init unless defined $name;
     return $new->handle($name)
-      if UNIVERSAL::isa($name, 'GLOB') or ref(\ $name) eq 'GLOB';
+      if UNIVERSAL::isa($name, 'GLOB')
+      or ref(\$name) eq 'GLOB';
+
     # WWW - link is first because a link to a dir returns true for
     # both -l and -d.
-    return $new->link($name)	if -l $name;
-    return $new->file($name)	if -f $name;
-    return $new->dir($name)	if -d $name;
-    return $new->$1($name)	if $name =~ /^([a-z]{3,8}):/;
-    return $new->socket($name)	if $name =~ /^[\w\-\.]*:\d{1,5}$/;
-    return $new->pipe($name)	if $name =~ s/^\s*\|\s*// or $name =~ s/\s*\|\s*$//;
-    return $new->string		if $name eq '$';
-    return $new->stdio		if $name eq '-';
-    return $new->stderr		if $name eq '=';
-    return $new->temp		if $name eq '?';
+    return $new->link($name)   if -l $name;
+    return $new->file($name)   if -f $name;
+    return $new->dir($name)    if -d $name;
+    return $new->$1($name)     if $name =~ /^([a-z]{3,8}):/;
+    return $new->socket($name) if $name =~ /^[\w\-\.]*:\d{1,5}$/;
+    return $new->pipe($name)   if $name =~ s/^\s*\|\s*// or $name =~ s/\s*\|\s*$//;
+    return $new->string        if $name eq '$';
+    return $new->stdio         if $name eq '-';
+    return $new->stderr        if $name eq '=';
+    return $new->temp          if $name eq '?';
     $new->name($name);
     $new->_init;
 }
 
 sub _copy_from {
-    my $self = shift;
+    my $self  = shift;
     my $other = shift;
     for (keys(%{*$other})) {
+
         # XXX Need to audit exclusions here
         next if /^(_handle|io_handle|is_open)$/;
         *$self->{$_} = *$other->{$_};
@@ -161,15 +169,15 @@ use overload '@{}' => '_overload_array_deref';
 use overload '%{}' => '_overload_hash_deref';
 use overload '&{}' => '_overload_code_deref';
 
-sub _overload_bitwise_or	{ shift->_overload_handler(@_, '|' ); }
-sub _overload_left_bitshift	{ shift->_overload_handler(@_, '<<'); }
-sub _overload_right_bitshift	{ shift->_overload_handler(@_, '>>'); }
-sub _overload_less_than		{ shift->_overload_handler(@_, '<' ); }
-sub _overload_greater_than	{ shift->_overload_handler(@_, '>' ); }
-sub _overload_string_deref	{ shift->_overload_handler(@_, '${}'); }
-sub _overload_array_deref	{ shift->_overload_handler(@_, '@{}'); }
-sub _overload_hash_deref	{ shift->_overload_handler(@_, '%{}'); }
-sub _overload_code_deref	{ shift->_overload_handler(@_, '&{}'); }
+sub _overload_bitwise_or     {shift->_overload_handler(@_, '|');}
+sub _overload_left_bitshift  {shift->_overload_handler(@_, '<<');}
+sub _overload_right_bitshift {shift->_overload_handler(@_, '>>');}
+sub _overload_less_than      {shift->_overload_handler(@_, '<');}
+sub _overload_greater_than   {shift->_overload_handler(@_, '>');}
+sub _overload_string_deref   {shift->_overload_handler(@_, '${}');}
+sub _overload_array_deref    {shift->_overload_handler(@_, '@{}');}
+sub _overload_hash_deref     {shift->_overload_handler(@_, '%{}');}
+sub _overload_code_deref     {shift->_overload_handler(@_, '&{}');}
 
 sub _overload_handler {
     my ($self) = @_;
@@ -178,24 +186,26 @@ sub _overload_handler {
 }
 
 my $op_swap = {
-    '>' => '<', '>>' => '<<',
-    '<' => '>', '<<' => '>>',
+    '>'  => '<',
+    '>>' => '<<',
+    '<'  => '>',
+    '<<' => '>>',
 };
 
 sub _overload_table {
     my $self = shift;
     (
-        '* > *' => '_overload_any_to_any',
-        '* < *' => '_overload_any_from_any',
+        '* > *'  => '_overload_any_to_any',
+        '* < *'  => '_overload_any_from_any',
         '* >> *' => '_overload_any_addto_any',
         '* << *' => '_overload_any_addfrom_any',
 
-        '* < scalar' => '_overload_scalar_to_any',
-        '* > scalar' => '_overload_any_to_scalar',
+        '* < scalar'  => '_overload_scalar_to_any',
+        '* > scalar'  => '_overload_any_to_scalar',
         '* << scalar' => '_overload_scalar_addto_any',
         '* >> scalar' => '_overload_any_addto_scalar',
-    )
-};
+    );
+}
 
 sub _get_overload_method {
     my ($self, $arg1, $arg2, $swap, $operator) = @_;
@@ -203,7 +213,7 @@ sub _get_overload_method {
         $operator = $op_swap->{$operator} || $operator;
     }
     my $arg1_type = $self->_get_argument_type($arg1);
-    my $table1 = { $arg1->_overload_table };
+    my $table1    = {$arg1->_overload_table};
 
     if ($operator =~ /\{\}$/) {
         my $key = "$operator $arg1_type";
@@ -211,15 +221,13 @@ sub _get_overload_method {
     }
 
     my $arg2_type = $self->_get_argument_type($arg2);
-    my @table2 = UNIVERSAL::isa($arg2, "IO::All")
-    ? ($arg2->_overload_table)
-    : ();
-    my $table = { %$table1, @table2 };
+    my @table2 =
+      UNIVERSAL::isa($arg2, "IO::All")
+      ? ($arg2->_overload_table)
+      : ();
+    my $table = {%$table1, @table2};
 
-    my @keys = (
-        "$arg1_type $operator $arg2_type",
-        "* $operator $arg2_type",
-    );
+    my @keys = ("$arg1_type $operator $arg2_type", "* $operator $arg2_type",);
     push @keys, "$arg1_type $operator *", "* $operator *"
       unless $arg2_type =~ /^(scalar|array|hash|code|ref)$/;
 
@@ -232,13 +240,13 @@ sub _get_overload_method {
 }
 
 sub _get_argument_type {
-    my $self = shift;
+    my $self     = shift;
     my $argument = shift;
-    my $ref = ref($argument);
+    my $ref      = ref($argument);
     return 'scalar' unless $ref;
-    return 'code' if $ref eq 'CODE';
+    return 'code'  if $ref eq 'CODE';
     return 'array' if $ref eq 'ARRAY';
-    return 'hash' if $ref eq 'HASH';
+    return 'hash'  if $ref eq 'HASH';
     return 'ref' unless $argument->isa('IO::All');
     $argument->file
       if defined $argument->pathname and not $argument->type;
@@ -247,7 +255,7 @@ sub _get_argument_type {
 
 sub _overload_cmp {
     my ($self, $other, $swap) = @_;
-    $self = defined($self) ? $self.'' : $self;
+    $self = defined($self) ? $self . '' : $self;
     ($self, $other) = ($other, $self) if $swap;
     $self cmp $other;
 }
@@ -319,38 +327,38 @@ sub _overload_scalar_to_any {
 # Private Accessors
 #===============================================================================
 field '_package';
-field _strict => undef;
-field _layers => [];
-field _handle => undef;
-field _constructor => undef;
+field _strict             => undef;
+field _layers             => [];
+field _handle             => undef;
+field _constructor        => undef;
 field _partial_spec_class => undef;
 
 #===============================================================================
 # Public Accessors
 #===============================================================================
 chain block_size => 1024;
-chain errors => undef;
-field io_handle => undef;
-field is_open => 0;
-chain mode => undef;
-chain name => undef;
-chain perms => undef;
-chain separator => $/;
-field type => '';
+chain errors     => undef;
+field io_handle  => undef;
+field is_open    => 0;
+chain mode       => undef;
+chain name       => undef;
+chain perms      => undef;
+chain separator  => $/;
+field type       => '';
 
 sub _spec_class {
-   my $self = shift;
+    my $self = shift;
 
-   my $ret = 'File::Spec';
-   if (my $partial = $self->_partial_spec_class(@_)) {
-      $ret .= '::' . $partial;
-      eval "require $ret";
-   }
+    my $ret = 'File::Spec';
+    if (my $partial = $self->_partial_spec_class(@_)) {
+        $ret .= '::' . $partial;
+        eval "require $ret";
+    }
 
-   return $ret
+    return $ret;
 }
 
-sub pathname {my $self = shift; $self->name(@_) }
+sub pathname {my $self = shift; $self->name(@_)}
 
 #===============================================================================
 # Chainable option methods (write only)
@@ -378,17 +386,17 @@ proxy 'truncate';
 #===============================================================================
 # IO::Handle proxy methods that open the handle if needed
 #===============================================================================
-proxy_open print => '>';
-proxy_open printf => '>';
-proxy_open sysread => O_RDONLY;
+proxy_open print    => '>';
+proxy_open printf   => '>';
+proxy_open sysread  => O_RDONLY;
 proxy_open syswrite => O_CREAT | O_WRONLY;
-proxy_open seek => $^O eq 'MSWin32' ? '<' : '+<';
+proxy_open seek     => $^O eq 'MSWin32' ? '<' : '+<';
 proxy_open 'getc';
 
 #===============================================================================
 # Tie Interface
 #===============================================================================
-sub tie { my $self = shift; tie *$self, $self; }
+sub tie {my $self = shift; tie *$self, $self;}
 
 sub TIEHANDLE {
     return $_[0] if ref $_[0];
@@ -402,17 +410,16 @@ sub READLINE {
     goto &getline;
 }
 
-
 sub DESTROY {
     my $self = shift;
     no warnings;
-    unless ( $] < 5.008 ) {
+    unless ($] < 5.008) {
         untie *$self if tied *$self;
     }
     $self->close if $self->is_open;
 }
 
-sub BINMODE { my $self = shift; CORE::binmode *$self->io_handle; }
+sub BINMODE {my $self = shift; CORE::binmode *$self->io_handle;}
 
 {
     no warnings;
@@ -432,9 +439,9 @@ sub BINMODE { my $self = shift; CORE::binmode *$self->io_handle; }
 # File::Spec Interface
 #===============================================================================
 sub canonpath {
-   my $self = shift;
-   eval { Cwd::abs_path($self->pathname); 0 } ||
-      File::Spec->canonpath($self->pathname)
+    my $self = shift;
+    eval {Cwd::abs_path($self->pathname); 0}
+      || File::Spec->canonpath($self->pathname);
 }
 
 sub catdir {
@@ -442,25 +449,30 @@ sub catdir {
     my @args = grep defined, $self->name, @_;
     $self->_constructor->()->dir(File::Spec->catdir(@args));
 }
+
 sub catfile {
     my $self = shift;
     my @args = grep defined, $self->name, @_;
     $self->_constructor->()->file(File::Spec->catfile(@args));
 }
-sub join	{ shift->catfile(@_); }
-sub curdir	{ shift->_constructor->()->dir(File::Spec->curdir); }
-sub devnull	{ shift->_constructor->()->file(File::Spec->devnull); }
-sub rootdir	{ shift->_constructor->()->dir(File::Spec->rootdir); }
-sub tmpdir	{ shift->_constructor->()->dir(File::Spec->tmpdir); }
-sub updir	{ shift->_constructor->()->dir(File::Spec->updir); }
-sub case_tolerant{File::Spec->case_tolerant; }
-sub is_absolute	{ File::Spec->file_name_is_absolute(shift->pathname); }
-sub path	{ my $self = shift; map { $self->_constructor->()->dir($_) } File::Spec->path; }
-sub splitpath	{ File::Spec->splitpath(shift->pathname); }
-sub splitdir	{ File::Spec->splitdir(shift->pathname); }
-sub catpath	{ my $self=shift; $self->_constructor->(File::Spec->catpath(@_)); }
-sub abs2rel	{ File::Spec->abs2rel(shift->pathname, @_); }
-sub rel2abs	{ File::Spec->rel2abs(shift->pathname, @_); }
+sub join          {shift->catfile(@_);}
+sub curdir        {shift->_constructor->()->dir(File::Spec->curdir);}
+sub devnull       {shift->_constructor->()->file(File::Spec->devnull);}
+sub rootdir       {shift->_constructor->()->dir(File::Spec->rootdir);}
+sub tmpdir        {shift->_constructor->()->dir(File::Spec->tmpdir);}
+sub updir         {shift->_constructor->()->dir(File::Spec->updir);}
+sub case_tolerant {File::Spec->case_tolerant;}
+sub is_absolute   {File::Spec->file_name_is_absolute(shift->pathname);}
+
+sub path {
+    my $self = shift;
+    map {$self->_constructor->()->dir($_)} File::Spec->path;
+}
+sub splitpath {File::Spec->splitpath(shift->pathname);}
+sub splitdir  {File::Spec->splitdir(shift->pathname);}
+sub catpath   {my $self = shift; $self->_constructor->(File::Spec->catpath(@_));}
+sub abs2rel {File::Spec->abs2rel(shift->pathname, @_);}
+sub rel2abs {File::Spec->rel2abs(shift->pathname, @_);}
 
 #===============================================================================
 # Public IO Action Methods
@@ -503,7 +515,7 @@ sub binary {
 }
 
 sub binmode {
-    my $self = shift;
+    my $self  = shift;
     my $layer = shift;
     $self->_sane_binmode($layer) if $self->is_open;
     push @{$self->_layers}, $layer;
@@ -513,25 +525,25 @@ sub binmode {
 sub _sane_binmode {
     my ($self, $layer) = @_;
     $layer
-    ? CORE::binmode($self->io_handle, $layer)
-    : CORE::binmode($self->io_handle);
+      ? CORE::binmode($self->io_handle, $layer)
+      : CORE::binmode($self->io_handle);
 }
 
 sub buffer {
     my $self = shift;
     if (not @_) {
-        *$self->{buffer} = do {my $x = ''; \ $x}
+        *$self->{buffer} = do {my $x = ''; \$x}
           unless exists *$self->{buffer};
         return *$self->{buffer};
     }
-    my $buffer_ref = ref($_[0]) ? $_[0] : \ $_[0];
+    my $buffer_ref = ref($_[0]) ? $_[0] : \$_[0];
     $$buffer_ref = '' unless defined $$buffer_ref;
     *$self->{buffer} = $buffer_ref;
     return $self;
 }
 
 sub clear {
-    my $self = shift;
+    my $self   = shift;
     my $buffer = *$self->{buffer};
     $$buffer = '';
     return $self;
@@ -550,13 +562,12 @@ sub close {
 }
 
 sub empty {
-    my $self = shift;
-    my $message =
-      "Can't call empty on an object that is neither file nor directory";
+    my $self    = shift;
+    my $message = "Can't call empty on an object that is neither file nor directory";
     $self->throw($message);
 }
 
-sub exists {my $self = shift; -e $self->pathname }
+sub exists {my $self = shift; -e $self->pathname}
 
 sub getline {
     my $self = shift;
@@ -590,20 +601,20 @@ sub getlines {
     }
     $self->_error_check;
     return @lines if @lines;
-    $self->close if $self->_autoclose;
+    $self->close  if $self->_autoclose;
     return ();
 }
 
-sub is_dir	{ UNIVERSAL::isa(shift, 'IO::All::Dir');	}
-sub is_dbm	{ UNIVERSAL::isa(shift, 'IO::All::DBM');	}
-sub is_file	{ UNIVERSAL::isa(shift, 'IO::All::File');	}
-sub is_link	{ UNIVERSAL::isa(shift, 'IO::All::Link');	}
-sub is_mldbm	{ UNIVERSAL::isa(shift, 'IO::All::MLDBM');	}
-sub is_socket	{ UNIVERSAL::isa(shift, 'IO::All::Socket');	}
-sub is_stdio	{ UNIVERSAL::isa(shift, 'IO::All::STDIO');	}
-sub is_string	{ UNIVERSAL::isa(shift, 'IO::All::String');	}
-sub is_temp	{ UNIVERSAL::isa(shift, 'IO::All::Temp');	}
-sub length	{ length ${shift->buffer};			}
+sub is_dir    {UNIVERSAL::isa(shift, 'IO::All::Dir');}
+sub is_dbm    {UNIVERSAL::isa(shift, 'IO::All::DBM');}
+sub is_file   {UNIVERSAL::isa(shift, 'IO::All::File');}
+sub is_link   {UNIVERSAL::isa(shift, 'IO::All::Link');}
+sub is_mldbm  {UNIVERSAL::isa(shift, 'IO::All::MLDBM');}
+sub is_socket {UNIVERSAL::isa(shift, 'IO::All::Socket');}
+sub is_stdio  {UNIVERSAL::isa(shift, 'IO::All::STDIO');}
+sub is_string {UNIVERSAL::isa(shift, 'IO::All::String');}
+sub is_temp   {UNIVERSAL::isa(shift, 'IO::All::Temp');}
+sub length    {length ${shift->buffer};}
 
 sub open {
     my $self = shift;
@@ -614,6 +625,7 @@ sub open {
     $self->mode('<') unless defined $self->mode;
     $self->perms($perms) if defined $perms;
     my @args;
+
     unless ($self->is_dir) {
         push @args, $self->mode;
         push @args, $self->perms if defined $self->perms;
@@ -622,9 +634,9 @@ sub open {
         $self->file;
         return $self->open(@args);
     }
-    elsif (defined $self->_handle and
-           not $self->io_handle->opened
-          ) {
+    elsif (defined $self->_handle
+        and not $self->io_handle->opened)
+    {
         # XXX Not tested
         $self->io_handle->fdopen($self->_handle, @args);
     }
@@ -639,13 +651,10 @@ sub println {
 sub read {
     my $self = shift;
     $self->_assert_open('<');
-    my $length = (@_ or $self->type eq 'dir')
-    ? $self->io_handle->read(@_)
-    : $self->io_handle->read(
-        ${$self->buffer},
-        $self->block_size,
-        $self->length,
-    );
+    my $length =
+      (@_ or $self->type eq 'dir')
+      ? $self->io_handle->read(@_)
+      : $self->io_handle->read(${$self->buffer}, $self->block_size, $self->length,);
     $self->_error_check;
     return $length || $self->_autoclose && $self->close && 0;
 }
@@ -662,7 +671,7 @@ sub scalar {
 }
 
 sub slurp {
-    my $self = shift;
+    my $self  = shift;
     my $slurp = $self->all;
     return $slurp unless wantarray;
     my $separator = $self->separator;
@@ -685,11 +694,11 @@ sub utf8 {
 }
 
 sub _has_utf8 {
-    grep { $_ eq ':encoding(UTF-8)' } @{shift->_layers}
+    grep {$_ eq ':encoding(UTF-8)'} @{shift->_layers};
 }
 
 sub encoding {
-    my $self = shift;
+    my $self     = shift;
     my $encoding = shift;
     if ($] < 5.008) {
         die "IO::All -encoding not supported on Perl older than 5.8";
@@ -708,9 +717,10 @@ sub _set_encoding {
 sub write {
     my $self = shift;
     $self->_assert_open('>');
-    my $length = @_
-    ? $self->io_handle->write(@_)
-    : $self->io_handle->write(${$self->buffer}, $self->length);
+    my $length =
+        @_
+      ? $self->io_handle->write(@_)
+      : $self->io_handle->write(${$self->buffer}, $self->length);
     $self->_error_check;
     $self->clear unless @_;
     return $length;
@@ -722,7 +732,6 @@ sub write {
 sub throw {
     my $self = shift;
     require Carp;
-    ;
     return &{$self->errors}(@_)
       if $self->errors;
     return Carp::confess(@_)
@@ -734,16 +743,19 @@ sub throw {
 # Private instance methods
 #===============================================================================
 sub _assert_dirpath {
-    my $self = shift;
+    my $self     = shift;
     my $dir_name = shift;
-    return $dir_name if ((! CORE::length($dir_name)) or
-      -d $dir_name or
-      CORE::mkdir($dir_name, $self->perms || 0755) or
-      do {
-          require File::Path;
-          File::Path::mkpath($dir_name, 0, $self->perms || 0755 );
-      } or
-      $self->throw("Can't make $dir_name"));
+    return $dir_name
+      if (
+           (!CORE::length($dir_name))
+        or -d $dir_name
+        or CORE::mkdir($dir_name, $self->perms || 0755)
+        or do {
+            require File::Path;
+            File::Path::mkpath($dir_name, 0, $self->perms || 0755);
+        }
+        or $self->throw("Can't make $dir_name")
+      );
 }
 
 sub _assert_open {
@@ -754,7 +766,7 @@ sub _assert_open {
 }
 
 sub _error_check {
-    my $self = shift;
+    my $self        = shift;
     my $saved_error = $!;
     return unless $self->io_handle->can('error');
     return unless $self->io_handle->error;
@@ -773,12 +785,11 @@ sub _set_binmode {
 BEGIN {
     no strict 'refs';
     my @stat_fields = qw(
-        device inode modes nlink uid gid device_id size atime mtime
-        ctime blksize blocks
+      device inode modes nlink uid gid device_id size atime mtime
+      ctime blksize blocks
     );
-    foreach my $stat_field_idx (0 .. $#stat_fields)
-    {
-        my $idx = $stat_field_idx;
+    foreach my $stat_field_idx (0 .. $#stat_fields) {
+        my $idx  = $stat_field_idx;
         my $name = $stat_fields[$idx];
 
         *$name = sub {

@@ -1,4 +1,6 @@
-use strict; use warnings;
+use strict;
+use warnings;
+
 package IO::All::Pipe;
 
 use IO::All -base;
@@ -30,24 +32,27 @@ sub open {
     $command =~ s/(^\||\|$)//;
     my $mode = shift || $self->mode || '<';
     my $pipe_mode =
-      $mode eq '>' ? '|-' :
-      $mode eq '<' ? '-|' :
-      $self->throw("Invalid usage mode '$mode' for pipe");
+        $mode eq '>' ? '|-'
+      : $mode eq '<' ? '-|'
+      :                $self->throw("Invalid usage mode '$mode' for pipe");
     CORE::open($self->io_handle, $pipe_mode, $command);
     $self->_set_binmode;
 }
 
 my %mode_msg = (
-    '>' => 'output',
-    '<' => 'input',
+    '>'  => 'output',
+    '<'  => 'input',
     '>>' => 'append',
 );
+
 sub open_msg {
     my $self = shift;
-    my $name = defined $self->name
+    my $name =
+      defined $self->name
       ? " '" . $self->name . "'"
       : '';
-    my $direction = defined $mode_msg{$self->mode}
+    my $direction =
+      defined $mode_msg{$self->mode}
       ? ' for ' . $mode_msg{$self->mode}
       : '';
     return qq{Can't open pipe$name$direction:\n$!};
