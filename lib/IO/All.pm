@@ -631,6 +631,55 @@ sub getlines {
     return ();
 }
 
+sub stream_meth {}
+
+sub for {
+    my ( $self, $code ) = @_;
+    my $stream_meth = $self->stream_meth;
+    die "Streaming helpers not supported for ".ref($self) if !$stream_meth;
+    while ( defined( my $item = $self->$stream_meth ) ) {
+        $_ = $item;
+        $code->( $item );
+    }
+    return;
+}
+
+sub map {
+    my ( $self, $code ) = @_;
+    my $stream_meth = $self->stream_meth;
+    die "Streaming helpers not supported for ".ref($self) if !$stream_meth;
+    my @lines;
+    while ( defined( my $item = $self->$stream_meth ) ) {
+        $_ = $item;
+        push @lines, $code->( $item );
+    }
+    return @lines;
+}
+
+sub grep {
+    my ( $self, $code ) = @_;
+    my $stream_meth = $self->stream_meth;
+    die "Streaming helpers not supported for ".ref($self) if !$stream_meth;
+    my @lines;
+    while ( defined( my $item = $self->$stream_meth ) ) {
+        $_ = $item;
+        next if !$code->( $item );
+        push @lines, $item;
+    }
+    return @lines;
+}
+
+sub reduce {
+    my ( $self, $code, $accum ) = @_;
+    my $stream_meth = $self->stream_meth;
+    die "Streaming helpers not supported for ".ref($self) if !$stream_meth;
+    while ( defined( my $item = $self->$stream_meth ) ) {
+        $_ = $item;
+        $accum = $code->( $accum, $item );
+    }
+    return $accum;
+}
+
 sub is_dir {my $self = shift; UNIVERSAL::isa($self, 'IO::All::Dir') }
 sub is_dbm {my $self = shift; UNIVERSAL::isa($self, 'IO::All::DBM') }
 sub is_file {my $self = shift; UNIVERSAL::isa($self, 'IO::All::File') }
