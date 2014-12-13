@@ -830,7 +830,8 @@ This is so that the option methods can be chained together. For example:
 
 - relative
 
-  Indicates that the `pathname` for the object should be made relative.
+  Indicates that the `pathname` for the object should be made relative.  If
+  passed an argument, path will be made relative to passed argument.
 
 - sort
 

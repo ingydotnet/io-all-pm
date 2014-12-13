@@ -73,8 +73,11 @@ sub pathname {
 
 sub relative {
     my $self = shift;
-    $self->pathname(File::Spec->abs2rel($self->pathname))
-      if $self->is_absolute;
+    if (my $base = $_[0]) {
+       $self->pathname(File::Spec->abs2rel($self->pathname, $base))
+    } elsif ($self->is_absolute) {
+       $self->pathname(File::Spec->abs2rel($self->pathname))
+    }
     $self->is_absolute(0);
     return $self;
 }
