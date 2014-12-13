@@ -801,17 +801,6 @@ sub error_check {
     $self->throw($!);
 }
 
-sub copy {
-    my $self = shift;
-    my $copy;
-    for (keys %{*$self}) {
-        $copy->{$_} = *$self->{$_};
-    }
-    $copy->{io_handle} = 'defined'
-      if defined $copy->{io_handle};
-    return $copy;
-}
-
 sub set_binmode {
     my $self = shift;
     $self->_sane_binmode($_) for @{$self->_layers};
