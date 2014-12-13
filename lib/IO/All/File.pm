@@ -4,6 +4,7 @@ package IO::All::File;
 use IO::All::Filesys -base;
 use IO::All -base;
 use IO::File;
+use File::Copy ();
 
 #===============================================================================
 const type => 'file';
@@ -118,6 +119,14 @@ sub open_msg {
 }
 
 #===============================================================================
+sub copy {
+    my ($self, $new) = @_;
+
+    File::Copy::copy($self->name, $new)
+        or die "failed to copy $self to $new: $!";
+    $self->file($new)
+}
+
 sub close {
     my $self = shift;
     return unless $self->is_open;

@@ -1,4 +1,9 @@
 ---
+version: 0.84
+date:
+changes:
+- Add ->copy method (Arthur Axel 'fREW' Schmidt)
+---
 version: 0.83
 date:    Sat Dec 13 01:00:16 CST 2014
 changes:

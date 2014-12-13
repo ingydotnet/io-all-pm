@@ -212,6 +212,16 @@ sub glob {
    } bsd_glob $self->_spec_class->catdir( $self->pathname, @rest );
 }
 
+sub copy {
+    my ($self, $new) = @_;
+
+    require File::Copy::Recursive;
+
+    File::Copy::Recursive::dircopy($self->name, $new)
+        or die "failed to copy $self to $new: $!";
+     $self->constructor->($new)
+}
+
 sub DESTROY {
     my $self = shift;
     CORE::chdir($self->chdir_from)
