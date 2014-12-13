@@ -848,7 +848,8 @@ write mode.
 
 =item relative
 
-Indicates that the C<pathname> for the object should be made relative.
+Indicates that the C<pathname> for the object should be made relative. If
+passed an argument, path will be made relative to passed argument.
 
 =item sort
 
