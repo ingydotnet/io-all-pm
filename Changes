@@ -2,6 +2,7 @@
 version: 0.84
 date:
 changes:
+- Pass separator along when tie'ing (Fixes GH#52, Arthur Axel 'fREW' Schmidt)
 - Add ->copy method (Arthur Axel 'fREW' Schmidt)
 - Prefix private methods with underscores (Arthur Axel 'fREW' Schmidt)
 ---
