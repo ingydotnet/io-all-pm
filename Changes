@@ -1,6 +1,6 @@
 ---
 version: 0.84
-date:
+date:    Sun Dec 14 02:06:37 CST 2014
 changes:
 - Pass separator along when tie'ing (Fixes GH#52, Arthur Axel 'fREW' Schmidt)
 - Add ->copy method (Arthur Axel 'fREW' Schmidt)

@@ -233,9 +233,9 @@ L</append>, L</appendf>, L</appendln>, L</assert>, L</atime>, L</autoclose>,
 L</autoflush>, L</backwards>, L</bcc>, L</binary>, L</binmode>, L</blksize>,
 L</blocks>, L</block_size>, L</buffer>, L</canonpath>, L</case_tolerant>,
 L</catdir>, L</catfile>, L</catpath>, L</cc>, L</chdir>, L</chomp>, L</clear>,
-L</close>, L</confess>, L</content>, L</ctime>, L</curdir>, L</dbm>, L</deep>,
-L</device>, L</device_id>, L</devnull>, L</dir>, L</domain>, L</empty>,
-L</ext>, L</encoding>, L</eof>, L</errors>, L</file>, L</filename>,
+L</close>, L</confess>, L</content>, L</copy>, L</ctime>, L</curdir>, L</dbm>,
+L</deep>, L</device>, L</device_id>, L</devnull>, L</dir>, L</domain>,
+L</empty>, L</ext>, L</encoding>, L</eof>, L</errors>, L</file>, L</filename>,
 L</fileno>, L</filepath>, L</filter>, L</fork>, L</from>, L</ftp>, L</get>,
 L</getc>, L</getline>, L</getlines>, L</gid>, L</glob>, L</handle>, L</head>,
 L</http>, L</https>, L</inode>, L</io_handle>, L</is_absolute>, L</is_dir>,
@@ -1104,6 +1104,11 @@ Close will basically unopen the object, which has different meanings for
 different objects. For files and directories it will close and release the
 handle. For sockets it calls shutdown. For tied things it unties them, and it
 unlocks locked things.
+
+=item copy
+
+Copies the object to the path passed. Works on both files and directories, but
+directories require C<File::Copy::Recursive> to be installed.
 
 =item empty
 
