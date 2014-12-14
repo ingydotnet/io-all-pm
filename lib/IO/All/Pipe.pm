@@ -13,7 +13,7 @@ sub pipe {
     return $self->_init;
 }
 
-sub assert_open {
+sub _assert_open {
     my $self = shift;
     return if $self->is_open;
     $self->mode(shift) unless $self->mode;
@@ -34,7 +34,7 @@ sub open {
       $mode eq '<' ? '-|' :
       $self->throw("Invalid usage mode '$mode' for pipe");
     CORE::open($self->io_handle, $pipe_mode, $command);
-    $self->set_binmode;
+    $self->_set_binmode;
 }
 
 my %mode_msg = (

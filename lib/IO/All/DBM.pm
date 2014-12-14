@@ -15,7 +15,7 @@ sub dbm {
     return $self;
 }
 
-sub assert_open {
+sub _assert_open {
     my $self = shift;
     return $self->tied_file
       if $self->tied_file;

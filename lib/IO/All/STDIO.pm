@@ -39,7 +39,7 @@ sub open {
     : fileno(STDIN);
     $self->io_handle(IO::File->new);
     $self->io_handle->fdopen($fileno, $mode);
-    $self->set_binmode;
+    $self->_set_binmode;
 }
 
 sub open_stderr {

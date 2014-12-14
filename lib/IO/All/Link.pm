@@ -14,7 +14,7 @@ sub link {
 
 sub readlink {
     my $self = shift;
-    $self->constructor->(CORE::readlink($self->name));
+    $self->_constructor->(CORE::readlink($self->name));
 }
 
 sub symlink {

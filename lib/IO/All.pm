@@ -61,14 +61,14 @@ sub AUTOLOAD {
     $method =~ s/.*:://;
     my $pkg = ref($self) || $self;
     $self->throw(qq{Can't locate object method "$method" via package "$pkg"})
-      if $pkg ne $self->package;
-    my $class = $self->autoload_class($method);
+      if $pkg ne $self->_package;
+    my $class = $self->_autoload_class($method);
     my $foo = "$self";
     bless $self, $class;
     $self->$method(@_);
 }
 
-sub autoload_class {
+sub _autoload_class {
     my $self = shift;
     my $method = shift;
     my $class_id = $self->autoload->{$method} || $method;
@@ -99,7 +99,7 @@ sub new {
     my $self = shift;
     my $package = ref($self) || $self;
     my $new = bless Symbol::gensym(), $package;
-    $new->package($package);
+    $new->_package($package);
     $new->_copy_from($self) if ref($self);
     my $name = shift;
     return $name if UNIVERSAL::isa($name, 'IO::All');
@@ -150,30 +150,30 @@ $SIG{__WARN__} = sub {
     }
 };
 
-use overload '""' => 'overload_stringify';
-use overload '|' => 'overload_bitwise_or';
-use overload '<<' => 'overload_left_bitshift';
-use overload '>>' => 'overload_right_bitshift';
-use overload '<' => 'overload_less_than';
-use overload '>' => 'overload_greater_than';
-use overload '${}' => 'overload_string_deref';
-use overload '@{}' => 'overload_array_deref';
-use overload '%{}' => 'overload_hash_deref';
-use overload '&{}' => 'overload_code_deref';
+use overload '""' => '_overload_stringify';
+use overload '|' => '_overload_bitwise_or';
+use overload '<<' => '_overload_left_bitshift';
+use overload '>>' => '_overload_right_bitshift';
+use overload '<' => '_overload_less_than';
+use overload '>' => '_overload_greater_than';
+use overload '${}' => '_overload_string_deref';
+use overload '@{}' => '_overload_array_deref';
+use overload '%{}' => '_overload_hash_deref';
+use overload '&{}' => '_overload_code_deref';
 
-sub overload_bitwise_or {my $self = shift; $self->overload_handler(@_, '|') }
-sub overload_left_bitshift {my $self = shift; $self->overload_handler(@_, '<<') }
-sub overload_right_bitshift {my $self = shift; $self->overload_handler(@_, '>>') }
-sub overload_less_than {my $self = shift; $self->overload_handler(@_, '<') }
-sub overload_greater_than {my $self = shift; $self->overload_handler(@_, '>') }
-sub overload_string_deref {my $self = shift; $self->overload_handler(@_, '${}') }
-sub overload_array_deref {my $self = shift; $self->overload_handler(@_, '@{}') }
-sub overload_hash_deref {my $self = shift; $self->overload_handler(@_, '%{}') }
-sub overload_code_deref {my $self = shift; $self->overload_handler(@_, '&{}') }
+sub _overload_bitwise_or {my $self = shift; $self->_overload_handler(@_, '|') }
+sub _overload_left_bitshift {my $self = shift; $self->_overload_handler(@_, '<<') }
+sub _overload_right_bitshift {my $self = shift; $self->_overload_handler(@_, '>>') }
+sub _overload_less_than {my $self = shift; $self->_overload_handler(@_, '<') }
+sub _overload_greater_than {my $self = shift; $self->_overload_handler(@_, '>') }
+sub _overload_string_deref {my $self = shift; $self->_overload_handler(@_, '${}') }
+sub _overload_array_deref {my $self = shift; $self->_overload_handler(@_, '@{}') }
+sub _overload_hash_deref {my $self = shift; $self->_overload_handler(@_, '%{}') }
+sub _overload_code_deref {my $self = shift; $self->_overload_handler(@_, '&{}') }
 
-sub overload_handler {
+sub _overload_handler {
     my ($self) = @_;
-    my $method = $self->get_overload_method(@_);
+    my $method = $self->_get_overload_method(@_);
     $self->$method(@_);
 }
 
@@ -182,37 +182,37 @@ my $op_swap = {
     '<' => '>', '<<' => '>>',
 };
 
-sub overload_table {
+sub _overload_table {
     my $self = shift;
     (
-        '* > *' => 'overload_any_to_any',
-        '* < *' => 'overload_any_from_any',
-        '* >> *' => 'overload_any_addto_any',
-        '* << *' => 'overload_any_addfrom_any',
+        '* > *' => '_overload_any_to_any',
+        '* < *' => '_overload_any_from_any',
+        '* >> *' => '_overload_any_addto_any',
+        '* << *' => '_overload_any_addfrom_any',
 
-        '* < scalar' => 'overload_scalar_to_any',
-        '* > scalar' => 'overload_any_to_scalar',
-        '* << scalar' => 'overload_scalar_addto_any',
-        '* >> scalar' => 'overload_any_addto_scalar',
+        '* < scalar' => '_overload_scalar_to_any',
+        '* > scalar' => '_overload_any_to_scalar',
+        '* << scalar' => '_overload_scalar_addto_any',
+        '* >> scalar' => '_overload_any_addto_scalar',
     )
 };
 
-sub get_overload_method {
+sub _get_overload_method {
     my ($self, $arg1, $arg2, $swap, $operator) = @_;
     if ($swap) {
         $operator = $op_swap->{$operator} || $operator;
     }
-    my $arg1_type = $self->get_argument_type($arg1);
-    my $table1 = { $arg1->overload_table };
+    my $arg1_type = $self->_get_argument_type($arg1);
+    my $table1 = { $arg1->_overload_table };
 
     if ($operator =~ /\{\}$/) {
         my $key = "$operator $arg1_type";
-        return $table1->{$key} || $self->overload_undefined($key);
+        return $table1->{$key} || $self->_overload_undefined($key);
     }
 
-    my $arg2_type = $self->get_argument_type($arg2);
+    my $arg2_type = $self->_get_argument_type($arg2);
     my @table2 = UNIVERSAL::isa($arg2, "IO::All")
-    ? ($arg2->overload_table)
+    ? ($arg2->_overload_table)
     : ();
     my $table = { %$table1, @table2 };
 
@@ -228,10 +228,10 @@ sub get_overload_method {
           if defined $table->{$_};
     }
 
-    return $self->overload_undefined($keys[0]);
+    return $self->_overload_undefined($keys[0]);
 }
 
-sub get_argument_type {
+sub _get_argument_type {
     my $self = shift;
     my $argument = shift;
     my $ref = ref($argument);
@@ -245,63 +245,63 @@ sub get_argument_type {
     return $argument->type || 'unknown';
 }
 
-sub overload_stringify {
+sub _overload_stringify {
     my $self = shift;
     my $name = $self->pathname;
     return defined($name) ? $name : overload::StrVal($self);
 }
 
-sub overload_undefined {
+sub _overload_undefined {
     my $self = shift;
     require Carp;
     my $key = shift;
     Carp::carp "Undefined behavior for overloaded IO::All operation: '$key'"
       if $^W;
-    return 'overload_noop';
+    return '_overload_noop';
 }
 
-sub overload_noop {
+sub _overload_noop {
     my $self = shift;
     return;
 }
 
-sub overload_any_addfrom_any {
+sub _overload_any_addfrom_any {
     $_[1]->append($_[2]->all);
     $_[1];
 }
 
-sub overload_any_addto_any {
+sub _overload_any_addto_any {
     $_[2]->append($_[1]->all);
     $_[2];
 }
 
-sub overload_any_from_any {
+sub _overload_any_from_any {
     $_[1]->close if $_[1]->is_file and $_[1]->is_open;
     $_[1]->print($_[2]->all);
     $_[1];
 }
 
-sub overload_any_to_any {
+sub _overload_any_to_any {
     $_[2]->close if $_[2]->is_file and $_[2]->is_open;
     $_[2]->print($_[1]->all);
     $_[2];
 }
 
-sub overload_any_to_scalar {
+sub _overload_any_to_scalar {
     $_[2] = $_[1]->all;
 }
 
-sub overload_any_addto_scalar {
+sub _overload_any_addto_scalar {
     $_[2] .= $_[1]->all;
     $_[2];
 }
 
-sub overload_scalar_addto_any {
+sub _overload_scalar_addto_any {
     $_[1]->append($_[2]);
     $_[1];
 }
 
-sub overload_scalar_to_any {
+sub _overload_scalar_to_any {
     local $\;
     $_[1]->close if $_[1]->is_file and $_[1]->is_open;
     $_[1]->print($_[2]);
@@ -311,15 +311,16 @@ sub overload_scalar_to_any {
 #===============================================================================
 # Private Accessors
 #===============================================================================
-field 'package';
+field '_package';
 field _strict => undef;
 field _layers => [];
 field _handle => undef;
+field _constructor => undef;
+field _partial_spec_class => undef;
 
 #===============================================================================
 # Public Accessors
 #===============================================================================
-field constructor => undef;
 chain block_size => 1024;
 chain errors => undef;
 field io_handle => undef;
@@ -329,7 +330,6 @@ chain name => undef;
 chain perms => undef;
 chain separator => $/;
 field type => '';
-field _partial_spec_class => undef;
 
 sub _spec_class {
    my $self = shift;
@@ -438,33 +438,33 @@ sub canonpath {my $self = shift;
 sub catdir {
     my $self = shift;
     my @args = grep defined, $self->name, @_;
-    $self->constructor->()->dir(File::Spec->catdir(@args));
+    $self->_constructor->()->dir(File::Spec->catdir(@args));
 }
 sub catfile {
     my $self = shift;
     my @args = grep defined, $self->name, @_;
-    $self->constructor->()->file(File::Spec->catfile(@args));
+    $self->_constructor->()->file(File::Spec->catfile(@args));
 }
 sub join {my $self = shift; $self->catfile(@_) }
 sub curdir {
     my $self = shift;
-    $self->constructor->()->dir(File::Spec->curdir);
+    $self->_constructor->()->dir(File::Spec->curdir);
 }
 sub devnull {
     my $self = shift;
-    $self->constructor->()->file(File::Spec->devnull);
+    $self->_constructor->()->file(File::Spec->devnull);
 }
 sub rootdir {
     my $self = shift;
-    $self->constructor->()->dir(File::Spec->rootdir);
+    $self->_constructor->()->dir(File::Spec->rootdir);
 }
 sub tmpdir {
     my $self = shift;
-    $self->constructor->()->dir(File::Spec->tmpdir);
+    $self->_constructor->()->dir(File::Spec->tmpdir);
 }
 sub updir {
     my $self = shift;
-    $self->constructor->()->dir(File::Spec->updir);
+    $self->_constructor->()->dir(File::Spec->updir);
 }
 sub case_tolerant {
     my $self = shift;
@@ -476,7 +476,7 @@ sub is_absolute {
 }
 sub path {
     my $self = shift;
-    map { $self->constructor->()->dir($_) } File::Spec->path;
+    map { $self->_constructor->()->dir($_) } File::Spec->path;
 }
 sub splitpath {
     my $self = shift;
@@ -488,7 +488,7 @@ sub splitdir {
 }
 sub catpath {
     my $self = shift;
-    $self->constructor->(File::Spec->catpath(@_));
+    $self->_constructor->(File::Spec->catpath(@_));
 }
 sub abs2rel {
     my $self = shift;
@@ -512,23 +512,23 @@ sub absolute {
 
 sub all {
     my $self = shift;
-    $self->assert_open('<');
+    $self->_assert_open('<');
     local $/;
     my $all = $self->io_handle->getline;
-    $self->error_check;
+    $self->_error_check;
     $self->_autoclose && $self->close;
     return $all;
 }
 
 sub append {
     my $self = shift;
-    $self->assert_open('>>');
+    $self->_assert_open('>>');
     $self->print(@_);
 }
 
 sub appendln {
     my $self = shift;
-    $self->assert_open('>>');
+    $self->_assert_open('>>');
     $self->println(@_);
 }
 
@@ -599,14 +599,14 @@ sub getline {
     my $self = shift;
     return $self->getline_backwards
       if $self->_backwards;
-    $self->assert_open('<');
+    $self->_assert_open('<');
     my $line;
     {
         local $/ = @_ ? shift(@_) : $self->separator;
         $line = $self->io_handle->getline;
         chomp($line) if $self->_chomp and defined $line;
     }
-    $self->error_check;
+    $self->_error_check;
     return $line if defined $line;
     $self->close if $self->_autoclose;
     return undef;
@@ -616,7 +616,7 @@ sub getlines {
     my $self = shift;
     return $self->getlines_backwards
       if $self->_backwards;
-    $self->assert_open('<');
+    $self->_assert_open('<');
     my @lines;
     {
         local $/ = @_ ? shift(@_) : $self->separator;
@@ -625,7 +625,7 @@ sub getlines {
             chomp for @lines;
         }
     }
-    $self->error_check;
+    $self->_error_check;
     return @lines if @lines;
     $self->close if $self->_autoclose;
     return ();
@@ -669,7 +669,7 @@ sub open {
         # XXX Not tested
         $self->io_handle->fdopen($self->_handle, @args);
     }
-    $self->set_binmode;
+    $self->_set_binmode;
 }
 
 sub println {
@@ -679,7 +679,7 @@ sub println {
 
 sub read {
     my $self = shift;
-    $self->assert_open('<');
+    $self->_assert_open('<');
     my $length = (@_ or $self->type eq 'dir')
     ? $self->io_handle->read(@_)
     : $self->io_handle->read(
@@ -687,7 +687,7 @@ sub read {
         $self->block_size,
         $self->length,
     );
-    $self->error_check;
+    $self->_error_check;
     return $length || $self->_autoclose && $self->close && 0;
 }
 
@@ -748,11 +748,11 @@ sub _set_encoding {
 
 sub write {
     my $self = shift;
-    $self->assert_open('>');
+    $self->_assert_open('>');
     my $length = @_
     ? $self->io_handle->write(@_)
     : $self->io_handle->write(${$self->buffer}, $self->length);
-    $self->error_check;
+    $self->_error_check;
     $self->clear unless @_;
     return $length;
 }
@@ -774,7 +774,7 @@ sub throw {
 #===============================================================================
 # Private instance methods
 #===============================================================================
-sub assert_dirpath {
+sub _assert_dirpath {
     my $self = shift;
     my $dir_name = shift;
     return $dir_name if ((! CORE::length($dir_name)) or
@@ -787,21 +787,21 @@ sub assert_dirpath {
       $self->throw("Can't make $dir_name"));
 }
 
-sub assert_open {
+sub _assert_open {
     my $self = shift;
     return if $self->is_open;
     $self->file unless $self->type;
     return $self->open(@_);
 }
 
-sub error_check {
+sub _error_check {
     my $self = shift;
     return unless $self->io_handle->can('error');
     return unless $self->io_handle->error;
     $self->throw($!);
 }
 
-sub set_binmode {
+sub _set_binmode {
     my $self = shift;
     $self->_sane_binmode($_) for @{$self->_layers};
     return $self;

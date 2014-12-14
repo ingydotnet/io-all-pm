@@ -27,7 +27,7 @@ sub open {
     $self->string_ref($ref);
     open my $fh, '+<', $ref;
     $self->io_handle($fh);
-    $self->set_binmode;
+    $self->_set_binmode;
     $self->is_open(1);
 }
 

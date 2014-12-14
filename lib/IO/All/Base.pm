@@ -20,13 +20,13 @@ sub import {
         my @flags = @_;
         for my $export (@{$class . '::EXPORT'}) {
             *{$package . "::$export"} = $export eq 'io'
-            ? $class->generate_constructor(@flags)
+            ? $class->_generate_constructor(@flags)
             : \&{$class . "::$export"};
         }
     }
 }
 
-sub generate_constructor {
+sub _generate_constructor {
     my $class = shift;
     my (@flags, %flags, $key);
     for (@_) {
@@ -45,7 +45,7 @@ sub generate_constructor {
         for (@flags) {
             $self->$_($flags{$_});
         }
-        $self->constructor($constructor);
+        $self->_constructor($constructor);
         return $self;
     }
 }
@@ -126,7 +126,7 @@ sub proxy {
       sub {
           my $self = shift;
           my @return = $self->io_handle->$proxy(@_);
-          $self->error_check;
+          $self->_error_check;
           wantarray ? @return : $return[0];
       };
 }
@@ -138,9 +138,9 @@ sub proxy_open {
     return if defined &{"${package}::$proxy"};
     my $method = sub {
         my $self = shift;
-        $self->assert_open(@args);
+        $self->_assert_open(@args);
         my @return = $self->io_handle->$proxy(@_);
-        $self->error_check;
+        $self->_error_check;
         wantarray ? @return : $return[0];
     };
     *{"$package\::$proxy"} =

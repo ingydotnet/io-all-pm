@@ -88,7 +88,7 @@ sub rename {
     rename($self->name, "$new")
       ? UNIVERSAL::isa($new, 'IO::All')
         ? $new
-        : $self->constructor->($new)
+        : $self->_constructor->($new)
       : undef;
 }
 

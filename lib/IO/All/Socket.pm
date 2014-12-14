@@ -36,7 +36,7 @@ sub accept {
     }
     local $SIG{CHLD};
     $self->_listen(1);
-    $self->assert_open;
+    $self->_assert_open;
     my $server = $self->io_handle;
     my $socket;
     while (1) {
@@ -66,7 +66,7 @@ sub shutdown {
       if defined $handle;
 }
 
-sub assert_open {
+sub _assert_open {
     my $self = shift;
     return if $self->is_open;
     $self->mode(shift) unless $self->mode;
@@ -94,7 +94,7 @@ sub open {
     my $socket = IO::Socket::INET->new(@args)
       or $self->throw("Can't open socket");
     $self->io_handle($socket);
-    $self->set_binmode;
+    $self->_set_binmode;
 }
 
 sub get_socket_domain_port {
@@ -108,15 +108,15 @@ sub get_socket_domain_port {
     return $self;
 }
 
-sub overload_table {
+sub _overload_table {
     my $self = shift;
     (
-        $self->SUPER::overload_table(@_),
-        '&{} socket' => 'overload_socket_as_code',
+        $self->SUPER::_overload_table(@_),
+        '&{} socket' => '_overload_socket_as_code',
     )
 }
 
-sub overload_socket_as_code {
+sub _overload_socket_as_code {
     my $self = shift;
     sub {
         my $coderef = shift;
@@ -127,15 +127,15 @@ sub overload_socket_as_code {
     }
 }
 
-sub overload_any_from_any {
+sub _overload_any_from_any {
     my $self = shift;
-    $self->SUPER::overload_any_from_any(@_);
+    $self->SUPER::_overload_any_from_any(@_);
     $self->close;
 }
 
-sub overload_any_to_any {
+sub _overload_any_to_any {
     my $self = shift;
-    $self->SUPER::overload_any_to_any(@_);
+    $self->SUPER::_overload_any_to_any(@_);
     $self->close;
 }
 

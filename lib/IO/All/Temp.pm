@@ -9,7 +9,7 @@ sub temp {
     my $temp_file = IO::File::new_tmpfile()
       or $self->throw("Can't create temporary file");
     $self->io_handle($temp_file);
-    $self->error_check;
+    $self->_error_check;
     $self->autoclose(0);
     $self->is_open(1);
     return $self;

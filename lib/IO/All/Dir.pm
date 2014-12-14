@@ -41,7 +41,7 @@ sub dir_handle {
 }
 
 #===============================================================================
-sub assert_open {
+sub _assert_open {
     my $self = shift;
     return if $self->is_open;
     $self->open;
@@ -50,7 +50,7 @@ sub assert_open {
 sub open {
     my $self = shift;
     $self->is_open(1);
-    $self->assert_dirpath($self->pathname)
+    $self->_assert_dirpath($self->pathname)
       if $self->pathname and $self->_assert;
     my $handle = IO::Dir->new;
     $self->io_handle($handle);
@@ -157,22 +157,22 @@ sub mkpath {
 sub file {
     my ($self, @rest) = @_;
 
-    return $self->constructor->()->file($self->pathname, @rest)
+    return $self->_constructor->()->file($self->pathname, @rest)
 }
 
 sub next {
     my $self = shift;
-    $self->assert_open;
+    $self->_assert_open;
     my $name = $self->readdir;
     return unless defined $name;
-    my $io = $self->constructor->(File::Spec->catfile($self->pathname, $name));
+    my $io = $self->_constructor->(File::Spec->catfile($self->pathname, $name));
     $io->absolute if $self->is_absolute;
     return $io;
 }
 
 sub readdir {
     my $self = shift;
-    $self->assert_open;
+    $self->_assert_open;
     if (wantarray) {
         my @return = grep {
             not /^\.{1,2}$/
@@ -206,7 +206,7 @@ sub glob {
    my ($self, @rest) = @_;
 
    map {;
-      my $ret = $self->constructor->($_);
+      my $ret = $self->_constructor->($_);
       $ret->absolute if $self->is_absolute;
       $ret
    } bsd_glob $self->_spec_class->catdir( $self->pathname, @rest );
@@ -219,7 +219,7 @@ sub copy {
 
     File::Copy::Recursive::dircopy($self->name, $new)
         or die "failed to copy $self to $new: $!";
-     $self->constructor->($new)
+     $self->_constructor->($new)
 }
 
 sub DESTROY {
@@ -230,23 +230,23 @@ sub DESTROY {
 }
 
 #===============================================================================
-sub overload_table {
+sub _overload_table {
     (
-        '${} dir' => 'overload_as_scalar',
-        '@{} dir' => 'overload_as_array',
-        '%{} dir' => 'overload_as_hash',
+        '${} dir' => '_overload_as_scalar',
+        '@{} dir' => '_overload_as_array',
+        '%{} dir' => '_overload_as_hash',
     )
 }
 
-sub overload_as_scalar {
+sub _overload_as_scalar {
     \ $_[1];
 }
 
-sub overload_as_array {
+sub _overload_as_array {
     [ $_[1]->all ];
 }
 
-sub overload_as_hash {
+sub _overload_as_hash {
     +{
         map {
             (my $name = $_->pathname) =~ s/.*[\/\\]//;
