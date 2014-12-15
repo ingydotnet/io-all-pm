@@ -1,4 +1,9 @@
 ---
+version: 0.85
+date:    Mon Dec 15 08:34:09 CST 2014
+changes:
+- Fix copy tests on Windows
+---
 version: 0.84
 date:    Sun Dec 14 02:06:37 CST 2014
 changes:
