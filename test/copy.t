@@ -6,7 +6,7 @@ use IO_All_Test;
 
 my $ret = io->file("$t/img.jpg")->copy(o_dir() . '/img.jpg');
 ok(io->file("$t/img.jpg")->binary->all eq $ret->binary->all, 'file copied correctly');
-is($ret->name, io->file(o_dir(), 'img.jpg')->name, 'copy returns new obj');
+is(f($ret->name), f(io->file(o_dir(), 'img.jpg')->name), 'copy returns new obj');
 
 SKIP: {
     skip 'requires File::Copy::Recursive', 2
