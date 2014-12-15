@@ -13,6 +13,8 @@ use Symbol();
 use Fcntl;
 use Cwd ();
 
+# use XXX;
+
 our @EXPORT = qw(io);
 
 #===============================================================================
@@ -98,7 +100,7 @@ sub _autoload_class {
 sub new {
     my $self = shift;
     my $package = ref($self) || $self;
-    my $new = bless Symbol::gensym(), $package;
+    my $new = bless {}, $package;
     $new->_package($package);
     $new->_copy_from($self) if ref($self);
     my $name = shift;
@@ -126,10 +128,10 @@ sub new {
 sub _copy_from {
     my $self = shift;
     my $other = shift;
-    for (keys(%{*$other})) {
+    for (keys %$other) {
         # XXX Need to audit exclusions here
         next if /^(_handle|io_handle|is_open)$/;
-        *$self->{$_} = *$other->{$_};
+        $self->{$_} = $other->{$_};
     }
 }
 
@@ -158,7 +160,7 @@ use overload '<' => '_overload_less_than';
 use overload '>' => '_overload_greater_than';
 use overload '${}' => '_overload_string_deref';
 use overload '@{}' => '_overload_array_deref';
-use overload '%{}' => '_overload_hash_deref';
+# use overload '%{}' => '_overload_hash_deref';
 use overload '&{}' => '_overload_code_deref';
 
 sub _overload_bitwise_or {my $self = shift; $self->_overload_handler(@_, '|') }
@@ -168,7 +170,7 @@ sub _overload_less_than {my $self = shift; $self->_overload_handler(@_, '<') }
 sub _overload_greater_than {my $self = shift; $self->_overload_handler(@_, '>') }
 sub _overload_string_deref {my $self = shift; $self->_overload_handler(@_, '${}') }
 sub _overload_array_deref {my $self = shift; $self->_overload_handler(@_, '@{}') }
-sub _overload_hash_deref {my $self = shift; $self->_overload_handler(@_, '%{}') }
+# sub _overload_hash_deref {my $self = shift; $self->_overload_handler(@_, '%{}') }
 sub _overload_code_deref {my $self = shift; $self->_overload_handler(@_, '&{}') }
 
 sub _overload_handler {
@@ -381,17 +383,19 @@ proxy_open 'getc';
 #===============================================================================
 # Tie Interface
 #===============================================================================
+# FIXME (object-model, tie)
+# No idea what to do about tie.
 sub tie {
     my $self = shift;
-    tie *$self, $self;
+    tie %$self, ref($self);
     return $self;
 }
 
-sub TIEHANDLE {
+sub TIEHASH {
     return $_[0] if ref $_[0];
     my $class = shift;
-    my $self = bless Symbol::gensym(), $class;
-    $self->init(@_);
+    my $self = bless {}, $class;
+    $self->_init(@_);
 }
 
 sub READLINE {
@@ -403,14 +407,14 @@ sub DESTROY {
     my $self = shift;
     no warnings;
     unless ( $] < 5.008 ) {
-        untie *$self if tied *$self;
+        untie $self if tied $self;
     }
     $self->close if $self->is_open;
 }
 
 sub BINMODE {
     my $self = shift;
-    CORE::binmode *$self->io_handle;
+    CORE::binmode $self->io_handle;
 }
 
 {
@@ -557,19 +561,19 @@ sub _sane_binmode {
 sub buffer {
     my $self = shift;
     if (not @_) {
-        *$self->{buffer} = do {my $x = ''; \ $x}
-          unless exists *$self->{buffer};
-        return *$self->{buffer};
+        $self->{buffer} = do {my $x = ''; \ $x}
+          unless exists $self->{buffer};
+        return $self->{buffer};
     }
     my $buffer_ref = ref($_[0]) ? $_[0] : \ $_[0];
     $$buffer_ref = '' unless defined $$buffer_ref;
-    *$self->{buffer} = $buffer_ref;
+    $self->{buffer} = $buffer_ref;
     return $self;
 }
 
 sub clear {
     my $self = shift;
-    my $buffer = *$self->{buffer};
+    my $buffer = $self->{buffer};
     $$buffer = '';
     return $self;
 }

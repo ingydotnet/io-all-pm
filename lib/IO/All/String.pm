@@ -9,9 +9,9 @@ sub string_ref {
    my ($self, $ref) = @_;
 
    no strict 'refs';
-   *$self->{ref} = $ref if exists $_[1];
+   $self->{ref} = $ref if exists $_[1];
 
-   return *$self->{ref}
+   return $self->{ref}
 }
 
 sub string {

@@ -50,10 +50,10 @@ sub mimetype {
 
 sub is_absolute {
     my $self = shift;
-    return *$self->{is_absolute} = shift if @_;
-    return *$self->{is_absolute}
-      if defined *$self->{is_absolute};
-    *$self->{is_absolute} = IO::All::is_absolute($self) ? 1 : 0;
+    return $self->{is_absolute} = shift if @_;
+    return $self->{is_absolute}
+      if defined $self->{is_absolute};
+    $self->{is_absolute} = IO::All::is_absolute($self) ? 1 : 0;
 }
 
 sub is_executable { my $self = shift; -x $self->name }
@@ -66,8 +66,8 @@ sub is_writable { my $self = shift; -w $self->name }
 
 sub pathname {
     my $self = shift;
-    return *$self->{pathname} = shift if @_;
-    return *$self->{pathname} if defined *$self->{pathname};
+    return $self->{pathname} = shift if @_;
+    return $self->{pathname} if defined $self->{pathname};
     return $self->name;
 }
 

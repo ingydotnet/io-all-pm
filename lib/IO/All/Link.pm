@@ -38,7 +38,7 @@ sub AUTOLOAD {
 
 sub target {
     my $self = shift;
-    return *$self->{target} if *$self->{target};
+    return $self->{target} if $self->{target};
     my %seen;
     my $link = $self;
     my $new;
@@ -50,7 +50,7 @@ sub target {
         return if $seen{$new->name}++;
         $link = $new;
     }
-    *$self->{target} = $new;
+    $self->{target} = $new;
 }
 
 sub exists { -l shift->pathname }

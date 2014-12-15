@@ -69,7 +69,7 @@ sub option {
     *{"${package}::$field"} =
       sub {
           my $self = shift;
-          *$self->{"_$field"} = @_ ? shift(@_) : 1;
+          $self->{"_$field"} = @_ ? shift(@_) : 1;
           return $self;
       };
 }
@@ -82,11 +82,11 @@ sub chain {
       sub {
           my $self = shift;
           if (@_) {
-              *$self->{$field} = shift;
+              $self->{$field} = shift;
               return $self;
           }
-          return $default unless exists *$self->{$field};
-          return *$self->{$field};
+          return $default unless exists $self->{$field};
+          return $self->{$field};
       };
 }
 
@@ -98,14 +98,14 @@ sub field {
     *{"${package}::$field"} =
       sub {
           my $self = shift;
-          unless (exists *$self->{$field}) {
-              *$self->{$field} =
+          unless (exists $self->{$field}) {
+              $self->{$field} =
                 ref($default) eq 'ARRAY' ? [] :
                 ref($default) eq 'HASH' ? {} :
                 $default;
           }
-          return *$self->{$field} unless @_;
-          *$self->{$field} = shift;
+          return $self->{$field} unless @_;
+          $self->{$field} = shift;
       };
 }
 
