@@ -1,6 +1,6 @@
 use strict; use warnings;
 package IO::All;
-our $VERSION = '0.85';
+our $VERSION = '0.86';
 
 require Carp;
 # So one can use Carp::carp "$message" - without the parenthesis.

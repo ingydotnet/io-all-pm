@@ -1,9 +1,4 @@
-IO::All
-=======
-
-IO::All to Larry Wall!
-
-<badge travis coveralls ingydotnet/io-all-pm>
+<<<cpan-head>>>
 
 = Synopsis
 
@@ -153,24 +148,25 @@ you write code very quickly, though they should be used judiciously:
 = Description
 
 IO::All combines all of the best Perl IO modules into a single nifty object
-oriented interface to greatly simplify your everyday Perl IO idioms. It exports
-a single function called `io`, which returns a new IO::All object. And that
-object can do it all!
+oriented interface to greatly simplify your everyday Perl IO idioms. It
+exports a single function called `io`, which returns a new IO::All object. And
+that object can do it all!
 
 The IO::All object is a proxy for IO::File, IO::Dir, IO::Socket, Tie::File,
 File::Spec, File::Path, File::MimeInfo and File::ReadBackwards; as well as all
 the DBM and MLDBM modules. You can use most of the methods found in these
 classes and in IO::Handle (which they inherit from). IO::All adds dozens of
-other helpful idiomatic methods including file stat and manipulation functions.
+other helpful idiomatic methods including file stat and manipulation
+functions.
 
-IO::All is pluggable, and modules like [IO::All::LWP] and [IO::All::Mailto] add
-even more functionality. Optionally, every IO::All object can be tied to
-itself. This means that you can use most perl IO builtins on it: readline, <>,
-getc, print, printf, syswrite, sysread, close.
+IO::All is pluggable, and modules like [IO::All::LWP] and [IO::All::Mailto]
+add even more functionality. Optionally, every IO::All object can be tied to
+itself. This means that you can use most perl IO builtins on it: readline,
+`<>`, getc, print, printf, syswrite, sysread, close.
 
 The distinguishing magic of IO::All is that it will automatically open (and
 close) files, directories, sockets and other IO things for you. You never need
-to specify the mode ('<', '>>', etc), since it is determined by the usage
+to specify the mode (`<`, `>>`, etc), since it is determined by the usage
 context. That means you can replace this:
 
   open STUFF, '<', './mystuff'
@@ -209,8 +205,8 @@ In other words, these 2 statements are usually the same:
   $content = io('file.txt')->all;
   $content = io->file('file.txt')->all;
 
-Use the first form when you are demonstrating your Perl virtues of laziness and
-impatience, and use the second form when your job is on the line.
+Use the first form when you are demonstrating your Perl virtues of laziness
+and impatience, and use the second form when your job is on the line.
 
 = Method role Call
 
@@ -220,35 +216,35 @@ IO::All object.
 [/abs2rel], [/absolute], [/accept], [/All], [/all], [/All_Dirs], [/all_dirs],
 [/All_Files], [/all_files], [/All_Links], [/all_links], [/append], [/appendf],
 [/appendln], [/assert], [/atime], [/autoclose], [/autoflush], [/backwards],
-[/bcc], [/binary], [/binmode], [/blksize], [/blocks], [/block_size], [/buffer],
-[/canonpath], [/case_tolerant], [/catdir], [/catfile], [/catpath], [/cc],
-[/chdir], [/chomp], [/clear], [/close], [/confess], [/content], [/copy], [/ctime],
-[/curdir], [/dbm], [/deep], [/device], [/device_id], [/devnull], [/dir],
-[/domain], [/empty], [/ext], [/encoding], [/eof], [/errors], [/file],
-[/filename], [/fileno], [/filepath], [/filter], [/fork], [/from], [/ftp],
-[/get], [/getc], [/getline], [/getlines], [/gid], [/glob], [/handle], [/head],
-[/http], [/https], [/inode], [/io_handle], [/is_absolute], [/is_dir],
-[/is_dbm], [/is_executable], [/is_file], [/is_link], [/is_mldbm], [/is_open],
-[/is_pipe], [/is_readable], [/is_socket], [/is_stdio], [/is_string],
-[/is_temp], [/is_writable], [/join], [/length], [/link], [/lock], [/mailer],
-[/mailto], [/mimetype], [/mkdir], [/mkpath], [/mldbm], [/mode], [/modes],
-[/mtime], [/name], [/new], [/next], [/nlink], [/open], [/os] [/password],
-[/path], [/pathname], [/perms], [/pipe], [/port], [/print], [/printf],
-[/println], [/put], [/rdonly], [/rdwr], [/read], [/readdir], [/readlink],
-[/recv], [/rel2abs], [/relative], [/rename], [/request], [/response], [/rmdir],
-[/rmtree], [/rootdir], [/scalar], [/seek], [/send], [/separator], [/shutdown],
-[/size], [/slurp], [/socket], [/sort], [/splitdir], [/splitpath], [/stat],
-[/stdio], [/stderr], [/stdin], [/stdout], [/string], [/string_ref], [/subject],
-[/sysread], [/syswrite], [/tail], [/tell], [/temp], [/tie], [/tmpdir], [/to],
-[/touch], [/truncate], [/type], [/user], [/uid], [/unlink], [/unlock],
-[/updir], [/uri], [/utf8], [/utime] and [/write].
+[/bcc], [/binary], [/binmode], [/blksize], [/blocks], [/block_size],
+[/buffer], [/canonpath], [/case_tolerant], [/catdir], [/catfile], [/catpath],
+[/cc], [/chdir], [/chomp], [/clear], [/close], [/confess], [/content],
+[/copy], [/ctime], [/curdir], [/dbm], [/deep], [/device], [/device_id],
+[/devnull], [/dir], [/domain], [/empty], [/ext], [/encoding], [/eof],
+[/errors], [/file], [/filename], [/fileno], [/filepath], [/filter], [/fork],
+[/from], [/ftp], [/get], [/getc], [/getline], [/getlines], [/gid], [/glob],
+[/handle], [/head], [/http], [/https], [/inode], [/io_handle], [/is_absolute],
+[/is_dir], [/is_dbm], [/is_executable], [/is_file], [/is_link], [/is_mldbm],
+[/is_open], [/is_pipe], [/is_readable], [/is_socket], [/is_stdio],
+[/is_string], [/is_temp], [/is_writable], [/join], [/length], [/link],
+[/lock], [/mailer], [/mailto], [/mimetype], [/mkdir], [/mkpath], [/mldbm],
+[/mode], [/modes], [/mtime], [/name], [/new], [/next], [/nlink], [/open],
+[/os] [/password], [/path], [/pathname], [/perms], [/pipe], [/port], [/print],
+[/printf], [/println], [/put], [/rdonly], [/rdwr], [/read], [/readdir],
+[/readlink], [/recv], [/rel2abs], [/relative], [/rename], [/request],
+[/response], [/rmdir], [/rmtree], [/rootdir], [/scalar], [/seek], [/send],
+[/separator], [/shutdown], [/size], [/slurp], [/socket], [/sort], [/splitdir],
+[/splitpath], [/stat], [/stdio], [/stderr], [/stdin], [/stdout], [/string],
+[/string_ref], [/subject], [/sysread], [/syswrite], [/tail], [/tell], [/temp],
+[/tie], [/tmpdir], [/to], [/touch], [/truncate], [/type], [/user], [/uid],
+[/unlink], [/unlock], [/updir], [/uri], [/utf8], [/utime] and [/write].
 
 Each method is documented further below.
 
 = Operator Overloading
 
 IO::All objects overload a small set of Perl operators to great effect. The
-overloads are limited to <, <<, >, >>, dereferencing operations, and
+overloads are limited to `<`, `<<`, `>`, `>>`, dereferencing operations, and
 stringification.
 
 Even though relatively few operations are overloaded, there is actually a huge
@@ -267,10 +263,10 @@ is the same as:
   perl -MIO::All -le 'print $_->name for io(".")->all'
 
 Stringification is important because it allows IO::All operations to return
-objects when they might otherwise return file names. Then the recipient can use
-the result either as an object or a string.
+objects when they might otherwise return file names. Then the recipient can
+use the result either as an object or a string.
 
-'>' and '<' move data between objects in the direction pointed to by the
+`>` and `<` move data between objects in the direction pointed to by the
 operator.
 
   $content1 < io('file1');
@@ -280,7 +276,7 @@ operator.
   io('file3') > io('file4');
   io('file5') < io('file4');
 
-'>>' and '<<' do the same thing except the recipient string or file is
+`>>` and `<<` do the same thing except the recipient string or file is
 appended to.
 
 An IO::All file used as an array reference becomes tied using Tie::File:
@@ -328,9 +324,9 @@ standalone program that demonstrates locking for both write and read:
   $io1->println('line 1');
 
   fork or do {
-      my $io2 = io('myfile')->lock;
-      print $io2->slurp;
-      exit;
+    my $io2 = io('myfile')->lock;
+    print $io2->slurp;
+    exit;
   };
 
   sleep 1;
@@ -357,7 +353,7 @@ read, it will reopen the file and read the first one again.
   my $io = io 'file1.txt';
   $io->autoclose(1);
   while (my $line = $io->getline || $io->getline) {
-      print $line;
+    print $line;
   }
 
 == Reading Backwards
@@ -370,7 +366,7 @@ end to the beginning.
   my $io = io('file1.txt');
   $io->backwards;
   while (my $line = $io->getline) {
-      push @reversed, $line;
+    push @reversed, $line;
   }
 
 or more simply:
@@ -422,9 +418,9 @@ dynamic pages:
 
   perl -MIO::All -e 'io(":8080")->fork->accept->(sub { $_[0] < io(-x $1 ? "./$1 |" : $1) if /^GET \/(.*) / })'
 
-There is are a lot of subtle things going on here. First we accept a socket and
-fork the server. Then we overload the new socket as a code ref. This code ref
-takes one argument, another code ref, which is used as a callback.
+There is are a lot of subtle things going on here. First we accept a socket
+and fork the server. Then we overload the new socket as a code ref. This code
+ref takes one argument, another code ref, which is used as a callback.
 
 The callback is called once for every line read on the socket. The line is put
 into `$_` and the socket itself is passed in to the callback.
@@ -467,8 +463,9 @@ is a simple recipe for subclassing:
 
 IO::Dumper inherits everything from IO::All and adds an extra method called
 `dump`, which will dump a data structure to the file we specify in the `io`
-function. Since it needs Data::Dumper to do the dumping, we override the `open`
-method to `require Data::Dumper` and then pass control to the real `open`.
+function. Since it needs Data::Dumper to do the dumping, we override the
+`open` method to `require Data::Dumper` and then pass control to the real
+`open`.
 
 First the code using the module:
 
@@ -483,8 +480,8 @@ And next the IO::Dumper module itself:
   use Data::Dumper;
 
   sub dump {
-      my $self = shift;
-      Dumper(@_) > $self;
+    my $self = shift;
+    Dumper(@_) > $self;
   }
 
   1;
@@ -503,8 +500,8 @@ don't "use" IO::Dumper, you need to still call its `import` method manually.
   use Data::Dumper;
 
   sub dump {
-      my $self = shift;
-      Dumper(@_) > $self;
+    my $self = shift;
+    Dumper(@_) > $self;
   }
 
 = The IO::All Methods
@@ -752,8 +749,8 @@ This is so that the option methods can be chained together. For example:
 - autoclose
 
   By default, IO::All will close an object opened for input when EOF is
-  reached. By closing the handle early, one can immediately do other operations
-  on the object without first having to close it.
+  reached. By closing the handle early, one can immediately do other
+  operations on the object without first having to close it.
 
   This option is on by default, so if you don't want this behaviour, say so
   like this:
@@ -790,9 +787,9 @@ This is so that the option methods can be chained together. For example:
   `separator` method has been called, chomp will remove that value from the
   end of each record.
 
-  Note that `chomp` may cause the following idiom to halt prematurely (e.g., if
-  `separator` is `\n` (the default) and `chomp` is in effect, then this command
-  will stop reading at the first blank line):
+  Note that `chomp` may cause the following idiom to halt prematurely (e.g.,
+  if `separator` is `\n` (the default) and `chomp` is in effect, then this
+  command will stop reading at the first blank line):
 
     while ( my $line = $io->getline ) {...}
 
@@ -811,8 +808,8 @@ This is so that the option methods can be chained together. For example:
 
 - fork
 
-  Indicates that the process should automatically be forked inside the `accept`
-  socket method.
+  Indicates that the process should automatically be forked inside the
+  `accept` socket method.
 
 - lock
 
@@ -825,12 +822,12 @@ This is so that the option methods can be chained together. For example:
 
 - rdwr
 
-  This option indicates that DBM and MLDBM files should be opened in read-
-  write mode.
+  This option indicates that DBM and MLDBM files should be opened in
+  read/write mode.
 
 - relative
 
-  Indicates that the `pathname` for the object should be made relative.  If
+  Indicates that the `pathname` for the object should be made relative. If
   passed an argument, path will be made relative to passed argument.
 
 - sort
@@ -1081,7 +1078,7 @@ sections below.
 
 - copy
 
-  Copies the object to the path passed.  Works on both files and directories,
+  Copies the object to the path passed. Works on both files and directories,
   but directories require `File::Copy::Recursive` to be installed.
 
 - empty
@@ -1290,11 +1287,11 @@ sections below.
   the data that is read. The function returns the length actually read (which
   is zero at EOF).
 
-  If you don't pass any arguments for a file, IO::All will use its own internal
-  buffer, a default length, and the offset will always point at the end of the
-  buffer. The buffer can be accessed with the `buffer` method. The length can
-  be set with the `block_size` method. The default length is 1024 bytes. The
-  `clear` method can be called to clear the buffer.
+  If you don't pass any arguments for a file, IO::All will use its own
+  internal buffer, a default length, and the offset will always point at the
+  end of the buffer. The buffer can be accessed with the `buffer` method. The
+  length can be set with the `block_size` method. The default length is 1024
+  bytes. The `clear` method can be called to clear the buffer.
 
   For a directory, this will proxy IO::Dir::read.
 
@@ -1313,8 +1310,8 @@ sections below.
 - readlink
 
   Calls Perl's readlink function on the link represented by the object.
-  Instead of returning the file path, it returns a new IO::All object using the
-  file path.
+  Instead of returning the file path, it returns a new IO::All object using
+  the file path.
 
 - recv
 
@@ -1494,8 +1491,8 @@ handle represented by the IO::All object.
 == File::Spec Methods
 
 These methods are all adaptations from File::Spec. Each method actually does
-call the matching File::Spec method, but the arguments and return values differ
-slightly. Instead of being file and directory *names*, they are IO::All
+call the matching File::Spec method, but the arguments and return values
+differ slightly. Instead of being file and directory *names*, they are IO::All
 *objects*. Since IO::All objects stringify to their names, you can generally
 use the methods just like File::Spec.
 
@@ -1669,18 +1666,6 @@ If you call a method that does not make sense for a particular object, the
 result probably won't make sense. Little attempt is made to check for improper
 usage.
 
-= See Also
-
-* [IO::Handle]
-* [IO::File]
-* [IO::Dir]
-* [IO::Socket]
-* [File::Spec]
-* [File::Path]
-* [File::ReadBackwards]
-* [Tie::File]
-* [File::MimeInfo]
-
 = Credits
 
 A lot of people have sent in suggestions, that have become a part of IO::All.
@@ -1701,15 +1686,4 @@ The IO::All module can be found on CPAN and on GitHub:
 
 Please join the IO::All discussion on #io-all on irc.perl.org.
 
-= Author
-
-Ingy döt Net <ingy@cpan.org>
-
-= Copyright
-
-Copyright 2004-2014. Ingy döt Net.
-
-This program is free software; you can redistribute it and/or modify it under
-the same terms as Perl itself.
-
-See http://www.perl.com/perl/misc/Artistic.html
+<<<cpan-tail +see>>>

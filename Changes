@@ -1,4 +1,9 @@
 ---
+version: 0.86
+date:    Thu Jan  1 18:44:25 PST 2015
+changes:
+- Revamp docs
+---
 version: 0.85
 date:    Mon Dec 15 08:34:09 CST 2014
 changes:
