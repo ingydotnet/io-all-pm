@@ -968,7 +968,7 @@ object reference will be returned for potential method chaining.
 - separator
 
   Sets the record (line) separator to whatever value you pass it. Default is
-  \n. Affects the chomp setting too.
+  `\n`. Affects the chomp setting too.
 
 - string_ref
 
