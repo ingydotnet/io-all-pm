@@ -12,6 +12,7 @@ use File::Spec();
 use Symbol();
 use Fcntl;
 use Cwd ();
+use Package::Stash ();
 
 our @EXPORT = qw(io);
 
@@ -63,8 +64,11 @@ sub AUTOLOAD {
     $self->throw(qq{Can't locate object method "$method" via package "$pkg"})
       if $pkg ne $self->_package;
     my $class = $self->_autoload_class($method);
-    my $foo = "$self";
     bless $self, $class;
+
+    my $stash = Package::Stash->new($pkg);
+    $stash->add_symbol( '&' . $method, sub {my $self = shift; bless $self, $class; $self->$method(@_)} );
+
     $self->$method(@_);
 }
 
