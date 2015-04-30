@@ -1,6 +1,6 @@
 use strict; use warnings;
 package IO::All;
-our $VERSION = '0.86';
+our $VERSION = '0.86.1';
 
 require Carp;
 # So one can use Carp::carp "$message" - without the parenthesis.
@@ -150,6 +150,7 @@ $SIG{__WARN__} = sub {
     }
 };
 
+use overload 'cmp' => '_overload_cmp';
 use overload '""' => '_overload_stringify';
 use overload '|' => '_overload_bitwise_or';
 use overload '<<' => '_overload_left_bitshift';
@@ -243,6 +244,13 @@ sub _get_argument_type {
     $argument->file
       if defined $argument->pathname and not $argument->type;
     return $argument->type || 'unknown';
+}
+
+sub _overload_cmp {
+    my ($self, $other, $swap) = @_;
+    $self = defined($self) ? $self.'' : $self;
+    ($self, $other) = ($other, $self) if $swap;
+    $self cmp $other;
 }
 
 sub _overload_stringify {

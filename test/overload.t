@@ -1,6 +1,6 @@
 use strict; use warnings;
 my $t; use lib ($t = -e 't' ? 't' : 'test');
-use Test::More tests => 24;
+use Test::More tests => 26;
 use IO_All_Test;
 use IO::All;
 
@@ -86,5 +86,9 @@ test_file_contents2(o_dir() . '/overload1', $cat3);
 
 is "" . ${io($t)}, $t, "scalar overload of directory (for mst)";
 
+#because it broke lots of modules via File::Spec::Win32::catfile/catdir
+my ($f1,$f2) = io->dir( o_dir() )->all;
+ok $f1 ne "", 'string operations overload';
+ok $f1 cmp $f2, 'string operations overload';
 
 del_output_dir();
