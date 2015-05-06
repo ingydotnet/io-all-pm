@@ -345,6 +345,27 @@ The parent process sleeps just to make sure the child process gets a chance.
 The parent needs to call `unlock` or `close` to release the lock. If all goes
 well the child will print 3 lines.
 
+== In Place Editing
+
+Because an IO::All object can be used as an array reference so operations 
+on arrays are supported tranparently (using Tie::File) so a file can be modified
+in the same way you would modify an array. Try this example and se for yourself!
+
+  > cat > x.txt 
+  The sexy saxaphone,
+ 
+  got the axe.
+  ^d
+ 
+  > perl -MIO::All -e 'map { s/x/X/g; $_ } @{ io(shift) }' x.txt 
+  > cat x.txt
+  The seXy saXaphone,
+ 
+  got the aXe.
+ 
+ The one liner uses shift() to grab the file from STDIN and create an io object
+ that is dereferenced @{ } and fed to map like any perl array reference.
+
 == Round Robin
 
 This simple example will read lines from a file forever. When the last line is
