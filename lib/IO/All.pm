@@ -49,11 +49,11 @@ my $autoload = {
 
 # XXX - These should die if the given argument exists but is not a
 # link, dbm, etc.
-sub link {my $self = shift; require IO::All::Link; IO::All::Link::link($self, @_) }
-sub dbm {my $self = shift; require IO::All::DBM; IO::All::DBM::dbm($self, @_) }
-sub mldbm {my $self = shift; require IO::All::MLDBM; IO::All::MLDBM::mldbm($self, @_) }
+sub link  { require IO::All::Link;  goto &IO::All::Link::link; }
+sub dbm   { require IO::All::DBM;   goto &IO::All::DBM::dbm; }
+sub mldbm { require IO::All::MLDBM; goto &IO::All::MLDBM::mldbm; }
 
-sub autoload {my $self = shift; $autoload }
+sub autoload { my $self = shift; $autoload; }
 
 sub AUTOLOAD {
     my $self = shift;
@@ -108,17 +108,16 @@ sub new {
       if UNIVERSAL::isa($name, 'GLOB') or ref(\ $name) eq 'GLOB';
     # WWW - link is first because a link to a dir returns true for
     # both -l and -d.
-    return $new->link($name) if -l $name;
-    return $new->file($name) if -f $name;
-    return $new->dir($name) if -d $name;
-    return $new->$1($name) if $name =~ /^([a-z]{3,8}):/;
-    return $new->socket($name) if $name =~ /^[\w\-\.]*:\d{1,5}$/;
-    return $new->pipe($name)
-      if $name =~ s/^\s*\|\s*// or $name =~ s/\s*\|\s*$//;
-    return $new->string if $name eq '$';
-    return $new->stdio if $name eq '-';
-    return $new->stderr if $name eq '=';
-    return $new->temp if $name eq '?';
+    return $new->link($name)	if -l $name;
+    return $new->file($name)	if -f $name;
+    return $new->dir($name)	if -d $name;
+    return $new->$1($name)	if $name =~ /^([a-z]{3,8}):/;
+    return $new->socket($name)	if $name =~ /^[\w\-\.]*:\d{1,5}$/;
+    return $new->pipe($name)	if $name =~ s/^\s*\|\s*// or $name =~ s/\s*\|\s*$//;
+    return $new->string		if $name eq '$';
+    return $new->stdio		if $name eq '-';
+    return $new->stderr		if $name eq '=';
+    return $new->temp		if $name eq '?';
     $new->name($name);
     $new->_init;
 }
@@ -150,26 +149,26 @@ $SIG{__WARN__} = sub {
     }
 };
 
-use overload '""' => '_overload_stringify';
-use overload '|' => '_overload_bitwise_or';
-use overload '<<' => '_overload_left_bitshift';
-use overload '>>' => '_overload_right_bitshift';
-use overload '<' => '_overload_less_than';
-use overload '>' => '_overload_greater_than';
+use overload '""'  => '_overload_stringify';
+use overload '|'   => '_overload_bitwise_or';
+use overload '<<'  => '_overload_left_bitshift';
+use overload '>>'  => '_overload_right_bitshift';
+use overload '<'   => '_overload_less_than';
+use overload '>'   => '_overload_greater_than';
 use overload '${}' => '_overload_string_deref';
 use overload '@{}' => '_overload_array_deref';
 use overload '%{}' => '_overload_hash_deref';
 use overload '&{}' => '_overload_code_deref';
 
-sub _overload_bitwise_or {my $self = shift; $self->_overload_handler(@_, '|') }
-sub _overload_left_bitshift {my $self = shift; $self->_overload_handler(@_, '<<') }
-sub _overload_right_bitshift {my $self = shift; $self->_overload_handler(@_, '>>') }
-sub _overload_less_than {my $self = shift; $self->_overload_handler(@_, '<') }
-sub _overload_greater_than {my $self = shift; $self->_overload_handler(@_, '>') }
-sub _overload_string_deref {my $self = shift; $self->_overload_handler(@_, '${}') }
-sub _overload_array_deref {my $self = shift; $self->_overload_handler(@_, '@{}') }
-sub _overload_hash_deref {my $self = shift; $self->_overload_handler(@_, '%{}') }
-sub _overload_code_deref {my $self = shift; $self->_overload_handler(@_, '&{}') }
+sub _overload_bitwise_or	{ shift->_overload_handler(@_, '|' ); }
+sub _overload_left_bitshift	{ shift->_overload_handler(@_, '<<'); }
+sub _overload_right_bitshift	{ shift->_overload_handler(@_, '>>'); }
+sub _overload_less_than		{ shift->_overload_handler(@_, '<' ); }
+sub _overload_greater_than	{ shift->_overload_handler(@_, '>' ); }
+sub _overload_string_deref	{ shift->_overload_handler(@_, '${}'); }
+sub _overload_array_deref	{ shift->_overload_handler(@_, '@{}'); }
+sub _overload_hash_deref	{ shift->_overload_handler(@_, '%{}'); }
+sub _overload_code_deref	{ shift->_overload_handler(@_, '&{}'); }
 
 sub _overload_handler {
     my ($self) = @_;
@@ -381,11 +380,7 @@ proxy_open 'getc';
 #===============================================================================
 # Tie Interface
 #===============================================================================
-sub tie {
-    my $self = shift;
-    tie *$self, $self;
-    return $self;
-}
+sub tie { my $self = shift; tie *$self, $self; }
 
 sub TIEHANDLE {
     return $_[0] if ref $_[0];
@@ -399,6 +394,7 @@ sub READLINE {
     goto &getline;
 }
 
+
 sub DESTROY {
     my $self = shift;
     no warnings;
@@ -408,10 +404,7 @@ sub DESTROY {
     $self->close if $self->is_open;
 }
 
-sub BINMODE {
-    my $self = shift;
-    CORE::binmode *$self->io_handle;
-}
+sub BINMODE { my $self = shift; CORE::binmode *$self->io_handle; }
 
 {
     no warnings;
@@ -430,7 +423,8 @@ sub BINMODE {
 #===============================================================================
 # File::Spec Interface
 #===============================================================================
-sub canonpath {my $self = shift;
+sub canonpath {
+   my $self = shift;
    eval { Cwd::abs_path($self->pathname); 0 } ||
       File::Spec->canonpath($self->pathname)
 }
@@ -445,59 +439,20 @@ sub catfile {
     my @args = grep defined, $self->name, @_;
     $self->_constructor->()->file(File::Spec->catfile(@args));
 }
-sub join {my $self = shift; $self->catfile(@_) }
-sub curdir {
-    my $self = shift;
-    $self->_constructor->()->dir(File::Spec->curdir);
-}
-sub devnull {
-    my $self = shift;
-    $self->_constructor->()->file(File::Spec->devnull);
-}
-sub rootdir {
-    my $self = shift;
-    $self->_constructor->()->dir(File::Spec->rootdir);
-}
-sub tmpdir {
-    my $self = shift;
-    $self->_constructor->()->dir(File::Spec->tmpdir);
-}
-sub updir {
-    my $self = shift;
-    $self->_constructor->()->dir(File::Spec->updir);
-}
-sub case_tolerant {
-    my $self = shift;
-    File::Spec->case_tolerant;
-}
-sub is_absolute {
-    my $self = shift;
-    File::Spec->file_name_is_absolute($self->pathname);
-}
-sub path {
-    my $self = shift;
-    map { $self->_constructor->()->dir($_) } File::Spec->path;
-}
-sub splitpath {
-    my $self = shift;
-    File::Spec->splitpath($self->pathname);
-}
-sub splitdir {
-    my $self = shift;
-    File::Spec->splitdir($self->pathname);
-}
-sub catpath {
-    my $self = shift;
-    $self->_constructor->(File::Spec->catpath(@_));
-}
-sub abs2rel {
-    my $self = shift;
-    File::Spec->abs2rel($self->pathname, @_);
-}
-sub rel2abs {
-    my $self = shift;
-    File::Spec->rel2abs($self->pathname, @_);
-}
+sub join	{ shift->catfile(@_); }
+sub curdir	{ shift->_constructor->()->dir(File::Spec->curdir); }
+sub devnull	{ shift->_constructor->()->file(File::Spec->devnull); }
+sub rootdir	{ shift->_constructor->()->dir(File::Spec->rootdir); }
+sub tmpdir	{ shift->_constructor->()->dir(File::Spec->tmpdir); }
+sub updir	{ shift->_constructor->()->dir(File::Spec->updir); }
+sub case_tolerant{File::Spec->case_tolerant; }
+sub is_absolute	{ File::Spec->file_name_is_absolute(shift->pathname); }
+sub path	{ my $self = shift; map { $self->_constructor->()->dir($_) } File::Spec->path; }
+sub splitpath	{ File::Spec->splitpath(shift->pathname); }
+sub splitdir	{ File::Spec->splitdir(shift->pathname); }
+sub catpath	{ my $self=shift; $self->_constructor->(File::Spec->catpath(@_)); }
+sub abs2rel	{ File::Spec->abs2rel(shift->pathname, @_); }
+sub rel2abs	{ File::Spec->rel2abs(shift->pathname, @_); }
 
 #===============================================================================
 # Public IO Action Methods
@@ -631,20 +586,16 @@ sub getlines {
     return ();
 }
 
-sub is_dir {my $self = shift; UNIVERSAL::isa($self, 'IO::All::Dir') }
-sub is_dbm {my $self = shift; UNIVERSAL::isa($self, 'IO::All::DBM') }
-sub is_file {my $self = shift; UNIVERSAL::isa($self, 'IO::All::File') }
-sub is_link {my $self = shift; UNIVERSAL::isa($self, 'IO::All::Link') }
-sub is_mldbm {my $self = shift; UNIVERSAL::isa($self, 'IO::All::MLDBM') }
-sub is_socket {my $self = shift; UNIVERSAL::isa($self, 'IO::All::Socket') }
-sub is_stdio {my $self = shift; UNIVERSAL::isa($self, 'IO::All::STDIO') }
-sub is_string {my $self = shift; UNIVERSAL::isa($self, 'IO::All::String') }
-sub is_temp {my $self = shift; UNIVERSAL::isa($self, 'IO::All::Temp') }
-
-sub length {
-    my $self = shift;
-    length(${$self->buffer});
-}
+sub is_dir	{ UNIVERSAL::isa(shift, 'IO::All::Dir');	}
+sub is_dbm	{ UNIVERSAL::isa(shift, 'IO::All::DBM');	}
+sub is_file	{ UNIVERSAL::isa(shift, 'IO::All::File');	}
+sub is_link	{ UNIVERSAL::isa(shift, 'IO::All::Link');	}
+sub is_mldbm	{ UNIVERSAL::isa(shift, 'IO::All::MLDBM');	}
+sub is_socket	{ UNIVERSAL::isa(shift, 'IO::All::Socket');	}
+sub is_stdio	{ UNIVERSAL::isa(shift, 'IO::All::STDIO');	}
+sub is_string	{ UNIVERSAL::isa(shift, 'IO::All::String');	}
+sub is_temp	{ UNIVERSAL::isa(shift, 'IO::All::Temp');	}
+sub length	{ length ${shift->buffer};			}
 
 sub open {
     my $self = shift;
