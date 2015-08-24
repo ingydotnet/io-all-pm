@@ -796,9 +796,10 @@ sub _assert_open {
 
 sub _error_check {
     my $self = shift;
+    my $saved_error = $!;
     return unless $self->io_handle->can('error');
     return unless $self->io_handle->error;
-    $self->throw($!);
+    $self->throw($saved_error);
 }
 
 sub _set_binmode {
