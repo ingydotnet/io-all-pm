@@ -314,7 +314,7 @@ combination, an error will be thrown.
 This section describes some various things that you can easily cook up with
 IO::All.
 
-= File Locking
+== File Locking
 
 IO::All makes it very easy to lock files. Just use the `lock` method. Here's a
 standalone program that demonstrates locking for both write and read:
