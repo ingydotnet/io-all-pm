@@ -178,6 +178,7 @@ sub readdir {
             not /^\.{1,2}$/
         } $self->io_handle->read;
         $self->close;
+        if ($self->_has_utf8) { utf8::decode($_) for (@return) }
         return @return;
     }
     my $name = '.';
@@ -188,6 +189,7 @@ sub readdir {
             return;
         }
     }
+    if ($self->_has_utf8) { utf8::decode($name) }
     return $name;
 }
 
