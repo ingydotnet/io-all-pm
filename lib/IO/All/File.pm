@@ -64,7 +64,6 @@ sub assert_tied_file {
         eval {require Tie::File};
         $self->throw("Tie::File required for file array operations:\n$@")
           if $@;
-        $self->_assert_open;
         my $array_ref = do { my @array; \@array };
         my $name = $self->pathname;
         my @options;
