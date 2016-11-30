@@ -345,26 +345,26 @@ The parent process sleeps just to make sure the child process gets a chance.
 The parent needs to call `unlock` or `close` to release the lock. If all goes
 well the child will print 3 lines.
 
-== In Place Editing
+== In-place Editing
 
-Because an IO::All object can be used as an array reference so operations 
-on arrays are supported tranparently (using Tie::File) so a file can be modified
-in the same way you would modify an array. Try this example and se for yourself!
+Because an IO::All object can be used as an array reference, operations
+on arrays are supported transparently (using Tie::File) so a file can be
+modified in the same way you would modify an array.
 
-  > cat > x.txt 
-  The sexy saxaphone,
- 
+  > cat > x.txt
+  The sexy saxophone,
+
   got the axe.
   ^d
- 
-  > perl -MIO::All -e 'map { s/x/X/g; $_ } @{ io(shift) }' x.txt 
+
+  > perl -MIO::All -e 'map { s/x/X/g; $_ } @{ io(shift) }' x.txt
   > cat x.txt
-  The seXy saXaphone,
- 
+  The seXy saXophone,
+
   got the aXe.
- 
- The one liner uses shift() to grab the file from STDIN and create an io object
- that is dereferenced @{ } and fed to map like any perl array reference.
+
+ This one liner uses shift() to grab the file from STDIN and create an io object
+ that is dereferenced using @{ } and fed to map() like any perl array reference.
 
 == Round Robin
 
