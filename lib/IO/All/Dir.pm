@@ -204,6 +204,8 @@ sub rmtree {
     File::Path::rmtree($self->pathname, @_);
 }
 
+sub stream_meth { "next" }
+
 sub glob {
    my ($self, @rest) = @_;
 
