@@ -196,6 +196,8 @@ sub head {
     return wantarray ? @return : join '', @return;
 }
 
+sub stream_meth { "getline" }
+
 sub tail {
     my $self = shift;
     my $lines = shift || 10;
