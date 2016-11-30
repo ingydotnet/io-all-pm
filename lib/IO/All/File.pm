@@ -67,9 +67,11 @@ sub assert_tied_file {
         $self->_assert_open;
         my $array_ref = do { my @array; \@array };
         my $name = $self->pathname;
-        my @options = $self->_rdonly ? (mode => O_RDONLY) : ();
+        my @options;
+        push @options, (mode => O_RDONLY)  if $self->_rdonly;
         push @options, (recsep => $self->separator);
-        tie @$array_ref, 'Tie::File', $self->io_handle, @options;
+        push @options, (discipline => join('', @{$self->_layers})) if @{$self->_layers};
+        tie @$array_ref, 'Tie::File', $name, @options;
         $self->throw("Can't tie 'Tie::File' to '$name':\n$!")
           unless tied @$array_ref;
         $self->tied_file($array_ref);
