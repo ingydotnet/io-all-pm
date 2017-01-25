@@ -29,7 +29,7 @@ changes:
 version: 0.81
 date:    Wed Nov  5 18:18:25 PST 2014
 changes:
-- Fixed a doc formatting bug. 
+- Fixed a doc formatting bug.
 ---
 version: 0.80
 date:    Tue Nov  4 11:13:18 PST 2014
