@@ -1,20 +1,24 @@
-use strict; use warnings;
-my $t; use lib ($t = -e 't' ? 't' : 'test');
+use strict;
+use warnings;
+my $t;
+use lib ($t = -e 't' ? 't' : 'test');
 use Test::More tests => 33;
 use IO::All;
 use IO_All_Test;
 
 my $path = f("$t/file_spec.t");
-like(io("././$t/file_spec.t")->canonpath, qr/\Q$path\E$/, 'give full canonical path for real files' );
-is(io("././$t/file_spec.t")->ext, 't');
+like(io("././$t/file_spec.t")->canonpath, qr/\Q$path\E$/, 'give full canonical path for real files');
+is(io("././$t/file_spec.t")->ext,       't');
 is(io("././$t/file_spec.t")->extension, 't');
 $path = f("$t/bogus");
 like(io("././$t/bogus")->canonpath, qr/\Q$path\E$/, 'give full canonical path for files that could exist');
-is(join(';', grep {! /CVS|\.svn/} io->catdir($t, 'mydir')->all), f "$t/mydir/dir1;$t/mydir/dir2;$t/mydir/file1;$t/mydir/file2;$t/mydir/file3");
+is(join(';', grep {!/CVS|\.svn/} io->catdir($t, 'mydir')->all),
+    f "$t/mydir/dir1;$t/mydir/dir2;$t/mydir/file1;$t/mydir/file2;$t/mydir/file3");
 test_file_contents(io->catfile($t, 'mystuff')->scalar, "$t/mystuff");
 test_file_contents(io->join($t, 'mystuff')->scalar, "$t/mystuff");
 is(ref(io->devnull), 'IO::All::File');
 ok(io->devnull->print('IO::All'));
+
 # Not supporting class calls anymore. Objects only.
 # ok(IO::All->devnull->print('IO::All'));
 ok(io->rootdir->is_dir);
@@ -31,7 +35,7 @@ ok(not io('foo/bar')->is_absolute);
       : '/home/frew/.plenv/bin:/home/frew/node/bin::/home/frew/code/git-super-status/bin:/opt/bin:/home/frew/code/teatime/bin:/home/frew/bin:/home/frew/code/dotfiles/bin:/home/frew/Dropbox/bin:/home/frew/Dropbox/go/bin:/home/frew/Dropbox/node/bin:/opt/bin:/home/frew/.plenv/bin:/home/frew/node/bin:/home/frew/code/git-super-status/bin:/opt/bin:/home/frew/code/teatime/bin:/home/frew/bin:/home/frew/code/dotfiles/bin:/home/frew/Dropbox/bin:/home/frew/Dropbox/go/bin:/home/frew/Dropbox/node/bin:/home/frew/.plenv/shims:/home/frew/perl5/perlbrew/bin:/home/frew/perl5/perlbrew/perls/perl-5.16.0/bin:/usr/lib/lightdm/lightdm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/frew/.zsh/adenosine/bin:/home/frew/.zsh/adenosine/bin';
     my $expected = $^O eq 'MSWin32' ? 31 : 36;
     my @path1 = io->path;
-    is scalar( @path1 ), $expected, "expected amount of PATH entries returned";
+    is scalar(@path1), $expected, "expected amount of PATH entries returned";
 }
 my ($v, $d, $f) = io('foo/bar')->splitpath;
 is($d, 'foo/');
@@ -41,19 +45,19 @@ is(scalar(@dirs), 3);
 is(join('+', @dirs), 'foo+bar+baz');
 test_file_contents(io->catpath('', $t, 'mystuff')->scalar, "$t/mystuff");
 is(io('/foo/bar/baz')->abs2rel('/foo'), f 'bar/baz');
-is(io('foo/bar/baz')->rel2abs('/moo'), f '/moo/foo/bar/baz');
+is(io('foo/bar/baz')->rel2abs('/moo'),  f '/moo/foo/bar/baz');
 
-is("".io->dir('doo/foo')->catdir('goo', 'hoo'), f 'doo/foo/goo/hoo');
-is("".io->dir->catdir('goo', 'hoo'), f 'goo/hoo');
-is("".io->catdir('goo', 'hoo'), f 'goo/hoo');
+is("" . io->dir('doo/foo')->catdir('goo', 'hoo'), f 'doo/foo/goo/hoo');
+is("" . io->dir->catdir('goo', 'hoo'), f 'goo/hoo');
+is("" . io->catdir('goo', 'hoo'), f 'goo/hoo');
 
-is("".io->file('doo/foo')->catfile('goo', 'hoo'), f 'doo/foo/goo/hoo');
-is("".io->file->catfile('goo', 'hoo'), f 'goo/hoo');
-is("".io->catfile('goo', 'hoo'), f 'goo/hoo');
+is("" . io->file('doo/foo')->catfile('goo', 'hoo'), f 'doo/foo/goo/hoo');
+is("" . io->file->catfile('goo', 'hoo'), f 'goo/hoo');
+is("" . io->catfile('goo', 'hoo'), f 'goo/hoo');
 
-is("".io->file('goo', 'hoo', 'bar.txt'), f 'goo/hoo/bar.txt');
-is("".io->dir('goo', 'hoo'), f 'goo/hoo');
+is("" . io->file('goo', 'hoo', 'bar.txt'), f 'goo/hoo/bar.txt');
+is("" . io->dir('goo', 'hoo'), f 'goo/hoo');
 
-is("".io->dir('goo', 'hoo')->dir('boo', 'foo'), f 'goo/hoo/boo/foo');
-is("".io->dir('goo', 'hoo')->dir('boo'), f 'goo/hoo/boo');
+is("" . io->dir('goo', 'hoo')->dir('boo', 'foo'), f 'goo/hoo/boo/foo');
+is("" . io->dir('goo', 'hoo')->dir('boo'), f 'goo/hoo/boo');
 del_output_dir();

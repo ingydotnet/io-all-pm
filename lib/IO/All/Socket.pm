@@ -1,15 +1,17 @@
-use strict; use warnings;
+use strict;
+use warnings;
+
 package IO::All::Socket;
 
 use IO::All -base;
 use IO::Socket;
 
-const type => 'socket';
+const type    => 'socket';
 field _listen => undef;
 option 'fork';
 const domain_default => 'localhost';
-chain domain => undef;
-chain port => undef;
+chain domain         => undef;
+chain port           => undef;
 proxy_open 'recv';
 proxy_open 'send';
 
@@ -30,8 +32,9 @@ sub socket_handle {
 sub accept {
     my $self = shift;
     use POSIX ":sys_wait_h";
+
     sub REAPER {
-        while (waitpid(-1, WNOHANG) > 0) {}
+        while (waitpid(-1, WNOHANG) > 0) { }
         $SIG{CHLD} = \&REAPER;
     }
     local $SIG{CHLD};
@@ -59,8 +62,8 @@ sub accept {
 }
 
 sub shutdown {
-    my $self = shift;
-    my $how = @_ ? shift : 2;
+    my $self   = shift;
+    my $how    = @_ ? shift : 2;
     my $handle = $self->io_handle;
     $handle->shutdown(2)
       if defined $handle;
@@ -78,19 +81,20 @@ sub open {
     return if $self->is_open;
     $self->is_open(1);
     $self->get_socket_domain_port;
-    my @args = $self->_listen
-    ? (
+    my @args =
+      $self->_listen
+      ? (
         LocalAddr => $self->domain,
         LocalPort => $self->port,
-        Proto => 'tcp',
-        Listen => 1,
-        Reuse => 1,
-    )
-    : (
+        Proto     => 'tcp',
+        Listen    => 1,
+        Reuse     => 1,
+      )
+      : (
         PeerAddr => $self->domain,
         PeerPort => $self->port,
-        Proto => 'tcp',
-    );
+        Proto    => 'tcp',
+      );
     my $socket = IO::Socket::INET->new(@args)
       or $self->throw("Can't open socket");
     $self->io_handle($socket);
@@ -102,18 +106,15 @@ sub get_socket_domain_port {
     my ($domain, $port);
     ($domain, $port) = split /:/, $self->name
       if defined $self->name;
-    $self->domain($domain) unless defined $self->domain;
+    $self->domain($domain)               unless defined $self->domain;
     $self->domain($self->domain_default) unless $self->domain;
-    $self->port($port) unless defined $self->port;
+    $self->port($port)                   unless defined $self->port;
     return $self;
 }
 
 sub _overload_table {
     my $self = shift;
-    (
-        $self->SUPER::_overload_table(@_),
-        '&{} socket' => '_overload_socket_as_code',
-    )
+    ($self->SUPER::_overload_table(@_), '&{} socket' => '_overload_socket_as_code',);
 }
 
 sub _overload_socket_as_code {
@@ -124,7 +125,7 @@ sub _overload_socket_as_code {
             $_ = $self->getline;
             &$coderef($self);
         }
-    }
+      }
 }
 
 sub _overload_any_from_any {

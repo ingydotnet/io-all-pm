@@ -1,4 +1,6 @@
-use strict; use warnings;
+use strict;
+use warnings;
+
 package IO::All::Dir;
 
 use Scalar::Util 'blessed';
@@ -8,9 +10,9 @@ use IO::All -base;
 use IO::Dir;
 
 #===============================================================================
-const type => 'dir';
+const type    => 'dir';
 option 'sort' => 1;
-chain filter => undef;
+chain filter  => undef;
 option 'deep';
 field 'chdir_from';
 
@@ -21,14 +23,14 @@ sub dir {
 
     bless $self, __PACKAGE__ unless $had_prev;
     if (@_ && @_ > 1 || @_ && $had_prev) {
-       $self->name(
-           $self->_spec_class->catdir(
-               ($self->pathname ? ($self->pathname) : () ),
-               @_,
-           )
-       )
-    } elsif (@_) {
-       $self->name($_[0])
+        $self->name(
+            $self->_spec_class->catdir(($self->pathname ? ($self->pathname) : ()), @_,)
+          );
+    }
+    elsif (@_) {
+        $self->name(
+            $_[0]
+          );
     }
     return $self->_init;
 }
@@ -61,13 +63,14 @@ sub open {
 
 sub open_msg {
     my $self = shift;
-    my $name = defined $self->pathname
+    my $name =
+      defined $self->pathname
       ? " '" . $self->pathname . "'"
       : '';
     return qq{Can't open directory$name:\n$!};
 }
 
-sub exists { -d shift->pathname }
+sub exists {-d shift->pathname}
 
 #===============================================================================
 sub All {
@@ -76,7 +79,7 @@ sub All {
 }
 
 sub all {
-    my $self = shift;
+    my $self  = shift;
     my $depth = @_ ? shift(@_) : $self->_deep ? 0 : 1;
     my $first = not @_;
     my @all;
@@ -112,8 +115,8 @@ sub all_files {
 }
 
 sub All_Links {
- my $self = shift;
- $self->all_links(0);
+    my $self = shift;
+    $self->all_links(0);
 }
 
 sub all_links {
@@ -134,7 +137,7 @@ sub empty {
     my $dh;
     opendir($dh, $self->pathname) or die;
     while (my $dir = readdir($dh)) {
-       return 0 unless $dir =~ /^\.{1,2}$/;
+        return 0 unless $dir =~ /^\.{1,2}$/;
     }
     return 1;
 }
@@ -142,8 +145,8 @@ sub empty {
 sub mkdir {
     my $self = shift;
     defined($self->perms)
-    ? (CORE::mkdir($self->pathname, $self->perms) or die "mkdir failed: $!")
-    : (CORE::mkdir($self->pathname) or die "mkdir failed: $!");
+      ? (CORE::mkdir($self->pathname, $self->perms) or die "mkdir failed: $!")
+      : (CORE::mkdir($self->pathname) or die "mkdir failed: $!");
     return $self;
 }
 
@@ -157,7 +160,9 @@ sub mkpath {
 sub file {
     my ($self, @rest) = @_;
 
-    return $self->_constructor->()->file($self->pathname, @rest)
+    return $self->_constructor->()->file(
+        $self->pathname, @rest
+      );
 }
 
 sub next {
@@ -174,11 +179,9 @@ sub readdir {
     my $self = shift;
     $self->_assert_open;
     if (wantarray) {
-        my @return = grep {
-            not /^\.{1,2}$/
-        } $self->io_handle->read;
+        my @return = grep {not /^\.{1,2}$/} $self->io_handle->read;
         $self->close;
-        if ($self->_has_utf8) { utf8::decode($_) for (@return) }
+        if ($self->_has_utf8) {utf8::decode($_) for (@return)}
         return @return;
     }
     my $name = '.';
@@ -189,7 +192,7 @@ sub readdir {
             return;
         }
     }
-    if ($self->_has_utf8) { utf8::decode($name) }
+    if ($self->_has_utf8) {utf8::decode($name)}
     return $name;
 }
 
@@ -205,13 +208,14 @@ sub rmtree {
 }
 
 sub glob {
-   my ($self, @rest) = @_;
+    my ($self, @rest) = @_;
 
-   map {;
-      my $ret = $self->_constructor->($_);
-      $ret->absolute if $self->is_absolute;
-      $ret
-   } bsd_glob $self->_spec_class->catdir( $self->pathname, @rest );
+    map {
+        ;
+        my $ret = $self->_constructor->($_);
+        $ret->absolute if $self->is_absolute;
+        $ret
+    } bsd_glob $self->_spec_class->catdir($self->pathname, @rest);
 }
 
 sub copy {
@@ -220,15 +224,17 @@ sub copy {
     require File::Copy::Recursive;
 
     File::Copy::Recursive::dircopy($self->name, $new)
-        or die "failed to copy $self to $new: $!";
-     $self->_constructor->($new)
+      or die "failed to copy $self to $new: $!";
+    $self->_constructor->(
+        $new);
 }
 
 sub DESTROY {
     my $self = shift;
     CORE::chdir($self->chdir_from)
       if $self->chdir_from;
-      # $self->SUPER::DESTROY(@_);
+
+    # $self->SUPER::DESTROY(@_);
 }
 
 #===============================================================================
@@ -237,15 +243,15 @@ sub _overload_table {
         '${} dir' => '_overload_as_scalar',
         '@{} dir' => '_overload_as_array',
         '%{} dir' => '_overload_as_hash',
-    )
+      );
 }
 
 sub _overload_as_scalar {
-    \ $_[1];
+    \$_[1];
 }
 
 sub _overload_as_array {
-    [ $_[1]->all ];
+    [$_[1]->all];
 }
 
 sub _overload_as_hash {

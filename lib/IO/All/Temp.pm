@@ -1,4 +1,6 @@
-use strict; use warnings;
+use strict;
+use warnings;
+
 package IO::All::Temp;
 
 use IO::All::File -base;

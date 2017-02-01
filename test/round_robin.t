@@ -1,10 +1,12 @@
-use strict; use warnings;
-my $t; use lib ($t = -e 't' ? 't' : 'test');
+use strict;
+use warnings;
+my $t;
+use lib ($t = -e 't' ? 't' : 'test');
 use Test::More tests => 9;
 use IO::All;
 
 my $io = io("$t/mystuff");
-my $x = 0;
+my $x  = 0;
 while (my $line = $io->getline || $io->getline) {
     my $expected = <DATA>;
     is($line, $expected);

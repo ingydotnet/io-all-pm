@@ -1,4 +1,6 @@
-use strict; use warnings;
+use strict;
+use warnings;
+
 package IO::All::String;
 
 use IO::All -base;
@@ -6,12 +8,12 @@ use IO::All -base;
 const type => 'string';
 
 sub string_ref {
-   my ($self, $ref) = @_;
+    my ($self, $ref) = @_;
 
-   no strict 'refs';
-   *$self->{ref} = $ref if exists $_[1];
+    no strict 'refs';
+    *$self->{ref} = $ref if exists $_[1];
 
-   return *$self->{ref}
+    return *$self->{ref};
 }
 
 sub string {
@@ -22,8 +24,8 @@ sub string {
 
 sub open {
     my $self = shift;
-    my $str = '';
-    my $ref = \$str;
+    my $str  = '';
+    my $ref  = \$str;
     $self->string_ref($ref);
     open my $fh, '+<', $ref;
     $self->io_handle($fh);

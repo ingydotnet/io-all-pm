@@ -1,4 +1,6 @@
-use strict; use warnings;
+use strict;
+use warnings;
+
 package IO::All::STDIO;
 
 use IO::All -base;
@@ -34,9 +36,10 @@ sub open {
     my $self = shift;
     $self->is_open(1);
     my $mode = shift || $self->mode || '<';
-    my $fileno = $mode eq '>'
-    ? fileno(STDOUT)
-    : fileno(STDIN);
+    my $fileno =
+      $mode eq '>'
+      ? fileno(STDOUT)
+      : fileno(STDIN);
     $self->io_handle(IO::File->new);
     $self->io_handle->fdopen($fileno, $mode);
     $self->_set_binmode;

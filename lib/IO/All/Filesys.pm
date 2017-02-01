@@ -1,4 +1,6 @@
-use strict; use warnings;
+use strict;
+use warnings;
+
 package IO::All::Filesys;
 
 use IO::All::Base -base;
@@ -11,6 +13,7 @@ my %spec_map = (
     mac   => 'Mac',
     os2   => 'OS2',
 );
+
 sub os {
     my ($self, $type) = @_;
 
@@ -19,12 +22,12 @@ sub os {
 
     $self->_spec_class($spec_map{$type});
 
-    $self->name( $self->_spec_class->catfile( @d, $f ) );
+    $self->name($self->_spec_class->catfile(@d, $f));
 
-    return $self
+    return $self;
 }
 
-sub exists { my $self = shift; -e $self->name }
+sub exists {my $self = shift; -e $self->name}
 
 sub filename {
     my $self = shift;
@@ -34,9 +37,9 @@ sub filename {
 }
 
 sub ext {
-   my $self = shift;
+    my $self = shift;
 
-   return $1 if $self->filename =~ m/\.([^\.]+)$/
+    return $1 if $self->filename =~ m/\.([^\.]+)$/;
 }
 {
     no warnings 'once';
@@ -44,8 +47,10 @@ sub ext {
 }
 
 sub mimetype {
-   require File::MimeInfo;
-   return File::MimeInfo::mimetype($_[0]->filename)
+    require File::MimeInfo;
+    return File::MimeInfo::mimetype(
+        $_[0]->filename
+      );
 }
 
 sub is_absolute {
@@ -56,9 +61,9 @@ sub is_absolute {
     *$self->{is_absolute} = IO::All::is_absolute($self) ? 1 : 0;
 }
 
-sub is_executable { my $self = shift; -x $self->name }
-sub is_readable { my $self = shift; -r $self->name }
-sub is_writable { my $self = shift; -w $self->name }
+sub is_executable {my $self = shift; -x $self->name}
+sub is_readable   {my $self = shift; -r $self->name}
+sub is_writable   {my $self = shift; -w $self->name}
 {
     no warnings 'once';
     *is_writeable = \&is_writable;
@@ -74,9 +79,14 @@ sub pathname {
 sub relative {
     my $self = shift;
     if (my $base = $_[0]) {
-       $self->pathname(File::Spec->abs2rel($self->pathname, $base))
-    } elsif ($self->is_absolute) {
-       $self->pathname(File::Spec->abs2rel($self->pathname))
+        $self->pathname(
+            File::Spec->abs2rel($self->pathname, $base)
+          );
+    }
+    elsif ($self->is_absolute) {
+        $self->pathname(
+            File::Spec->abs2rel($self->pathname)
+          );
     }
     $self->is_absolute(0);
     return $self;
@@ -84,11 +94,11 @@ sub relative {
 
 sub rename {
     my $self = shift;
-    my $new = shift;
+    my $new  = shift;
     rename($self->name, "$new")
       ? UNIVERSAL::isa($new, 'IO::All')
-        ? $new
-        : $self->_constructor->($new)
+          ? $new
+          : $self->_constructor->($new)
       : undef;
 }
 
@@ -96,9 +106,10 @@ sub set_lock {
     my $self = shift;
     return unless $self->_lock;
     my $io_handle = $self->io_handle;
-    my $flag = $self->mode =~ /^>>?$/
-    ? LOCK_EX
-    : LOCK_SH;
+    my $flag =
+      $self->mode =~ /^>>?$/
+      ? LOCK_EX
+      : LOCK_SH;
     flock $io_handle, $flag;
 }
 
@@ -106,7 +117,7 @@ sub stat {
     my $self = shift;
     return IO::All::stat($self, @_)
       if $self->is_open;
-      CORE::stat($self->pathname);
+    CORE::stat($self->pathname);
 }
 
 sub touch {
@@ -121,10 +132,10 @@ sub unlock {
 }
 
 sub utime {
-    my $self = shift;
+    my $self  = shift;
     my $atime = shift;
     my $mtime = shift;
-    $atime = time unless defined $atime;
+    $atime = time   unless defined $atime;
     $mtime = $atime unless defined $mtime;
     utime($atime, $mtime, $self->name);
     return $self;

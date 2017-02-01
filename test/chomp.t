@@ -1,5 +1,7 @@
-use strict; use warnings;
-my $t; use lib ($t = -e 't' ? 't' : 'test');
+use strict;
+use warnings;
+my $t;
+use lib ($t = -e 't' ? 't' : 'test');
 use Test::More 'no_plan';
 use IO::All;
 use IO_All_Test;

@@ -1,5 +1,7 @@
-use strict; use warnings;
-my $t; use lib ($t = -e 't' ? 't' : 'test');
+use strict;
+use warnings;
+my $t;
+use lib ($t = -e 't' ? 't' : 'test');
 use Test::More tests => 26;
 use IO_All_Test;
 use IO::All;
@@ -8,7 +10,7 @@ unlink(o_dir() . '/overload1');
 unlink(o_dir() . '/overload2');
 unlink(o_dir() . '/overload3');
 unlink(o_dir() . '/tmp/mystuff') if -e o_dir() . '/tmp/mystuff';
-rmdir(o_dir() . '/tmp') if -d o_dir() . '/tmp';;
+rmdir(o_dir() . '/tmp') if -d o_dir() . '/tmp';
 
 my $data < io("$t/mystuff");
 test_file_contents($data, "$t/mystuff");
@@ -62,18 +64,13 @@ test_file_contents($data2, o_dir() . '/overload3');
 
 is(io('foo') . '', 'foo');
 
-is("@{io $t . '/mydir'}",
-   flip_slash
-     "$t/mydir/dir1 $t/mydir/dir2 $t/mydir/file1 $t/mydir/file2 $t/mydir/file3",
-);
+is("@{io $t . '/mydir'}", flip_slash "$t/mydir/dir1 $t/mydir/dir2 $t/mydir/file1 $t/mydir/file2 $t/mydir/file3",);
 
-is(join(' ', sort keys %{io "$t/mydir"}),
-   'dir1 dir2 file1 file2 file3',
-);
+is(join(' ', sort keys %{io "$t/mydir"}), 'dir1 dir2 file1 file2 file3',);
 
-is(join(' ', sort map {"$_"} values %{io "$t/mydir"}),
-   flip_slash
-     "$t/mydir/dir1 $t/mydir/dir2 $t/mydir/file1 $t/mydir/file2 $t/mydir/file3",
+is(
+    join(' ', sort map {"$_"} values %{io "$t/mydir"}),
+    flip_slash "$t/mydir/dir1 $t/mydir/dir2 $t/mydir/file1 $t/mydir/file2 $t/mydir/file3",
 );
 
 ${io("$t/mystuff")} . ${io("$t/mystuff")} > io(o_dir() . '/overload1');
@@ -87,7 +84,7 @@ test_file_contents2(o_dir() . '/overload1', $cat3);
 is "" . ${io($t)}, $t, "scalar overload of directory (for mst)";
 
 #because it broke lots of modules via File::Spec::Win32::catfile/catdir
-my ($f1,$f2) = io->dir( o_dir() )->all;
+my ($f1, $f2) = io->dir(o_dir())->all;
 ok $f1 ne "", 'string operations overload';
 ok $f1 cmp $f2, 'string operations overload';
 
