@@ -64,11 +64,12 @@ sub assert_tied_file {
         eval {require Tie::File};
         $self->throw("Tie::File required for file array operations:\n$@")
           if $@;
+        $self->_assert_open;
         my $array_ref = do { my @array; \@array };
         my $name = $self->pathname;
         my @options = $self->_rdonly ? (mode => O_RDONLY) : ();
         push @options, (recsep => $self->separator);
-        tie @$array_ref, 'Tie::File', $name, @options;
+        tie @$array_ref, 'Tie::File', $self->io_handle, @options;
         $self->throw("Can't tie 'Tie::File' to '$name':\n$!")
           unless tied @$array_ref;
         $self->tied_file($array_ref);
