@@ -68,9 +68,10 @@ sub assert_tied_file {
         my $name = $self->pathname;
         my @options = $self->_rdonly ? (mode => O_RDONLY) : ();
         push @options, (recsep => $self->separator);
-        tie @$array_ref, 'Tie::File', $name, @options;
-        $self->throw("Can't tie 'Tie::File' to '$name':\n$!")
-          unless tied @$array_ref;
+        my $obj = tie @$array_ref, 'Tie::File', $name, @options
+          or $self->throw("Can't tie 'Tie::File' to '$name':\n$!");
+        $self->io_handle($obj->{fh});
+        $self->_set_binmode;
         $self->tied_file($array_ref);
     };
 }
