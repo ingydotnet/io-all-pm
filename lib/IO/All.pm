@@ -675,6 +675,11 @@ sub slurp {
     }
 }
 
+sub lines_count {
+    my $self = shift;
+	return scalar (() = $self->slurp);
+}
+
 sub utf8 {
     my $self = shift;
     if ($] < 5.008) {
