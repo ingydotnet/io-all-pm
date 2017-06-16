@@ -133,7 +133,7 @@ you write code very quickly, though they should be used judiciously:
   # Miscellaneous:
   @lines = io('file.txt')->chomp->slurp;      # Chomp as you slurp
   @chunks =
-    io('file.txt')->separator('xxx')->slurp;  # Use alternnate record sep
+    io('file.txt')->separator('xxx')->slurp;  # Use alternate record sep
   $binary = io('file.bin')->binary->all;      # Read a binary file
   io('a-symlink')->readlink->slurp;           # Readlink returns an object
   print io('foo')->absolute->pathname;        # Print absolute path of foo
@@ -767,6 +767,8 @@ This is so that the option methods can be chained together. For example:
     Hello World
     $
 
+  This method is chainable.
+
 - autoclose
 
   By default, IO::All will close an object opened for input when EOF is
@@ -781,6 +783,8 @@ This is so that the option methods can be chained together. For example:
   The object will then be closed when `$io` goes out of scope, or you manually
   call `$io->close`.
 
+  This method is chainable.
+
 - autoflush
 
   Proxy for IO::Handle::autoflush
@@ -792,15 +796,21 @@ This is so that the option methods can be chained together. For example:
 
   Requires the File::ReadBackwards CPAN module.
 
+  This method is chainable.
+
 - binary
 
   Adds `:raw` to the list of PerlIO layers applied after `open`, and applies
   it immediately on an open handle.
 
+  This method is chainable.
+
 - chdir
 
   chdir() to the pathname of a directory object. When object goes out of scope,
   chdir back to starting directory.
+
+  This method is chainable.
 
 - chomp
 
@@ -818,14 +828,20 @@ This is so that the option methods can be chained together. For example:
 
     while ( defined(my $line = $io->getline) ) {...}
 
+  This method is chainable.
+
 - confess
 
   Errors should be reported with the very detailed Carp::confess function.
+
+  This method is chainable.
 
 - deep
 
   Indicates that calls to the `all` family of methods should search
   directories as deep as possible.
+
+  This method is chainable.
 
 - fork
 
@@ -836,15 +852,21 @@ This is so that the option methods can be chained together. For example:
 
   Indicate that operations on an object should be locked using flock.
 
+  This method is chainable.
+
 - rdonly
 
   This option indicates that certain operations like DBM and Tie::File access
   should be done in read-only mode.
 
+  This method is chainable.
+
 - rdwr
 
   This option indicates that DBM and MLDBM files should be opened in
   read/write mode.
+
+  This method is chainable.
 
 - relative
 
@@ -869,6 +891,8 @@ This is so that the option methods can be chained together. For example:
   Adds `:encoding(UTF-8)` to the list of PerlIO layers applied after `open`,
   and applies it immediately on an open handle.
 
+  This method is chainable.
+
 == Configuration Methods
 
 The following methods don't do any actual I/O, but they set specific values to
@@ -887,6 +911,8 @@ object reference will be returned for potential method chaining.
   Adds the specified layer to the list of PerlIO layers applied after `open`,
   and applies it immediately on an open handle. Does a bare `binmode` when
   called without argument.
+
+  This method is chainable.
 
 - block_size
 
@@ -909,6 +935,8 @@ object reference will be returned for potential method chaining.
     $output->buffer($input->buffer($buffer));
     $output->write while $input->read;
 
+  This method is chainable.
+
 - cc
 
   Set the Cc field for a mailto object.
@@ -925,6 +953,8 @@ object reference will be returned for potential method chaining.
 
   Adds the specified encoding to the list of PerlIO layers applied after
   `open`, and applies it immediately on an open handle. Requires an argument.
+
+  This method is chainable.
 
 - errors
 
@@ -1090,6 +1120,8 @@ sections below.
   Clear the internal buffer. This method is called by `write` after it writes
   the buffer. Returns the object reference for chaining.
 
+  This method is chainable.
+
 - close
 
   Close will basically unopen the object, which has different meanings for
@@ -1253,10 +1285,14 @@ sections below.
 
   Create the directory represented by the object.
 
+  This method is chainable.
+
 - mkpath
 
   Create the directory represented by the object, when the path contains more
   than one directory that doesn't exist. Proxy for File::Path::mkpath.
+
+  This method is chainable.
 
 - next
 
