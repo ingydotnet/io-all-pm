@@ -1,5 +1,5 @@
 use strict; use warnings;
-use lib -e 't' ? 't' : 'test';
+use lib -e 't' ? './t' : './test';
 
 package IO::Dumper;
 use IO::All -base;
@@ -35,7 +35,7 @@ ok($io->close);
 ok(-s o_dir() . '/dump1');
 
 my $VAR1;
-my $a = do (o_dir() . '/dump1');
+my $a = do ('./' . o_dir() . '/dump1');
 my $b = eval join('',<DATA>);
 is_deeply($a,$b);
 
