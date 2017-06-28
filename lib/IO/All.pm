@@ -161,15 +161,15 @@ use overload '@{}' => '_overload_array_deref';
 use overload '%{}' => '_overload_hash_deref';
 use overload '&{}' => '_overload_code_deref';
 
-sub _overload_bitwise_or	{ shift->_overload_handler(@_, '|' ); }
-sub _overload_left_bitshift	{ shift->_overload_handler(@_, '<<'); }
-sub _overload_right_bitshift	{ shift->_overload_handler(@_, '>>'); }
-sub _overload_less_than		{ shift->_overload_handler(@_, '<' ); }
-sub _overload_greater_than	{ shift->_overload_handler(@_, '>' ); }
-sub _overload_string_deref	{ shift->_overload_handler(@_, '${}'); }
-sub _overload_array_deref	{ shift->_overload_handler(@_, '@{}'); }
-sub _overload_hash_deref	{ shift->_overload_handler(@_, '%{}'); }
-sub _overload_code_deref	{ shift->_overload_handler(@_, '&{}'); }
+sub _overload_bitwise_or     { shift->_overload_handler(@_, '|' ); }
+sub _overload_left_bitshift  { shift->_overload_handler(@_, '<<'); }
+sub _overload_right_bitshift { shift->_overload_handler(@_, '>>'); }
+sub _overload_less_than      { shift->_overload_handler(@_, '<' ); }
+sub _overload_greater_than   { shift->_overload_handler(@_, '>' ); }
+sub _overload_string_deref   { shift->_overload_handler(@_, '${}'); }
+sub _overload_array_deref    { shift->_overload_handler(@_, '@{}'); }
+sub _overload_hash_deref     { shift->_overload_handler(@_, '%{}'); }
+sub _overload_code_deref     { shift->_overload_handler(@_, '&{}'); }
 
 sub _overload_handler {
     my ($self) = @_;
