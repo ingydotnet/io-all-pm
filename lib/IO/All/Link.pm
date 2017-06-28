@@ -55,4 +55,17 @@ sub target {
 
 sub exists { -l shift->pathname }
 
+#===============================================================================
+sub _overload_table {
+    (
+        '${} link' => '_overload_as_scalar',
+    )
+}
+
+# reference to link target
+sub _overload_as_scalar {
+    \ $_[1]->target;
+}
+
+
 1;
