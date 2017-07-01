@@ -17,7 +17,6 @@ perl:
 - '5.12'
 - '5.10'
 
-env:
 matrix:
   include:
   - perl: 5.8
