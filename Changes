@@ -1,6 +1,6 @@
 ---
 version: 0.87
-date:    Tue Jul 18 14:00:30 PDT 2017
+date:    Tue Jul 18 14:05:40 PDT 2017
 changes:
 - Fix io($dir)->all when files have unicode in names (GH#95)
 - Stop trampling $!
