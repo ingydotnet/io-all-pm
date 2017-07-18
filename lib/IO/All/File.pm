@@ -238,13 +238,11 @@ sub _overload_table {
 }
 
 sub _overload_file_to_file {
-    require File::Copy;
     File::Copy::copy($_[1]->pathname, $_[2]->pathname);
     $_[2];
 }
 
 sub _overload_file_from_file {
-    require File::Copy;
     File::Copy::copy($_[2]->pathname, $_[1]->pathname);
     $_[1];
 }
