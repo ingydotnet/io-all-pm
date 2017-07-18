@@ -16,7 +16,7 @@ ok($io->close);
 ok(-s o_dir() . '/dump2');
 
 my $VAR1;
-my $a = do (o_dir() . '/dump2');
+my $a = do './' . (o_dir() . '/dump2');
 my $b = eval join('',<DATA>);
 is_deeply($a,$b);
 
