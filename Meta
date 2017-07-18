@@ -1,12 +1,12 @@
 =meta: 0.0.2
 
 name: IO-All
-version: 0.86
+version: 0.87
 abstract: IO::All to Larry Wall!
 homepage: https://metacpan.org/release/IO-All
 language: perl
 license: perl
-copyright: 2004-2015
+copyright: 2004-2017
 
 author:
   name: Ingy döt Net

@@ -1,4 +1,11 @@
 ---
+version: 0.87
+date:    Tue Jul 18 14:00:30 PDT 2017
+changes:
+- Fix io($dir)->all when files have unicode in names (GH#95)
+- Stop trampling $!
+- Add cmp overload to fix some windows problems (GH#74)
+---
 version: 0.86
 date:    Thu Jan  1 18:44:25 PST 2015
 changes:
