@@ -363,7 +363,7 @@ modified in the same way you would modify an array.
 
   got the aXe.
 
- This one liner uses shift() to grab the file from STDIN and create an io object
+ This one liner uses shift() to grab the filename from @ARGV and create an io object
  that is dereferenced using @{ } and fed to map() like any perl array reference.
 
 == Round Robin
