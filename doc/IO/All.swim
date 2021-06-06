@@ -936,7 +936,7 @@ object reference will be returned for potential method chaining.
   Use this to set a subroutine reference that will be used to grep which
   objects get returned on a call to one of the `all` methods. For example:
 
-    my @odd = io->curdir->filter(sub {$_->size % 2})->All_Files;
+    my @odd = io->curdir->filter(sub {$_[0]->size % 2})->All_Files;
 
   `@odd` will contain all the files under the current directory whose size is
   an odd number of bytes.
